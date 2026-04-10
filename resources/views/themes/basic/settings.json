@@ -1,0 +1,603 @@
+{
+    "general": [
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Logo dark",
+            "name": "logo-dark",
+            "path": "images\/",
+            "key": "logo_dark",
+            "value": "themes\/basic\/images\/logo-dark.jpg",
+            "accept": ".jpg,.jpeg,.png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:jpg,jpeg,png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-dark",
+            "label": "Logo light",
+            "name": "logo-light",
+            "path": "images\/",
+            "key": "logo_light",
+            "value": "themes\/basic\/images\/logo-light.jpg",
+            "accept": ".jpg,.jpeg,.png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:jpg,jpeg,png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Business Logo dark",
+            "name": "business-logo-dark",
+            "path": "images\/",
+            "key": "business_logo_dark",
+            "value": "themes\/basic\/images\/business-logo-dark.jpg",
+            "accept": ".jpg,.jpeg,.png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:jpg,jpeg,png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-dark",
+            "label": "Business Logo light",
+            "name": "business-logo-light",
+            "path": "images\/",
+            "key": "business_logo_light",
+            "value": "themes\/basic\/images\/business-logo-light.jpg",
+            "accept": ".jpg,.jpeg,.png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:jpg,jpeg,png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Favicon",
+            "name": "favicon",
+            "path": "images\/",
+            "key": "favicon",
+            "value": "themes\/basic\/images\/favicon.jpg",
+            "accept": ".jpg,.jpeg,.png,.ico",
+            "rule": [
+                "nullable",
+                "mimes:png,jpg,jpeg,ico"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Social Image",
+            "path": "images\/",
+            "key": "social_image",
+            "value": "themes\/basic\/images\/social-image.jpg",
+            "accept": ".jpg,.jpeg",
+            "rule": [
+                "nullable",
+                "mimes:jpg,jpeg"
+            ]
+        }
+    ],
+    "colors": [
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Primary Color",
+            "key": "primary_color",
+            "value": "#ffb000",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Secondary Color",
+            "key": "secondary_color",
+            "value": "#1c1c1c",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Background Color",
+            "key": "background_color",
+            "value": "#fafafa",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Border Color",
+            "key": "border_color",
+            "value": "#ececec",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Text Color",
+            "key": "text_color",
+            "value": "#222222",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Text Muted Color",
+            "key": "text_muted_color",
+            "value": "#474747",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Elements Background Color",
+            "key": "elements_background_color",
+            "value": "#ffffff",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Inner Background Color",
+            "key": "inner_background_color",
+            "value": "#F7F7F7",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Elements Inner Background Color",
+            "key": "elements_inner_background_color",
+            "value": "#f5f5f5",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Inner border Color",
+            "key": "inner_border_color",
+            "value": "#C1C1C1",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Navbar Background Color",
+            "key": "navbar_background_color",
+            "value": "#1c1c1c",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Business Button Color",
+            "key": "business_button_color",
+            "value": "#0766ed",
+            "required": true,
+            "rule": [
+                "required",
+                "string"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Verified Badge Color",
+            "key": "verified_badge_color",
+            "value": "#0099f2",
+            "required": true,
+            "rule": [
+                "required",
+                "string"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Star Color",
+            "key": "star_color",
+            "value": "#d9d9e2",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Star Fill Color",
+            "key": "star_fill_color",
+            "value": "#ffb000",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Footer Background Color",
+            "key": "footer_background_color",
+            "value": "#1c1c1c",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Footer Heading Color",
+            "key": "footer_heading_color",
+            "value": "#ffffff",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Footer Text Color",
+            "key": "footer_text_color",
+            "value": "#c2c2c2",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        },
+        {
+            "col": "col-lg-4",
+            "field": "color",
+            "label": "Footer Border Color",
+            "key": "footer_border_color",
+            "value": "#272727",
+            "required": true,
+            "rule": [
+                "required",
+                "string",
+                "regex:\/^#[A-Fa-f0-9]{6}$\/"
+            ]
+        }
+    ],
+    "stars": [
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Stars 0",
+            "name": "stars-0",
+            "path": "images\/stars\/",
+            "key": "stars_0",
+            "value": "themes\/basic\/images\/stars\/stars-0.svg",
+            "accept": ".png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Stars 1",
+            "name": "stars-1",
+            "path": "images\/stars\/",
+            "key": "stars_1",
+            "value": "themes\/basic\/images\/stars\/stars-1.svg",
+            "accept": ".png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Stars 1.5",
+            "name": "stars-1-5",
+            "path": "images\/stars\/",
+            "key": "stars_1_5",
+            "value": "themes\/basic\/images\/stars\/stars-1-5.svg",
+            "accept": ".png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Stars 2",
+            "name": "stars-2",
+            "path": "images\/stars\/",
+            "key": "stars_2",
+            "value": "themes\/basic\/images\/stars\/stars-2.svg",
+            "accept": ".png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Stars 2.5",
+            "name": "stars-2-5",
+            "path": "images\/stars\/",
+            "key": "stars_2_5",
+            "value": "themes\/basic\/images\/stars\/stars-2-5.svg",
+            "accept": ".png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Stars 3",
+            "name": "stars-3",
+            "path": "images\/stars\/",
+            "key": "stars_3",
+            "value": "themes\/basic\/images\/stars\/stars-3.svg",
+            "accept": ".png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Stars 3.5",
+            "name": "stars-3-5",
+            "path": "images\/stars\/",
+            "key": "stars_3_5",
+            "value": "themes\/basic\/images\/stars\/stars-3-5.svg",
+            "accept": ".png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Stars 4",
+            "name": "stars-4",
+            "path": "images\/stars\/",
+            "key": "stars_4",
+            "value": "themes\/basic\/images\/stars\/stars-4.svg",
+            "accept": ".png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Stars 4.5",
+            "name": "stars-4-5",
+            "path": "images\/stars\/",
+            "key": "stars_4_5",
+            "value": "themes\/basic\/images\/stars\/stars-4-5.svg",
+            "accept": ".png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:png,svg"
+            ]
+        },
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "background": "bg-light",
+            "label": "Stars 5",
+            "name": "stars-5",
+            "path": "images\/stars\/",
+            "key": "stars_5",
+            "value": "themes\/basic\/images\/stars\/stars-5.svg",
+            "accept": ".png,.svg",
+            "rule": [
+                "nullable",
+                "mimes:png,svg"
+            ]
+        }
+    ],
+    "home_page": [
+        {
+            "col": "col-lg-6",
+            "field": "image",
+            "box_type": "square-large",
+            "background": "bg-light",
+            "label": "Header Background",
+            "path": "images\/home-page\/",
+            "key": "header_background",
+            "value": "themes\/basic\/images\/home-page\/9v62jJhIMKbOe0a_1747614185.png",
+            "accept": ".jpg,.jpeg,.png,.svg,.webp",
+            "rule": [
+                "nullable",
+                "mimes:jpg,jpeg,png,svg,webp",
+                "max:4096"
+            ]
+        }
+    ],
+    "pages": [
+        {
+            "col": "col-12",
+            "field": "image",
+            "box_type": "regular",
+            "background": "bg-light",
+            "label": "Header Background",
+            "path": "images\/pages\/",
+            "key": "header_background",
+            "value": "themes\/basic\/images\/pages\/tG77JeJqrGrWDwD_1747614237.png",
+            "accept": ".jpg,.jpeg,.png,.svg,.webp",
+            "rule": [
+                "nullable",
+                "mimes:jpg,jpeg,png,svg,webp",
+                "max:4096"
+            ]
+        }
+    ],
+    "business": [
+        {
+            "col": "col-12",
+            "field": "image",
+            "height": "200px",
+            "box_type": "regular",
+            "background": "bg-light",
+            "label": "Authentication Pages background",
+            "path": "images\/business\/pages\/",
+            "key": "authentication_pages_background",
+            "value": "themes\/basic\/images\/business\/pages\/OuwHlOTCguH8rEb_1747614244.jpg",
+            "accept": ".jpg,.jpeg,.png,.svg,.webp",
+            "rule": [
+                "nullable",
+                "mimes:jpg,jpeg,png,svg,webp",
+                "max:4096"
+            ]
+        }
+    ],
+    "footer": [
+        {
+            "col": "col-lg-6",
+            "field": "toggle",
+            "label": "Footer Payment Methods",
+            "key": "footer_payment_methods",
+            "value": 1,
+            "on": "Show",
+            "off": "Hide",
+            "required": false
+        },
+        {
+            "col": "col-lg-12",
+            "field": "image",
+            "box_type": "regular",
+            "background": "bg-light",
+            "label": "Footer Payment Methods Image",
+            "path": "images\/",
+            "key": "footer_payment_methods_image",
+            "value": "themes\/basic\/images\/ONs8XQ16mUgeBXO_1734824146.png",
+            "accept": ".jpg,.jpeg,.png",
+            "rule": [
+                "nullable",
+                "image",
+                "mimes:jpg,jpeg,png"
+            ]
+        }
+    ],
+    "extra_codes": [
+        {
+            "col": "col-12",
+            "field": "textarea",
+            "label": "Head Code",
+            "key": "head_code",
+            "value": null,
+            "rows": 10,
+            "required": false,
+            "rule": [
+                "nullable",
+                "string"
+            ]
+        },
+        {
+            "col": "col-12",
+            "field": "textarea",
+            "label": "Footer Code",
+            "key": "footer_code",
+            "value": null,
+            "rows": 10,
+            "required": false,
+            "rule": [
+                "nullable",
+                "string"
+            ]
+        }
+    ]
+}
