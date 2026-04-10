@@ -262,21 +262,31 @@
 
     const swiperCategories = document.querySelector(".home-categories-swiper");
     if (swiperCategories) {
+        const categorySlidesCount = swiperCategories.querySelectorAll(".swiper-slide").length;
+        const categoryBreakpoints = {
+            0: {
+                slidesPerView: 1.2,
+            },
+            576: {
+                slidesPerView: 2,
+            },
+            992: {
+                slidesPerView: 3,
+            },
+            1400: {
+                slidesPerView: 4,
+            },
+        };
+        const maxCategorySlidesPerView = Math.max(...Object.values(categoryBreakpoints).map((point) => point.slidesPerView));
         new Swiper(swiperCategories, {
             spaceBetween: 16,
-            loop: true,
+            loop: categorySlidesCount > maxCategorySlidesPerView,
+            rewind: categorySlidesCount <= maxCategorySlidesPerView,
             navigation: {
                 nextEl: ".home-categories-swiper-next",
                 prevEl: ".home-categories-swiper-prev",
             },
-            breakpoints: {
-                0: {
-                    slidesPerView: "auto",
-                },
-                2000: {
-                    slidesPerView: 8,
-                },
-            },
+            breakpoints: categoryBreakpoints,
         });
     }
 

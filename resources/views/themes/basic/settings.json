@@ -8,7 +8,7 @@
             "name": "logo-dark",
             "path": "images\/",
             "key": "logo_dark",
-            "value": "themes\/basic\/images\/logo-dark.jpg",
+            "value": "themes\/basic\/images\/logo-dark.png",
             "accept": ".jpg,.jpeg,.png,.svg",
             "rule": [
                 "nullable",
@@ -23,7 +23,7 @@
             "name": "logo-light",
             "path": "images\/",
             "key": "logo_light",
-            "value": "themes\/basic\/images\/logo-light.jpg",
+            "value": "themes\/basic\/images\/logo-light.png",
             "accept": ".jpg,.jpeg,.png,.svg",
             "rule": [
                 "nullable",
@@ -38,7 +38,7 @@
             "name": "business-logo-dark",
             "path": "images\/",
             "key": "business_logo_dark",
-            "value": "themes\/basic\/images\/business-logo-dark.jpg",
+            "value": "themes\/basic\/images\/business-logo-dark.png",
             "accept": ".jpg,.jpeg,.png,.svg",
             "rule": [
                 "nullable",
@@ -53,7 +53,7 @@
             "name": "business-logo-light",
             "path": "images\/",
             "key": "business_logo_light",
-            "value": "themes\/basic\/images\/business-logo-light.jpg",
+            "value": "themes\/basic\/images\/business-logo-light.png",
             "accept": ".jpg,.jpeg,.png,.svg",
             "rule": [
                 "nullable",
@@ -68,7 +68,7 @@
             "name": "favicon",
             "path": "images\/",
             "key": "favicon",
-            "value": "themes\/basic\/images\/favicon.jpg",
+            "value": "themes\/basic\/images\/favicon.ico",
             "accept": ".jpg,.jpeg,.png,.ico",
             "rule": [
                 "nullable",
@@ -96,7 +96,7 @@
             "field": "color",
             "label": "Primary Color",
             "key": "primary_color",
-            "value": "#ffb000",
+            "value": "#ba521d",
             "required": true,
             "rule": [
                 "required",
@@ -498,7 +498,7 @@
             "label": "Header Background",
             "path": "images\/home-page\/",
             "key": "header_background",
-            "value": "themes\/basic\/images\/home-page\/9v62jJhIMKbOe0a_1747614185.png",
+            "value": "themes\/basic\/images\/home-page\/vmNEUYVpVAQ1rOL_1775818779.jpg",
             "accept": ".jpg,.jpeg,.png,.svg,.webp",
             "rule": [
                 "nullable",
