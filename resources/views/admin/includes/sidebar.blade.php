@@ -47,6 +47,12 @@
                         <span><i class="fa-solid fa-briefcase"></i>{{ d_trans('Businesses') }}</span>
                     </p>
                 </a>
+                <a href="{{ route('admin.products.index') }}"
+                    class="dashboard-sidebar-link {{ currentLink('products', 2) }}">
+                    <p class="dashboard-sidebar-link-title">
+                        <span><i class="fa-solid fa-box"></i>{{ d_trans('Products') }}</span>
+                    </p>
+                </a>
                 <a href="{{ route('admin.pending-reviews.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('pending-reviews', 2) }}">
                     <p class="dashboard-sidebar-link-title">

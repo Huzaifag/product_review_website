@@ -9,7 +9,6 @@
                     <p class="mag-desc">{{ $homeSection->trans->description }}</p>
                 @endif
             </div>
-            @if ($categories->count() > 5)
             <div class="mag-header-meta d-none d-md-flex">
                 <span class="mag-meta-pill">Editor's Selection</span>
                 <span class="mag-meta-count">{{ $categories->count() }} Topics</span>
@@ -26,7 +25,6 @@
                     </svg>
                 </div>
             </div>
-            @endif
         </div>
 
         <div class="section-body mag-grid-wrap">
@@ -35,12 +33,23 @@
                     @foreach ($categories as $category)
                         <div class="swiper-slide h-auto">
                             <a href="{{ $category->getLink() }}" class="mag-card">
+                                <div class="mag-card-accent"></div>
+                                <span class="mag-card-index">{{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                                 <div class="mag-icon-wrap">
                                     <img loading="lazy"
                                         src="{{ $category->getImageLink() }}"
                                         alt="{{ $category->slug }}" />
                                 </div>
                                 <span class="mag-card-name">{{ $category->trans->name }}</span>
+                                @if (!empty($category->trans->description))
+                                    <span class="mag-card-description">
+                                        {{ \Illuminate\Support\Str::limit(strip_tags($category->trans->description), 95) }}
+                                    </span>
+                                @endif
+                                <span class="mag-card-link">
+                                    {{ d_trans('Explore') }}
+                                    <i class="bi bi-arrow-up-right"></i>
+                                </span>
                             </a>
                         </div>
                     @endforeach

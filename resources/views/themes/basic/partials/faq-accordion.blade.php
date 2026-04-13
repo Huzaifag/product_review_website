@@ -9,7 +9,7 @@
         </button>
     </h2>
     <div id="collapse{{ $faq->id }}" class="accordion-collapse collapse" aria-labelledby="headingOne"
-        data-bs-parent="#accordion">
+        data-bs-parent="#{{ $accordionId ?? 'accordion' }}">
         <div class="accordion-body">
             {!! $faq->body !!}
         </div>

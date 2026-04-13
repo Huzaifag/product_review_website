@@ -14,6 +14,7 @@ use App\Models\Category;
 use App\Models\Faq;
 use App\Models\FooterLink;
 use App\Models\KycVerification;
+use App\Models\Product;
 use App\Models\NavbarLink;
 use App\Rules\BlockPatterns;
 use App\Rules\Username;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Validator;
@@ -37,6 +39,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        // Prevent "Specified key was too long" errors on older MySQL/MariaDB setups.
+        Schema::defaultStringLength(191);
+
         Carbon::setLocale(getLocale());
         Paginator::useBootstrapFive();
 
@@ -116,16 +121,17 @@ class AppServiceProvider extends ServiceProvider
         theme_compose('sections.featured', function ($view) {
             $featuredSection = homeSection('featured');
             $cacheMinutes = Carbon::now()->addMinutes($featuredSection->cache_expiry_time);
-            $featuredBusinesses = Cache::remember('home_featured_businesses_cache', $cacheMinutes, function () use ($featuredSection) {
-                return Business::active()
-                    ->featured()
+            $featuredProducts = Cache::remember('home_featured_products_cache', $cacheMinutes, function () use ($featuredSection) {
+                return Product::where('is_active', true)
+                    ->where('is_featured', true)
+                    ->with(['category', 'subCategory'])
                     ->inRandomOrder()
                     ->limit($featuredSection->items_number)
                     ->get();
             });
             $view->with([
                 'featuredSection' => $featuredSection,
-                'featuredBusinesses' => $featuredBusinesses,
+                'featuredProducts' => $featuredProducts,
             ]);
         });
 

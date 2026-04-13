@@ -53,6 +53,8 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
         Route::delete('{business}', 'BusinessController@destroy')->name('destroy');
     });
 
+    Route::resource('products', 'ProductController')->middleware('demo');
+
     Route::name('pending-reviews.')->prefix('pending-reviews')->group(function () {
         Route::get('/', 'ReviewController@pendingReviews')->name('index');
         Route::get('{businessReview}', 'ReviewController@pendingReviewsShow')->name('show');

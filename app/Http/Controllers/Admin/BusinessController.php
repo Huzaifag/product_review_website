@@ -118,6 +118,7 @@ class BusinessController extends Controller
         $business->website = $website;
         $business->domain = $domain;
         $business->short_description = $shortDescription;
+        $business->is_featured = Business::FEATURED;
         $business->save();
 
         toastr()->success(d_trans('Added successfully'));

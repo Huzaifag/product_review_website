@@ -33,7 +33,7 @@
                                 </div>
                             @else
                                 <a href="{{ $navbarLink->link }}" {{ $navbarLink->isExternal() ? 'target=_blank' : '' }}
-                                    class="link">
+                                    class="link {{ request()->url() == $navbarLink->link ? 'active' : '' }}">
                                     <div class="link-title">
                                         <span>{{ $navbarLink->name }}</span>
                                     </div>
@@ -51,18 +51,12 @@
                             </a>
                             @if (config('settings.user.actions.registration'))
                                 <a href="{{ route('register') }}" class="link-btn">
-                                    <button class="btn btn-primary px-3">
+                                    <button class="btn btn-signup px-3">
                                         <i class="fa-solid fa-user-plus me-2"></i>{{ d_trans('Sign Up') }}
                                     </button>
                                 </a>
                             @endif
                         @endguest
-                        <a href="{{ route('business.login') }}" class="link-btn" target="_blank">
-                            <button class="btn btn-business px-3">
-                                <i class="fa-solid fa-briefcase me-2"></i>{{ d_trans('For Businesses') }}<i
-                                    class="fa-solid fa-arrow-right ms-2 icon-rtl"></i>
-                            </button>
-                        </a>
                     </div>
                 </div>
             </div>

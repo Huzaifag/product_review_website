@@ -274,7 +274,7 @@
                 slidesPerView: 3,
             },
             1400: {
-                slidesPerView: 4,
+                slidesPerView: 5,
             },
         };
         const maxCategorySlidesPerView = Math.max(...Object.values(categoryBreakpoints).map((point) => point.slidesPerView));
