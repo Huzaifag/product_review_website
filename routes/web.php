@@ -74,6 +74,9 @@ Route::middleware('maintenance')->group(function () {
             Route::get('{slug}', 'GeneralController@blogArticle');
             Route::post('{slug}', 'GeneralController@blogComment')->name('article')->middleware('auth');
         });
+        Route::name('products.')->prefix('products')->group(function () {
+            Route::get('{slug}', 'ProductController@show')->name('show');
+        });
         Route::name('user.')->prefix('user')->group(function () {
             Route::get('{username}', 'UserController@profile')->name('profile');
             Route::middleware(['demo', 'auth'])->group(function () {

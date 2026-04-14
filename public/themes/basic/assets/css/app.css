@@ -6660,7 +6660,7 @@ a:hover {
     display: flex;
     flex-direction: column;
     height: auto;
-    min-height: 300px;
+    min-height: 330px;
     width: 100%;
     padding: 1.5rem;
     border-radius: 24px;
@@ -6817,18 +6817,38 @@ a:hover {
     text-transform: uppercase;
 }
 
+.featured-lab-index-category {
+    background: rgba(27, 94, 32, 0.10);
+    border-color: rgba(27, 94, 32, 0.22);
+    color: #1B5E20;
+}
+
+.featured-lab-index-subcategory {
+    background: rgba(198, 40, 40, 0.10);
+    border-color: rgba(198, 40, 40, 0.22);
+    color: #C62828;
+}
+
+.featured-lab-index-price {
+    background: rgba(13, 71, 161, 0.10);
+    border-color: rgba(13, 71, 161, 0.22);
+    color: #0D47A1;
+}
+
 .featured-lab-expand {
     position: relative;
     max-height: 0;
     opacity: 0;
+    transform: translateY(-10px);
     overflow: hidden;
-    transition: max-height 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease;
+    transition: max-height 1.05s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s ease, transform 0.8s ease;
     z-index: 1;
 }
 
 .featured-lab-card:hover .featured-lab-expand {
-    max-height: 220px;
+    max-height: 1200px;
     opacity: 1;
+    transform: translateY(0);
 }
 
 .featured-lab-expand-inner {
@@ -6836,7 +6856,28 @@ a:hover {
     border-radius: 14px;
     border: 1px solid #EDE0D4;
     background: #FDF8F4;
-    padding: 1rem 1.1rem;
+    padding: 1rem 1.1rem 1.05rem;
+    transform: translateY(8px);
+    opacity: 0;
+    transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease;
+}
+
+.featured-lab-card:hover .featured-lab-expand-inner {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.featured-lab-expand .featured-lab-meta-item,
+.featured-lab-expand .featured-lab-chip-safe {
+    transform: translateY(4px);
+    opacity: 0;
+    transition: transform 0.75s ease, opacity 0.55s ease;
+}
+
+.featured-lab-card:hover .featured-lab-expand .featured-lab-meta-item,
+.featured-lab-card:hover .featured-lab-expand .featured-lab-chip-safe {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 .featured-lab-meta-item {
@@ -6856,6 +6897,18 @@ a:hover {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.featured-lab-meta-price {
+    padding-top: 0.55rem;
+    border-top: 1px solid #EDE0D4;
+    margin-top: 0.25rem;
+}
+
+.featured-lab-expand .featured-lab-chip-safe {
+    margin-bottom: 0;
+    background: rgba(27, 94, 32, 0.10);
+    border-color: rgba(27, 94, 32, 0.22);
 }
 
 .featured-lab-rating {
@@ -7162,7 +7215,16 @@ a:hover {
     .featured-lab-expand {
         max-height: none;
         opacity: 1;
+        transform: none;
         z-index: 1;
+    }
+
+    .featured-lab-expand-inner,
+    .featured-lab-expand .featured-lab-meta-item,
+    .featured-lab-expand .featured-lab-chip-safe {
+        transform: none;
+        opacity: 1;
+        transition: none;
     }
 
     .featured-lab-hint {

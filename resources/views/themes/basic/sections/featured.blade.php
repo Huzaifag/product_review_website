@@ -24,8 +24,9 @@
                     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-3 g-4 featured-luxe-grid">
                         @foreach ($featuredProducts as $product)
                             <div class="col" data-aos="fade-up" data-aos-duration="1000">
-                                <div class="featured-lab-card">
-                                    <i class="fa-solid fa-box-open featured-lab-corner-icon"></i>
+                                <a href="{{ $product->getLink() }}"
+                                    class="featured-lab-card d-block text-reset text-decoration-none">
+                                    {{-- <i class="fa-solid fa-box-open featured-lab-corner-icon"></i> --}}
 
                                     <div class="featured-lab-head">
                                         <div class="featured-lab-thumb">
@@ -45,12 +46,12 @@
                                     </div>
 
                                     <div class="featured-lab-chips">
-                                        <span class="featured-lab-index">
+                                        <span class="featured-lab-index featured-lab-index-category">
                                             <i class="bi bi-tag"></i>
                                             {{ $product->category->trans->name ?? d_trans('Uncategorized') }}
                                         </span>
                                         @if ($product->subCategory)
-                                            <span class="featured-lab-index">
+                                            <span class="featured-lab-index featured-lab-index-subcategory">
                                                 <i class="bi bi-tag"></i>
                                                 {{ $product->subCategory->trans->name ?? $product->subCategory->name }}
                                             </span>
@@ -62,10 +63,10 @@
                                             </span>
                                         @endif
                                         @if ($product->price)
-                                            <span class="featured-lab-index">
+                                            {{-- <span class="featured-lab-index featured-lab-index-price">
                                                 <i class="bi bi-cash-coin"></i>
                                                 {{ $product->currency }} {{ numberFormat($product->price) }}
-                                            </span>
+                                            </span> --}}
                                         @endif
                                     </div>
 
@@ -79,6 +80,12 @@
                                                 <span>{{ d_trans('Organic Certified') }}</span>
                                                 <strong>{{ $product->organic_certified ? d_trans('Yes') : d_trans('No') }}</strong>
                                             </div>
+                                            @if ($product->price)
+                                                <div class="featured-lab-meta-item featured-lab-meta-price">
+                                                    <span>{{ d_trans('Price') }}</span>
+                                                    <strong>{{ $product->currency }} {{ numberFormat($product->price) }}</strong>
+                                                </div>
+                                            @endif
                                             <div class="featured-lab-meta-item">
                                                 <span>{{ d_trans('Ingredients') }}</span>
                                                 <strong>{{ count($product->getIngredientsList()) }}</strong>
@@ -96,7 +103,7 @@
                                     <span class="featured-lab-hint">
                                         <i class="bi bi-chevron-down"></i>
                                     </span>
-                                </div>
+                                </a>
                             </div>
                         @endforeach
                     </div>

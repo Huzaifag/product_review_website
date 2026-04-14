@@ -11,6 +11,21 @@ class Product extends Model
     use Sluggable;
     use SoftDeletes;
 
+    const UNVERIFIED = 0;
+    const VERIFIED = 1;
+
+    const NOT_TRENDING = 0;
+    const TRENDING = 1;
+
+    const NOT_BEST_RATING = 0;
+    const BEST_RATING = 1;
+
+    const NOT_FEATURED = 0;
+    const FEATURED = 1;
+
+    const STATUS_SUSPENDED = 0;
+    const STATUS_ACTIVE = 1;
+
     protected $fillable = [
         'category_id',
         'sub_category_id',
@@ -79,6 +94,11 @@ class Product extends Model
         return $this->hasMany(IngredientConcern::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
     public function userReviews()
     {
         return $this->hasMany(UserReview::class);
@@ -100,6 +120,17 @@ class Product extends Model
             return [];
         }
 
+
         return array_values(array_filter(array_map('trim', explode(',', $this->ingredients_inci))));
+    }
+
+    public function getLink()
+    {
+        return route('products.show', $this->slug ?? $this->id);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', self::STATUS_ACTIVE);
     }
 }

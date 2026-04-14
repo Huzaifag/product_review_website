@@ -25,34 +25,32 @@
                         : d_trans('All results for the ":name" category', [
                             'name' => strtolower($category->trans->name),
                         ]),
-                'hide_grid_buttons' => $businesses->count() < 1,
+                'hide_grid_buttons' => $products->count() < 1,
             ])
-            @if ($businesses->count() > 0)
+            @if ($products->count() > 0)
                 <div class="items">
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 g-3">
-                        @foreach ($businesses as $business)
+                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2 g-3">
+                        @foreach ($products as $product)
                             <div class="col">
-                                @include('themes.basic.partials.business', [
-                                    'business' => $business,
+                                @include('themes.basic.partials.product', [
+                                    'product' => $product,
                                     'item_footer' => true,
                                 ])
                             </div>
                         @endforeach
                     </div>
                 </div>
-                {{ $businesses->links() }}
+                {{ $products->links() }}
             @else
                 @include('themes.basic.partials.empty-box', ['empty_image' => 'v2'])
             @endif
-            @if (config('settings.user.actions.adding_none_exists_business'))
-                @if (
-                    !config('settings.business.actions.reviews_require_login') ||
-                        (config('settings.business.actions.reviews_require_login') && authUser()))
+            {{-- @if (config('settings.user.actions.adding_none_exists_business'))
+                @if (!config('settings.business.actions.reviews_require_login') || (config('settings.business.actions.reviews_require_login') && authUser()))
                     <div class="mt-4">
                         @include('themes.basic.partials.add-business-box')
                     </div>
                 @endif
-            @endif
+            @endif --}}
         </div>
     </div>
     @include('themes.basic.categories.includes.popular-searches', ['popularSearches' => $popularSearches])

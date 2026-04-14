@@ -27,6 +27,20 @@ Breadcrumbs::for('categories.sub-sub-category', function (BreadcrumbTrail $trail
     $trail->push($subSubCategory->trans->name, $subSubCategory->getLink());
 });
 
+Breadcrumbs::for('products.show', function (BreadcrumbTrail $trail, $product) {
+    if ($product->category) {
+        $trail->parent('categories.category', $product->category);
+    } else {
+        $trail->parent('home');
+    }
+
+    if ($product->subCategory) {
+        $trail->push($product->subCategory->trans->name, $product->subCategory->getLink());
+    }
+
+    $trail->push($product->name, $product->getLink());
+});
+
 Breadcrumbs::for('businesses', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push(d_trans('Businesses'), route('businesses.index'));

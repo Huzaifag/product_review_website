@@ -61,7 +61,7 @@ class CategoryController extends Controller
         $popularSearches = $category->subCategories()
             ->orderbyDesc('views')->limit(10)->get()->shuffle();
 
-        $businesses = BusinessController::getResultByParams($category);
+        $products = ProductController::getResultByParams($category);
 
         incrementViews($category, 'categories');
 
@@ -69,7 +69,7 @@ class CategoryController extends Controller
             'category' => $category,
             'searchCategories' => $searchCategories,
             'popularSearches' => $popularSearches,
-            'businesses' => $businesses,
+            'products' => $products,
         ]);
     }
 
@@ -89,7 +89,7 @@ class CategoryController extends Controller
         $popularSearches = $subCategory->subSubCategories()
             ->orderbyDesc('views')->limit(10)->get()->shuffle();
 
-        $businesses = BusinessController::getResultByParams($category, $subCategory);
+        $products = ProductController::getResultByParams($category, $subCategory);
 
         incrementViews($subCategory, 'sub_categories');
 
@@ -98,7 +98,7 @@ class CategoryController extends Controller
             'subCategory' => $subCategory,
             'searchCategories' => $searchCategories,
             'popularSearches' => $popularSearches,
-            'businesses' => $businesses,
+            'products' => $products,
         ]);
     }
 
@@ -121,7 +121,7 @@ class CategoryController extends Controller
         $popularSearches = $subCategory->subSubCategories()
             ->orderbyDesc('views')->limit(10)->get()->shuffle();
 
-        $businesses = BusinessController::getResultByParams($category, $subCategory, $subSubCategory);
+        $products = ProductController::getResultByParams($category, $subCategory, $subSubCategory);
 
         incrementViews($subCategory, 'sub_sub_categories');
 
@@ -131,7 +131,7 @@ class CategoryController extends Controller
             'subSubCategory' => $subSubCategory,
             'searchCategories' => $searchCategories,
             'popularSearches' => $popularSearches,
-            'businesses' => $businesses,
+            'products' => $products,
         ]);
     }
 }

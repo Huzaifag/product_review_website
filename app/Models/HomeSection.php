@@ -104,8 +104,12 @@ class HomeSection extends Model
     public function getBusinesses()
     {
         if (!$this->isPermanent()) {
-            $cacheMinutes = Carbon::now()->addMinutes($this->cache_expiry_time);
             $category = $this->getCategory();
+            if (!$category || !$category->slug) {
+                return collect();
+            }
+
+            $cacheMinutes = Carbon::now()->addMinutes($this->cache_expiry_time);
             $cacheKey = "home_businesses_" . Str::slug($category->slug, '_');
 
             return Cache::remember($cacheKey, $cacheMinutes, function () use ($category) {
