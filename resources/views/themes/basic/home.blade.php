@@ -71,8 +71,8 @@
             {{-- Search bar --}}
             <div class="oeko-hero-search" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
                 <div class="header-search search home-search">
-                    <form action="{{ route('businesses.index') }}"
-                        data-ajax-action="{{ route('businesses.ajax-search') }}"
+                    <form action="{{ route('products.index') }}"
+                        data-ajax-action="{{ route('products.ajax-search') }}"
                         data-ajax-empty="{{ d_trans('No results found') }}"
                         method="GET">
                         <div class="search-input oeko-search-input">
@@ -241,8 +241,9 @@
     display: flex;
     align-items: center;
     padding: 80px 0 60px;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
+    z-index: 50;
 }
 
 .oeko-hero-inner {
@@ -254,6 +255,7 @@
     gap: 60px;
     align-items: center;
     width: 100%;
+    overflow: visible;
 }
 
 /* ── Left Side ── */
@@ -261,6 +263,7 @@
     display: flex;
     flex-direction: column;
     gap: 28px;
+    overflow: visible;
 }
 
 /* Trust pill */
@@ -407,6 +410,7 @@
 /* Search */
 .oeko-hero-search {
     max-width: 520px;
+    overflow: visible;
 }
 
 .oeko-search-input {
@@ -414,7 +418,7 @@
     border: 1.5px solid #EDE0D4 !important;
     background: #FFFFFF !important;
     box-shadow: 0 4px 20px rgba(44,26,14,0.07) !important;
-    overflow: hidden;
+    overflow: visible;
     transition: all 200ms ease;
 }
 

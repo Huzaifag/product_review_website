@@ -13,13 +13,16 @@
     <div class="card">
         <div class="card-body p-4">
             <form id="submittedForm" action="{{ route('admin.categories.sub-categories.update', $subCategory->id) }}"
-                method="POST">
+                method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row g-3">
                     <div class="col-12">
+                        <x-admin.image-uploader width="100px" height="100px" :model="$subCategory" :required=false />
+                    </div>
+                    <div class="col-12">
                         <label class="form-label">{{ d_trans('Main Category') }} </label>
-                        <select class="form-select form-select-md" disabled>
+                        <select class="form-select form-select-md" name="category" required>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}" @selected($category->id == $subCategory->category->id)>
                                     {{ $category->trans->name }}

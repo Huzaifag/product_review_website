@@ -2363,6 +2363,7 @@ a:hover {
     position: relative;
     -ms-flex-negative: 0;
     flex-shrink: 0;
+    overflow: visible;
 }
 
 .header-search .search-input {
@@ -2428,13 +2429,16 @@ a:hover {
     top: 68px;
     left: 0;
     width: 100%;
+    z-index: 1050;
+    overflow: visible;
     border-top: 1px solid rgb(var(--border_color));
     -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
 }
 
 .header-search .search-results-inner {
-    max-height: 248px;
+    max-height: 500px;
+    overflow: visible !important;
 }
 
 .header-search.show .search-input input {
@@ -6141,6 +6145,13 @@ a:hover {
     }
 }
 
+.gradient-icon {
+    background: linear-gradient(135deg, #b86a3f, #8f421d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
 .mag-section {
     --mag-bg: #f6f4ef;
     --mag-border: #ded8ca;
@@ -6159,7 +6170,7 @@ a:hover {
     flex-direction: column;
     gap: 16px;
     padding: 0 40px 36px;
-    border-bottom: 1px solid var(--mag-border);
+    /* border-bottom: 1px solid var(--mag-border); */
     margin-bottom: 34px;
 }
 
@@ -6309,8 +6320,8 @@ a:hover {
 }
 
 .mag-icon-wrap img {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     object-fit: contain;
 }
 
@@ -6679,8 +6690,8 @@ a:hover {
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 10% -10%, rgba(198, 40, 40, 0.04) 0%, rgba(198, 40, 40, 0) 56%), 
-                radial-gradient(circle at 110% 120%, rgba(27, 94, 32, 0.04) 0%, rgba(27, 94, 32, 0) 60%);
+    background: radial-gradient(circle at 10% -10%, rgba(198, 40, 40, 0.04) 0%, rgba(198, 40, 40, 0) 56%),
+        radial-gradient(circle at 110% 120%, rgba(27, 94, 32, 0.04) 0%, rgba(27, 94, 32, 0) 60%);
     pointer-events: none;
 }
 

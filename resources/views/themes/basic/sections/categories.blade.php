@@ -1,8 +1,48 @@
 @if ($categories->count() > 0)
 <section class="section mag-section">
+    @push('styles')
+        <style>
+            .mag-grid-wrap .mag-card {
+                padding: 0.2rem 0.2rem 0.05rem;
+            }
+
+            .mag-grid-wrap .mag-icon-wrap {
+                width: 82px;
+                height: 82px;
+                margin-bottom: 0.45rem;
+            }
+
+            .mag-grid-wrap .mag-card-name {
+                font-size: 0.95rem;
+                line-height: 1.15;
+            }
+
+            .mag-section .section-inner {
+                position: relative;
+            }
+
+            .mag-section .mag-nav-arrows {
+                position: absolute;
+                right: 24px;
+                bottom: -50px;
+                z-index: 2;
+            }
+
+            .mag-section .mag-header {
+                padding-bottom: 1rem;
+            }
+
+            @media (min-width: 992px) {
+                .mag-grid-wrap .row {
+                    --bs-gutter-x: 1rem;
+                    --bs-gutter-y: 1rem;
+                }
+            }
+        </style>
+    @endpush
     <div class="section-inner">
         <div class="mag-header container container-custom">
-            <div class="mag-header-left">
+            <div class="container mag-header-left">
                 <span class="mag-label">Browse by Topic</span>
                 <h2 class="mag-title">{{ $homeSection->trans->name }}</h2>
                 @if ($homeSection->description)
@@ -29,22 +69,20 @@
             @endif
         </div>
 
-        <div class="section-body mag-grid-wrap">
-            <div class="swiper home-categories-swiper" data-aos="zoom-in-up" data-aos-duration="1000">
-                <div class="swiper-wrapper">
-                    @foreach ($categories as $category)
-                        <div class="swiper-slide h-auto">
-                            <a href="{{ $category->getLink() }}" class="mag-card">
-                                <div class="mag-icon-wrap">
-                                    <img loading="lazy"
-                                        src="{{ $category->getImageLink() }}"
-                                        alt="{{ $category->slug }}" />
-                                </div>
-                                <span class="mag-card-name">{{ $category->trans->name }}</span>
-                            </a>
-                        </div>
-                    @endforeach
-                </div>
+        <div class="container section-body mag-grid-wrap">
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-2 justify-content-center" data-aos="zoom-in-up" data-aos-duration="1000">
+                @foreach ($categories->take(12) as $category)
+                    <div class="col">
+                        <a href="{{ $category->getLink() }}" class="mag-card h-100">
+                            <div class="mag-icon-wrap">
+                                <img loading="lazy"
+                                    src="{{ $category->getImageLink() }}"
+                                    alt="{{ $category->slug }}" />
+                            </div>
+                            <span class="mag-card-name">{{ $category->trans->name }}</span>
+                        </a>
+                    </div>
+                @endforeach
             </div>
         </div>
 

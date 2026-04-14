@@ -176,4 +176,42 @@ class ProductController extends Controller
             'relatedProducts' => $relatedProducts,
         ]);
     }
+
+
+    public function ajaxSearch(Request $request)
+    {
+        $searchTerm = trim((string) $request->search);
+
+        if ($searchTerm === '') {
+            return response()->json([]);
+        }
+
+        $searchLike = '%' . $searchTerm . '%';
+        $searchStart = $searchTerm . '%';
+
+        $products = Product::active()
+            ->with(['category'])
+            ->where(function ($query) use ($searchLike) {
+                $query->where('name', 'like', $searchLike)
+                    ->orWhere('brand_name', 'like', $searchLike)
+                    ->orWhere('description', 'like', $searchLike)
+                    ->orWhere('ingredients_inci', 'like', $searchLike);
+            })
+            ->orderByRaw("CASE WHEN name LIKE ? THEN 0 ELSE 1 END", [$searchStart])
+            ->orderByDesc('view_count')
+            ->limit(10)
+            ->get();
+
+        return response()->json($products->map(function (Product $product) {
+            return [
+                'name' => $product->name,
+                'brand' => $product->brand_name,
+                'image' => $product->getImageLink(),
+                'category' => $product->category->trans->name ?? d_trans('Uncategorized'),
+                'grade' => $product->overall_grade ? str_replace('_', ' ', ucfirst($product->overall_grade)) : null,
+                'lab_verified' => $product->lab_verified,
+                'link' => $product->getLink(),
+            ];
+        }));
+    }
 }

@@ -8,9 +8,12 @@
 @section('content')
     <div class="card">
         <div class="card-body p-4">
-            <form id="submittedForm" action="{{ route('admin.categories.sub-categories.store') }}" method="POST">
+            <form id="submittedForm" action="{{ route('admin.categories.sub-categories.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row g-3">
+                    <div class="col-12">
+                        <x-admin.image-uploader width="100px" height="100px" :required=false />
+                    </div>
                     <div class="col-12">
                         <label class="form-label">{{ d_trans('Main Category') }} </label>
                         <select name="category" class="selectpicker selectpicker-md" title="{{ d_trans('Choose') }}"

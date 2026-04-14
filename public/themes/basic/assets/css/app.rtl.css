@@ -172,13 +172,16 @@ body {
     top: 68px;
     left: 0;
     width: 100%;
+    z-index: 1050;
+    overflow: visible;
     border-top: 1px solid rgb(var(--border_color));
     -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
 }
 
 .header-search .search-results-inner {
-    max-height: 248px;
+    max-height: 500px;
+    overflow: visible !important;
 }
 
 .header-search.show .search-input input {

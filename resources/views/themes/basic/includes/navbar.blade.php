@@ -85,7 +85,7 @@
                         @csrf
                     </form>
                 @endauth
-                <div class="nav-bar-menu-btn ms-3">
+                <div class="nav-bar-menu-btn ms-3 gradient-icon">
                     <i class="fa-solid fa-bars fa-lg"></i>
                 </div>
             </div>

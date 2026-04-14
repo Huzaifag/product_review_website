@@ -92,7 +92,7 @@
             }
 
             .site-logo {
-                font-family: 'Playfair Display', serif;
+                /* font-family: 'Playfair Display', serif; */
                 font-size: 1.25rem;
                 font-weight: 700;
                 color: var(--text-dark);
@@ -140,13 +140,15 @@
 
             /* LEFT column */
             .img-col {
-                width: 44%;
+                width: 50%;
                 flex-shrink: 0;
                 background: var(--cream-dark);
                 padding: 24px;
                 display: flex;
                 flex-direction: column;
                 gap: 12px;
+                overflow-y: auto;
+                /* max-height: 100vh; */
             }
 
             .img-main {
@@ -159,6 +161,7 @@
                 align-items: center;
                 justify-content: center;
                 position: relative;
+                flex-shrink: 0;
             }
 
             .img-main img {
@@ -216,7 +219,7 @@
             }
 
             .bag-brand {
-                font-family: 'Playfair Display', serif;
+                /* font-family: 'Playfair Display', serif; */
                 font-size: .52rem;
                 color: rgba(255, 255, 255, .8);
                 letter-spacing: .08em;
@@ -257,6 +260,7 @@
             .img-thumbs {
                 display: flex;
                 gap: 10px;
+                flex-shrink: 0;
             }
 
             .img-thumb {
@@ -281,6 +285,26 @@
             .img-thumb.active {
                 border-color: var(--selected-border);
                 transform: translateY(-2px);
+            }
+
+            .img-view-all-btn {
+                flex: 1;
+                aspect-ratio: 1 / 1;
+                background: rgba(44, 61, 46, 0.1);
+                border: 1.5px dashed var(--border);
+                border-radius: 10px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all .2s ease;
+                font-size: 2.5rem;
+                color: var(--text-dark);
+            }
+
+            .img-view-all-btn:hover {
+                border-color: var(--green-dark);
+                background: rgba(44, 61, 46, 0.15);
             }
 
             .thumb-pour {
@@ -385,7 +409,6 @@
             }
 
             .product-title {
-                font-family: 'Playfair Display', serif;
                 font-size: 2.2rem;
                 font-weight: 700;
                 color: var(--text-dark);
@@ -483,25 +506,20 @@
                 color: var(--text-mid);
                 border-bottom: 1px dashed rgba(122, 130, 110, .35);
                 padding-bottom: 4px;
+            }left-test-section {
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                background: #f8f2e8;
+                padding: 12px;
+                margin-bottom: 14px;
+                flex-shrink: 0;
             }
 
-            .lab-list li:last-child {
-                border-bottom: 0;
-                padding-bottom: 0;
-            }
-
-            .lab-badge {
-                display: inline-flex;
-                align-items: center;
-                padding: 2px 8px;
-                border-radius: 999px;
-                border: 1px solid rgba(44, 61, 46, .2);
-                background: rgba(44, 61, 46, .08);
-                color: var(--green-dark);
-                font-size: .64rem;
+            .left-section-title {
+                font-size: .8rem;
                 font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: .06em;
+                color: var(--text-dark);
+                margin-bottom: 8px;
             }
 
             .concern-list {
@@ -531,53 +549,156 @@
                 line-height: 1.45;
             }
 
+            /* Image Modal */
+            .modal-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 2000;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .modal-overlay.active {
+                display: flex;
+            }
+
+            .modal-content {
+                background: #fff;
+                border-radius: 16px;
+                padding: 24px;
+                max-width: 90vw;
+                max-height: 90vh;
+                overflow-y: auto;
+                position: relative;
+            }
+
+            .modal-close {
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                width: 32px;
+                height: 32px;
+                background: var(--cream-dark);
+                border: none;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                color: var(--text-dark);
+            }
+
+            .modal-close:hover {
+                background: var(--cream);
+            }
+
+            .modal-images-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 12px;
+                margin-top: 20px;
+            }
+
+            .modal-image {
+                aspect-ratio: 1 / 1;
+                border-radius: 12px;
+                overflow: hidden;
+                cursor: pointer;
+                border: 2px solid transparent;
+                transition: border-color .2s ease, transform .2s ease;
+            }
+
+            .modal-image:hover {
+                border-color: var(--green-dark);
+                transform: scale(1.05);
+            }
+
+            .modal-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover
+                gap: 8px;
+            }
+
+            .concern-item {
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 9px 10px;
+                background: #fff;
+            }
+
+            .concern-item h6 {
+                font-size: .78rem;
+                margin: 0 0 3px;
+                color: var(--text-dark);
+            }
+
+            .concern-item p {
+                margin: 0;
+                font-size: .72rem;
+                color: var(--text-mid);
+                line-height: 1.45;
+            }
+
             /* Roast selector */
             .roast-grid {
                 display: flex;
-                gap: 12px;
+                gap: 16px;
                 margin-bottom: 20px;
             }
 
             .roast-card {
                 flex: 1;
-                border: 1.5px solid var(--border);
-                border-radius: 10px;
-                padding: 10px 10px 8px;
+                border: 2px solid #e5e0d5;
+                border-radius: 12px;
+                padding: 16px 12px 14px;
                 text-align: center;
                 cursor: pointer;
-                transition: border-color .25s ease, background .25s ease, box-shadow .25s ease, transform .25s ease;
-                background: #f7f1e7;
+                transition: all .25s ease;
+                background: #f9f6f0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-height: 180px;
             }
 
             .roast-card:hover {
-                border-color: var(--tan);
-                transform: translateY(-2px);
+                border-color: #d9cfc5;
+                background: #faf8f4;
             }
 
             .roast-card.active {
-                background: var(--selected-bg);
-                border-color: var(--selected-border);
-                box-shadow: 0 10px 20px rgba(30, 40, 32, 0.08);
+                background: #f0f4f8;
+                border-color: #8db5d1;
+                box-shadow: none;
             }
 
             .roast-img {
-                width: 60px;
-                height: 76px;
-                margin: 0 auto 8px;
-                border-radius: 6px;
-                background: #efe8db;
+                width: 80px;
+                height: 100px;
+                margin: 0 auto 12px;
+                border-radius: 8px;
+                background: #f5f1e8;
                 position: relative;
                 overflow: hidden;
-                border: 1px solid #d9cfbf;
+                border: 1px solid #e8dfd2;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                flex-shrink: 0;
             }
 
             .roast-img img {
                 width: 100%;
                 height: 100%;
                 object-fit: contain;
+                padding: 4px;
             }
 
             .roast-mini-logo {
@@ -594,16 +715,18 @@
             }
 
             .roast-name {
-                font-family: 'Playfair Display', serif;
-                font-size: .85rem;
-                font-weight: 500;
-                color: var(--text-dark);
-                margin-bottom: 2px;
+                /* font-family: 'Playfair Display', serif; */
+                font-size: .88rem;
+                font-weight: 600;
+                color: #2c3a2e;
+                margin-bottom: 3px;
+                line-height: 1.2;
             }
 
             .roast-sub {
-                font-size: .62rem;
-                color: var(--text-light);
+                font-size: .65rem;
+                color: #7a826e;
+                line-height: 1.3;
             }
 
             /* Purchase options */
@@ -836,8 +959,6 @@
         if ($productImageUrls->isEmpty()) {
             $productImageUrls = collect([$product->getImageLink()]);
         }
-
-        $roastImages = $productImageUrls->pad(3, $productImageUrls->first())->take(3)->values();
     @endphp
     <div class="card-shell">
         <!-- Product body -->
@@ -850,15 +971,54 @@
                     <img id="mainProductImage" src="{{ $productImageUrls->first() }}" alt="{{ $product->name }}">
                 </div>
 
-                <!-- Thumbnails -->
+                <!-- Thumbnails - Show 4 images + View All button -->
                 <div class="img-thumbs">
-                    @foreach ($productImageUrls->take(4) as $index => $imageUrl)
+                    @foreach ($productImageUrls->take(3) as $index => $imageUrl)
                         <button type="button" class="img-thumb {{ $index === 0 ? 'active' : '' }}"
                             onclick="selectPreview(this, '{{ $imageUrl }}')">
                             <img src="{{ $imageUrl }}" alt="{{ $product->name }}">
                         </button>
                     @endforeach
+                    @if ($productImageUrls->count() > 3)
+                        <button type="button" class="img-view-all-btn" onclick="openImageModal()">
+                            +
+                        </button>
+                    @endif
                 </div>
+
+                <!-- Ingredient Concerns Section -->
+                @php
+                    $concerns = $product->ingredientConcerns;
+                @endphp
+                @if ($concerns->count() > 0)
+                    <div class="left-test-section">
+                        <div class="left-section-title">{{ d_trans('Ingredient Concerns') }}</div>
+                        <div class="concern-list">
+                            @foreach ($concerns as $concern)
+                                <div class="concern-item">
+                                    <h6>
+                                        {{ $concern->ingredient_name }}
+                                        <span class="lab-badge">{{ ucfirst($concern->severity) }}</span>
+                                    </h6>
+                                    <p>{{ $concern->description ?: d_trans('No description provided.') }}</p>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Test Summary Section -->
+                @php
+                    $lab = $product->labTestingResult;
+                @endphp
+                @if ($lab?->test_summary)
+                    <div class="left-test-section">
+                        <div class="left-section-title">{{ d_trans('Test Summary') }}</div>
+                        <p style="margin:0;font-size:.75rem;color:var(--text-mid);line-height:1.55;">
+                            {{ $lab->test_summary }}
+                        </p>
+                    </div>
+                @endif
             </div><!-- /img-col -->
 
             <!-- RIGHT: Product details -->
@@ -908,26 +1068,38 @@
 
                 <!-- Roast selector -->
                 <div class="roast-grid">
-                    <div class="roast-card" onclick="selectRoast(this)">
-                        <div class="roast-img">
-                            <img src="{{ $roastImages[0] }}" alt="{{ $product->name }}">
-                        </div>
-                        <div class="roast-name">Calm</div>
-                        <div class="roast-sub">Light Roast</div>
-                    </div>
+                    @php
+                        $category = $product->category;
+                        $subCategory = $product->subCategory;
+                        $categoryImage = $category?->image ? (\Illuminate\Support\Str::startsWith($category->image, ['http://', 'https://']) ? $category->image : asset($category->image)) : asset('images/placeholder.png');
+                        $subCategoryImage = $subCategory?->image ? (\Illuminate\Support\Str::startsWith($subCategory->image, ['http://', 'https://']) ? $subCategory->image : asset($subCategory->image)) : asset('images/placeholder.png');
+                    @endphp
+                    
+                    <!-- Category Card -->
                     <div class="roast-card active" onclick="selectRoast(this)">
                         <div class="roast-img">
-                            <img src="{{ $roastImages[1] }}" alt="{{ $product->name }}">
+                            <img src="{{ $categoryImage }}" alt="{{ $category?->trans->name }}">
                         </div>
-                        <div class="roast-name">Daily</div>
-                        <div class="roast-sub">Medium Roast</div>
+                        <div class="roast-name">{{ $category?->trans->name ?: d_trans('Category') }}</div>
+                        <div class="roast-sub">{{ d_trans('Category') }}</div>
                     </div>
+                    
+                    <!-- Sub Category Card -->
                     <div class="roast-card" onclick="selectRoast(this)">
                         <div class="roast-img">
-                            <img src="{{ $roastImages[2] }}" alt="{{ $product->name }}">
+                            <img src="{{ $subCategoryImage }}" alt="{{ $subCategory?->trans->name }}">
                         </div>
-                        <div class="roast-name">Bold</div>
-                        <div class="roast-sub">Medium+Dark Roast</div>
+                        <div class="roast-name">{{ $subCategory?->trans->name ?: d_trans('Sub Category') }}</div>
+                        <div class="roast-sub">{{ d_trans('Sub Category') }}</div>
+                    </div>
+                    
+                    <!-- Product Info Card -->
+                    <div class="roast-card" onclick="selectRoast(this)">
+                        <div class="roast-img">
+                            <img src="{{ $productImageUrls->first() }}" alt="{{ $product->name }}">
+                        </div>
+                        <div class="roast-name">{{ $product->name }}</div>
+                        <div class="roast-sub">{{ d_trans('Product') }}</div>
                     </div>
                 </div>
 
@@ -960,40 +1132,30 @@
                         </li>
                     </ul>
                 </div>
-
-                <div class="lab-box">
-                    <div class="lab-title">{{ d_trans('Ingredient Concerns') }}</div>
-                    @if ($concerns->count() > 0)
-                        <div class="concern-list">
-                            @foreach ($concerns as $concern)
-                                <div class="concern-item">
-                                    <h6>
-                                        {{ $concern->ingredient_name }}
-                                        <span class="lab-badge">{{ ucfirst($concern->severity) }}</span>
-                                    </h6>
-                                    <p>{{ $concern->description ?: d_trans('No description provided.') }}</p>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <p class="mb-0" style="font-size:.75rem;color:var(--text-mid);">
-                            {{ d_trans('No ingredient concerns have been recorded yet.') }}
-                        </p>
-                    @endif
-                </div>
-
-                @if ($lab?->test_summary)
-                    <div class="lab-box mb-0">
-                        <div class="lab-title">{{ d_trans('Test Summary') }}</div>
-                        <p class="mb-0" style="font-size:.75rem;color:var(--text-mid);line-height:1.55;">{{ $lab->test_summary }}</p>
-                    </div>
-                @endif
             </div><!-- /detail-col -->
 
         </div><!-- /product-body -->
     </div><!-- /card-shell -->
+
+    <!-- Image Modal -->
+    <div class="modal-overlay" id="imageModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeImageModal()">&times;</button>
+            <h3 style="margin: 0 0 16px 0; color: var(--text-dark);">{{ d_trans('All Product Images') }}</h3>
+            <div class="modal-images-grid">
+                @foreach ($productImageUrls as $imageUrl)
+                    <div class="modal-image" onclick="selectPreviewFromModal(this, '{{ $imageUrl }}')">
+                        <img src="{{ $imageUrl }}" alt="{{ $product->name }}">
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
     @push('scripts')
         <script>
+            const imageUrls = {!! json_encode($productImageUrls->values()->all()) !!};
+
             function selectRoast(el) {
                 document.querySelectorAll('.roast-card').forEach(c => c.classList.remove('active'));
                 el.classList.add('active');
@@ -1008,6 +1170,38 @@
                 document.querySelectorAll('.img-thumb').forEach(t => t.classList.remove('active'));
                 el.classList.add('active');
             }
+
+            function openImageModal() {
+                document.getElementById('imageModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeImageModal() {
+                document.getElementById('imageModal').classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            function selectPreviewFromModal(el, imageUrl) {
+                const mainImage = document.getElementById('mainProductImage');
+                if (mainImage) {
+                    mainImage.src = imageUrl;
+                }
+                closeImageModal();
+            }
+
+            // Close modal when clicking outside
+            document.getElementById('imageModal')?.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeImageModal();
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeImageModal();
+                }
+            });
         </script>
     @endpush
 @endsection

@@ -378,7 +378,7 @@
                             }
                         } else {
                             $.each(response, function(index, item) {
-                                let isVerified = item.is_verified ?
+                                let isVerified = item.lab_verified ?
                                     '<div class="item-verified">' +
                                     '<i class="bi bi-patch-check-fill" data-bs-toggle="tooltip" data-bs-title="' + config.translates.verified + '"></i>' +
                                     '</div>' : ''; +
@@ -386,17 +386,14 @@
                                 homeSearchResults.append('<a href="' + item.link + '" class="search-item position-relative d-block">' +
                                     '<div class="item-sm d-flex align-items-center gap-3">' +
                                     '<div class="item-img flex-shrink-0">' +
-                                    '<img loading="lazy" src="' + item.logo + '" alt="' + item.name + '">' + isVerified +
+                                    '<img loading="lazy" src="' + item.image + '" alt="' + item.name + '">' + isVerified +
                                     '</div>' +
                                     '<div class="item-info">' +
                                     '<h6 class="item-title mb-0">' + item.name + '</h6>' +
-                                    ' <p class="item-link small text-muted mb-0">' + item.domain + '</p>' +
+                                    ' <p class="item-link small text-muted mb-0">' + item.brand + '</p>' +
+                                    (item.grade ? ' <p class="item-link small text-muted mb-0">' + item.category + ' • ' + item.grade + '</p>' : ' <p class="item-link small text-muted mb-0">' + item.category + '</p>') +
                                     ' </div>' +
                                     '</div>' +
-                                    ' <div class="ratings ratings-sm position-absolute top-50 end-0 translate-middle-y d-none d-lg-inline me-3">' +
-                                    '<span class="text-muted me-1">' + item.rating_avg + '</span>' +
-                                    '<img src="' + item.rating_stars + '" alt="' + item.rating_avg + '">' +
-                                    ' </div>' +
                                     ' </a>');
                             });
                         }

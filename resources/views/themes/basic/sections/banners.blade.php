@@ -75,7 +75,7 @@
         </div>
         <div class="cta-right" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="150">
             <div class="cta-image">
-                <img src="{{ asset('images/frontend/cta-image.png') }}" alt="Safe beauty updates" class="img-fluid">
+                <img src="{{ asset('images/frontend/cta-image.webp') }}" alt="Safe beauty updates" class="img-fluid">
             </div>
         </div>
     </div>
