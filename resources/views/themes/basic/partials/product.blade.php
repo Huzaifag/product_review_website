@@ -1,10 +1,14 @@
 <div class="col" data-aos="fade-up" data-aos-duration="1000">
+    @php
+        $imagePath = $product->image ?: optional($product->images()->select('path')->first())->path;
+        $imageSrc = $imagePath ? asset($imagePath) : asset(config('theme.settings.general.social_image'));
+    @endphp
     <a href="{{ $product->getLink() }}" class="featured-lab-card d-block text-reset text-decoration-none">
         {{-- <i class="fa-solid fa-box-open featured-lab-corner-icon"></i> --}}
 
         <div class="featured-lab-head">
             <div class="featured-lab-thumb">
-                <img loading="lazy" src="{{ $product->getImageLink() }}" alt="{{ $product->name }}">
+                <img loading="lazy" src="{{ $imageSrc }}" alt="{{ $product->name }}">
             </div>
             <div class="featured-lab-head-copy">
                 <span class="featured-lab-kicker">

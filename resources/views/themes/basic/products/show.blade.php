@@ -423,6 +423,114 @@
                 margin-bottom: 20px;
             }
 
+            .details-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+                margin-bottom: 16px;
+            }
+
+            .detail-item {
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 10px 12px;
+                background: #f9f4eb;
+            }
+
+            .detail-item-label {
+                font-size: .66rem;
+                text-transform: uppercase;
+                letter-spacing: .08em;
+                color: var(--text-light);
+                margin-bottom: 4px;
+            }
+
+            .detail-item-value {
+                font-size: .83rem;
+                color: var(--text-dark);
+                font-weight: 600;
+                line-height: 1.35;
+            }
+
+            .lab-box {
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                background: #f8f2e8;
+                padding: 12px;
+                margin-bottom: 14px;
+            }
+
+            .lab-title {
+                font-size: .8rem;
+                font-weight: 700;
+                color: var(--text-dark);
+                margin-bottom: 8px;
+            }
+
+            .lab-list {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                display: grid;
+                gap: 6px;
+            }
+
+            .lab-list li {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                font-size: .75rem;
+                color: var(--text-mid);
+                border-bottom: 1px dashed rgba(122, 130, 110, .35);
+                padding-bottom: 4px;
+            }
+
+            .lab-list li:last-child {
+                border-bottom: 0;
+                padding-bottom: 0;
+            }
+
+            .lab-badge {
+                display: inline-flex;
+                align-items: center;
+                padding: 2px 8px;
+                border-radius: 999px;
+                border: 1px solid rgba(44, 61, 46, .2);
+                background: rgba(44, 61, 46, .08);
+                color: var(--green-dark);
+                font-size: .64rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: .06em;
+            }
+
+            .concern-list {
+                max-height: 180px;
+                overflow: auto;
+                display: grid;
+                gap: 8px;
+            }
+
+            .concern-item {
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 9px 10px;
+                background: #fff;
+            }
+
+            .concern-item h6 {
+                font-size: .78rem;
+                margin: 0 0 3px;
+                color: var(--text-dark);
+            }
+
+            .concern-item p {
+                margin: 0;
+                font-size: .72rem;
+                color: var(--text-mid);
+                line-height: 1.45;
+            }
+
             /* Roast selector */
             .roast-grid {
                 display: flex;
@@ -705,6 +813,10 @@
                     gap: 7px;
                 }
 
+                .details-grid {
+                    grid-template-columns: 1fr;
+                }
+
                 .cart-shell {
                     border-radius: 14px;
                 }
@@ -751,21 +863,48 @@
 
             <!-- RIGHT: Product details -->
             <div class="detail-col">
-                <p class="eyebrow">Your Everyday Reset</p>
-                <h1 class="product-title">Daily Blend</h1>
+                @php
+                    $lab = $product->labTestingResult;
+                    $concerns = $product->ingredientConcerns;
+                @endphp
+                <p class="eyebrow">{{ d_trans('Lab-Tested Product') }}</p>
+                <h1 class="product-title">{{ $product->name }}</h1>
                 <div class="tags">
-                    <span>Balanced</span>
+                    <span>{{ $product->brand_name ?: d_trans('Unknown brand') }}</span>
                     <span class="dot"></span>
-                    <span>Smooth</span>
+                    <span>{{ $product->category->trans->name ?? d_trans('Uncategorized') }}</span>
                     <span class="dot"></span>
-                    <span>Versatile</span>
+                    <span>{{ $product->subCategory->trans->name ?? d_trans('No sub category') }}</span>
                 </div>
 
                 <p class="product-desc">
-                    Daily Blend is designed for quiet focus and gentle energy — the kind of coffee that supports your flow
-                    without taking over. Whether it's work, journaling, or your second cup before noon, this one's your
-                    go-to.
+                    {{ \Illuminate\Support\Str::limit(strip_tags($product->description ?: d_trans('No description available for this product.')), 220) }}
                 </p>
+
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-item-label">{{ d_trans('Overall Grade') }}</div>
+                        <div class="detail-item-value">{{ $product->overall_grade ? str_replace('_', ' ', ucfirst($product->overall_grade)) : d_trans('N/A') }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-item-label">{{ d_trans('Test Date') }}</div>
+                        <div class="detail-item-value">{{ $product->test_date ? $product->test_date->format('M d, Y') : d_trans('N/A') }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-item-label">{{ d_trans('Price') }}</div>
+                        <div class="detail-item-value">
+                            @if ($product->price)
+                                {{ $product->currency }} {{ numberFormat($product->price) }}
+                            @else
+                                {{ d_trans('N/A') }}
+                            @endif
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-item-label">{{ d_trans('Size') }}</div>
+                        <div class="detail-item-value">{{ $product->product_size ?: d_trans('N/A') }}</div>
+                    </div>
+                </div>
 
                 <!-- Roast selector -->
                 <div class="roast-grid">
@@ -792,67 +931,63 @@
                     </div>
                 </div>
 
-                <!-- Purchase options -->
-                <div class="purchase-opts">
-                    <div class="opt-row" onclick="selectOpt(this)">
-                        <div class="opt-left">
-                            <div class="radio-ring"></div>
-                            <div class="opt-label">One time purchase <span>/ 250g</span></div>
+                <div class="lab-box">
+                    <div class="lab-title">{{ d_trans('Lab Test Snapshot') }}</div>
+                    <ul class="lab-list">
+                        <li>
+                            <span>{{ d_trans('Lab Name') }}</span>
+                            <strong>{{ $lab?->lab_name ?: d_trans('N/A') }}</strong>
+                        </li>
+                        <li>
+                            <span>{{ d_trans('Ingredient Grade') }}</span>
+                            <strong>{{ $lab?->ingredient_grade ? str_replace('_', ' ', ucfirst($lab->ingredient_grade)) : d_trans('N/A') }}</strong>
+                        </li>
+                        <li>
+                            <span>{{ d_trans('Defects Grade') }}</span>
+                            <strong>{{ $lab?->defects_grade ? str_replace('_', ' ', ucfirst($lab->defects_grade)) : d_trans('N/A') }}</strong>
+                        </li>
+                        <li>
+                            <span>{{ d_trans('Overall Grade') }}</span>
+                            <strong>{{ $lab?->overall_grade ? str_replace('_', ' ', ucfirst($lab->overall_grade)) : d_trans('N/A') }}</strong>
+                        </li>
+                        <li>
+                            <span>{{ d_trans('Fragrance') }}</span>
+                            <strong>{{ $lab ? ($lab->has_fragrance ? d_trans('Yes') : d_trans('No')) : d_trans('N/A') }}</strong>
+                        </li>
+                        <li>
+                            <span>{{ d_trans('Concerning UV Filter') }}</span>
+                            <strong>{{ $lab ? ($lab->concerning_uv_filter ? d_trans('Yes') : d_trans('No')) : d_trans('N/A') }}</strong>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="lab-box">
+                    <div class="lab-title">{{ d_trans('Ingredient Concerns') }}</div>
+                    @if ($concerns->count() > 0)
+                        <div class="concern-list">
+                            @foreach ($concerns as $concern)
+                                <div class="concern-item">
+                                    <h6>
+                                        {{ $concern->ingredient_name }}
+                                        <span class="lab-badge">{{ ucfirst($concern->severity) }}</span>
+                                    </h6>
+                                    <p>{{ $concern->description ?: d_trans('No description provided.') }}</p>
+                                </div>
+                            @endforeach
                         </div>
-                        <div class="opt-price">$22.00</div>
-                    </div>
-                    <div class="opt-row active" onclick="selectOpt(this)">
-                        <div class="opt-left">
-                            <div class="radio-ring"></div>
-                            <div class="opt-label">Subscribe <span>/ 250g</span></div>
-                        </div>
-                        <div class="opt-price"><span class="original">$22.00</span> $19.80</div>
-                    </div>
+                    @else
+                        <p class="mb-0" style="font-size:.75rem;color:var(--text-mid);">
+                            {{ d_trans('No ingredient concerns have been recorded yet.') }}
+                        </p>
+                    @endif
                 </div>
 
-                <!-- Frequency -->
-                <select class="freq-select">
-                    <option value="">Select delivery frequency</option>
-                    <option>Every 2 weeks</option>
-                    <option>Every 4 weeks</option>
-                    <option>Every 6 weeks</option>
-                    <option>Every 8 weeks</option>
-                </select>
-
-                <!-- Perks -->
-                <div class="perks">
-                    <div class="perk">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
-                            <rect x="2" y="7" width="20" height="14" rx="2" />
-                            <path d="M16 7V5a2 2 0 00-4 0v2" />
-                            <path d="M12 12v4" />
-                        </svg>
-                        Free shipping on
+                @if ($lab?->test_summary)
+                    <div class="lab-box mb-0">
+                        <div class="lab-title">{{ d_trans('Test Summary') }}</div>
+                        <p class="mb-0" style="font-size:.75rem;color:var(--text-mid);line-height:1.55;">{{ $lab->test_summary }}</p>
                     </div>
-                    <div class="perk">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
-                            <path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8l-6.2 3.3L7 14.2 2 9.3l6.9-1z" />
-                        </svg>
-                        Save 10%
-                    </div>
-                    <div class="perk">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
-                            <polyline points="23 4 23 10 17 10" />
-                            <path d="M20.5 15a9 9 0 11-2.7-6.6L23 10" />
-                        </svg>
-                        Cancel or skip anytime
-                    </div>
-                </div>
-
-                <!-- Add to cart -->
-                <div class="cart-row">
-                    <div class="qty-ctrl">
-                        <button class="qty-btn" onclick="changeQty(-1)">−</button>
-                        <span class="qty-num" id="qty">1</span>
-                        <button class="qty-btn" onclick="changeQty(1)">+</button>
-                    </div>
-                    <button class="btn-add">Add to cart</button>
-                </div>
+                @endif
             </div><!-- /detail-col -->
 
         </div><!-- /product-body -->
@@ -872,20 +1007,6 @@
 
                 document.querySelectorAll('.img-thumb').forEach(t => t.classList.remove('active'));
                 el.classList.add('active');
-            }
-
-            function selectOpt(el) {
-                document.querySelectorAll('.opt-row').forEach(r => r.classList.remove('active'));
-                el.classList.add('active');
-                const isSubscribe = el.querySelector('.opt-label').textContent.trim().startsWith('Subscribe');
-                document.querySelector('.freq-select').style.display = isSubscribe ? 'block' : 'none';
-                document.querySelector('.freq-select').style.display = isSubscribe ? '' : 'none';
-            }
-
-            function changeQty(delta) {
-                const el = document.getElementById('qty');
-                const val = Math.max(1, parseInt(el.textContent) + delta);
-                el.textContent = val;
             }
         </script>
     @endpush

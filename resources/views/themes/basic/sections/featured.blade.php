@@ -23,6 +23,10 @@
                 <div class="section-body featured-luxe-body">
                     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-3 g-4 featured-luxe-grid">
                         @foreach ($featuredProducts as $product)
+                            @php
+                                $imagePath = $product->image ?: optional($product->images()->select('path')->first())->path;
+                                $imageSrc = $imagePath ? asset($imagePath) : asset(config('theme.settings.general.social_image'));
+                            @endphp
                             <div class="col" data-aos="fade-up" data-aos-duration="1000">
                                 <a href="{{ $product->getLink() }}"
                                     class="featured-lab-card d-block text-reset text-decoration-none">
@@ -30,7 +34,7 @@
 
                                     <div class="featured-lab-head">
                                         <div class="featured-lab-thumb">
-                                            <img loading="lazy" src="{{ $product->getImageLink() }}"
+                                            <img loading="lazy" src="{{ $imageSrc }}"
                                                 alt="{{ $product->name }}">
                                         </div>
                                         <div class="featured-lab-head-copy">
