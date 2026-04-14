@@ -111,7 +111,15 @@ class Product extends Model
 
     public function getImageLink()
     {
-        return $this->image ? asset($this->image) : asset(config('theme.settings.general.social_image'));
+        if ($this->image) {
+            return asset($this->image);
+        }
+
+        if ($this->relationLoaded('images') && $this->images->first()) {
+            return asset($this->images->first()->path);
+        }
+
+        return asset(config('theme.settings.general.social_image'));
     }
 
     public function getIngredientsList(): array

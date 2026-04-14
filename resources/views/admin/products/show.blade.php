@@ -20,6 +20,32 @@
                     </form>
                 </div>
             </div>
+
+            @if ($product->images->count() > 0)
+                <div class="card mt-4">
+                    <div class="card-header border-bottom">
+                        <h5 class="mb-0">{{ d_trans('Product Images') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        @php
+                            $mainImagePath = $product->image ?: ($product->images->first()?->path ?? null);
+                            $galleryImages = $product->images->reject(function ($image) use ($mainImagePath) {
+                                return $image->path === $mainImagePath;
+                            });
+                        @endphp
+                        <div class="d-flex flex-wrap gap-3">
+                            @if ($mainImagePath)
+                                <img src="{{ asset($mainImagePath) }}" alt="{{ $product->name }}" width="96" height="96" class="rounded-3 border p-1">
+                            @endif
+                            @foreach ($galleryImages as $image)
+                                <img src="{{ asset($image->path) }}" alt="{{ $product->name }}" width="96" height="96" class="rounded-3 border p-1">
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            
         </div>
 
         <div class="col-lg-4">

@@ -54,6 +54,8 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
     });
 
     Route::resource('products', 'ProductController')->middleware('demo');
+    Route::post('products/{product}/lab-tests', 'ProductController@labTestsUpdate')->name('products.lab-tests.update')->middleware('demo');
+    Route::get('products/{product}/lab-tests', 'ProductController@labTests')->name('products.lab-tests');
 
     Route::name('pending-reviews.')->prefix('pending-reviews')->group(function () {
         Route::get('/', 'ReviewController@pendingReviews')->name('index');

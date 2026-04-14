@@ -151,7 +151,7 @@ class ProductController extends Controller
                 $query->where('slug', $slug)
                     ->orWhere('id', $slug);
             })
-            ->with(['category', 'subCategory', 'labTestingResult', 'ingredientConcerns'])
+            ->with(['category', 'subCategory', 'labTestingResult', 'ingredientConcerns', 'images'])
             ->withCount([
                 'userReviews as approved_reviews_count' => function ($query) {
                     $query->approved();

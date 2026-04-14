@@ -1,10 +1,39 @@
 <div class="row g-3 mb-4">
     <div class="col-12">
-        <label class="form-label">{{ d_trans('Image') }}</label>
-        <input type="file" name="image" class="form-control form-control-md" accept="image/png, image/jpg, image/jpeg, image/webp">
-        @if (!empty($product?->image))
-            <div class="mt-2">
-                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="border rounded-3 p-1" width="80" height="80">
+        <label class="form-label">{{ d_trans('Images') }}</label>
+        <input id="productImagesInput" type="file" name="images[]" class="form-control form-control-md" accept="image/png, image/jpg, image/jpeg, image/webp" multiple>
+        <small class="text-muted d-block mt-1">{{ d_trans('You can select multiple images at once or pick more images again before saving.') }}</small>
+        <small class="text-muted d-block">{{ d_trans('The first uploaded image will be saved as the main product image.') }}</small>
+        <div class="d-flex align-items-center gap-2 mt-2">
+            <small id="selectedImagesInfo" class="text-muted"></small>
+            <button id="clearSelectedImagesBtn" type="button" class="btn btn-sm btn-light py-0 px-2 d-none">{{ d_trans('Clear selected') }}</button>
+        </div>
+        @php
+            $currentProduct = $product ?? null;
+            $mainImagePath = null;
+            $galleryImages = collect();
+
+            if ($currentProduct) {
+                $mainImagePath = $currentProduct->image ?: optional($currentProduct->images->first())->path;
+                $galleryImages = $currentProduct->images->reject(function ($image) use ($mainImagePath) {
+                    return $image->path === $mainImagePath;
+                });
+            }
+        @endphp
+        @if ($mainImagePath || $galleryImages->count() > 0)
+            <div class="mt-3 d-flex flex-wrap gap-2">
+                @if ($mainImagePath)
+                    <div class="text-center">
+                        <img src="{{ asset($mainImagePath) }}" alt="{{ $currentProduct->name ?? '' }}" class="border rounded-3 p-1" width="80" height="80">
+                        <small class="d-block text-muted mt-1">{{ d_trans('Main') }}</small>
+                    </div>
+                @endif
+                @foreach ($galleryImages as $image)
+                    <div class="text-center">
+                        <img src="{{ asset($image->path) }}" alt="{{ $currentProduct->name ?? '' }}" class="border rounded-3 p-1" width="80" height="80">
+                        <small class="d-block text-muted mt-1">{{ d_trans('Gallery') }}</small>
+                    </div>
+                @endforeach
             </div>
         @endif
     </div>
@@ -132,3 +161,69 @@
 </div>
 
 <button class="btn btn-primary btn-md">{{ $buttonLabel ?? d_trans('Save') }}</button>
+
+@once
+    @push('scripts')
+        <script>
+            (function() {
+                const input = document.getElementById('productImagesInput');
+                const info = document.getElementById('selectedImagesInfo');
+                const clearBtn = document.getElementById('clearSelectedImagesBtn');
+
+                if (!input || input.dataset.multiUploadReady === '1') {
+                    return;
+                }
+
+                input.dataset.multiUploadReady = '1';
+                const dataTransfer = new DataTransfer();
+
+                function fileKey(file) {
+                    return `${file.name}-${file.size}-${file.lastModified}`;
+                }
+
+                function syncPreview() {
+                    if (!info || !clearBtn) {
+                        return;
+                    }
+
+                    const files = Array.from(dataTransfer.files);
+                    if (!files.length) {
+                        info.textContent = '';
+                        clearBtn.classList.add('d-none');
+                        return;
+                    }
+
+                    info.textContent = `${files.length} {{ d_trans('image(s) selected') }}`;
+                    clearBtn.classList.remove('d-none');
+                }
+
+                input.addEventListener('change', function() {
+                    const existingKeys = new Set(Array.from(dataTransfer.files).map(fileKey));
+
+                    Array.from(input.files).forEach(file => {
+                        const key = fileKey(file);
+                        if (!existingKeys.has(key)) {
+                            dataTransfer.items.add(file);
+                            existingKeys.add(key);
+                        }
+                    });
+
+                    input.files = dataTransfer.files;
+                    syncPreview();
+                });
+
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', function() {
+                        while (dataTransfer.items.length > 0) {
+                            dataTransfer.items.remove(0);
+                        }
+
+                        input.value = '';
+                        input.files = dataTransfer.files;
+                        syncPreview();
+                    });
+                }
+            })();
+        </script>
+    @endpush
+@endonce
