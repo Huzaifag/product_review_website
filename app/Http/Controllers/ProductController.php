@@ -13,7 +13,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $businesses = self::getResultByParams();
+        $products = self::getResultByParams();
 
         $searchCategories = Category::inRandomOrder()
             ->limit(10)->get();
@@ -21,8 +21,8 @@ class ProductController extends Controller
         $popularSearches = Category::orderByDesc('views')
             ->limit(10)->get()->shuffle();
 
-        return theme_view('businesses.index', [
-            'businesses' => $businesses,
+        return theme_view('products.index', [
+            'products' => $products,
             'searchCategories' => $searchCategories,
             'popularSearches' => $popularSearches,
         ]);

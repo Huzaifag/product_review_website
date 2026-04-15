@@ -27,6 +27,16 @@ Breadcrumbs::for('categories.sub-sub-category', function (BreadcrumbTrail $trail
     $trail->push($subSubCategory->trans->name, $subSubCategory->getLink());
 });
 
+
+Breadcrumbs::for('products.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push(d_trans('Products'), route('products.index'));
+});
+
+Breadcrumbs::for('products', function (BreadcrumbTrail $trail) {
+    $trail->parent('products.index');
+});
+
 Breadcrumbs::for('products.show', function (BreadcrumbTrail $trail, $product) {
     if ($product->category) {
         $trail->parent('categories.category', $product->category);

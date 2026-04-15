@@ -84,7 +84,7 @@ Route::middleware('maintenance')->group(function () {
         });
         Route::name('products.')->prefix('products')->group(function () {
             Route::get('{slug}', 'ProductController@show')->name('show');
-            Route::get('/products', 'ProductController@index')->name('index');
+            Route::get('/', 'ProductController@index')->name('index');
             Route::post('ajax-search', 'ProductController@ajaxSearch')->name('ajax-search');
         });
         Route::name('user.')->prefix('user')->group(function () {

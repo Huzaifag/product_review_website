@@ -16,6 +16,7 @@
             bottom: 0;
             background: radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 50%);
             pointer-events: none;
+            z-index: 0;
         }
 
         .content-container {
@@ -23,9 +24,11 @@
             margin: 0 auto;
             display: grid;
             grid-template-columns: 1.1fr 1fr;
-            gap: 48px;
+            gap: 84px;
             align-items: center;
             padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .text-content {
@@ -138,8 +141,9 @@
         .bottle-wrapper {
             position: relative;
             width: 600px;
+            height: 100%;
             z-index: 2;
-            margin-left: 12px;
+            /* margin-left: 12px; */
         }
 
         .bottle {
@@ -229,10 +233,7 @@
 <section class="ingredients-section">
     <div class="content-container">
         <div class="visual-container" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="150">
-            <div class="bottle-wrapper">
-                <!-- Main Bottle -->
-                <img src="{{ asset('/images/frontend/dropper-bottle.png') }}" alt="Dropper Bottle" class="bottle">
-
+            <div class="bottle-wrapper" style="background-image: url('{{ asset('/images/frontend/dropper-bottle.png') }}'); background-size: contain; background-position: center;">
             </div>
         </div>
 
