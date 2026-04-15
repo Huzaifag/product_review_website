@@ -2,6 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 
+
+// optime-clear 
+
+Route::get('/optimize-clear', function () {
+    Artisan::call('optimize:clear');
+    return 'Application cache cleared';
+})->name('optimize.clear');
+
 Route::middleware('maintenance')->group(function () {
     Auth::routes(['verify' => true]);
     Route::namespace('Auth')->group(function () {

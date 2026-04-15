@@ -1,4 +1,4 @@
-<livewire:newsletter.popup />
+{{-- <livewire:newsletter.popup /> --}}
 <x-partials />
 @include('themes.basic.includes.config')
 @stack('top_scripts')

@@ -6,7 +6,7 @@
         <p class="mag-label" id="how-we-test">How we test products</p>
         <h2 class="mag-title">Three steps from shelf to verdict</h2>
 
-        <div class="row g-3 mt-1">
+        <div class="row g-3 mt-4">
             <div class="col-md-4" data-aos="fade-up" data-aos-duration="900">
                 <div class="trust-card trust-card-1 h-100">
                     <i class="fas fa-store trust-card-corner-icon" aria-hidden="true"></i>
