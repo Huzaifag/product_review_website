@@ -1,7 +1,7 @@
 @if ($faqs->count() > 0)
     <section class="section home-modern-section home-faq-section">
         <div class="section-inner">
-            <div class="container container-custom">
+            <div class="container container-custom home-section-container">
                 <div class="section-header text-center home-modern-header">
                     <p class="mag-label">{{ d_trans('Questions & Answers') }}</p>
                     <h4 class="mag-title">{{ $homeSection->trans->name }}</h4>

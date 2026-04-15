@@ -2,9 +2,6 @@
     <style>
         .ingredients-section {
             background: linear-gradient(135deg, #f8f1e9 0%, #f4e6d8 100%);
-            padding: 72px 0;
-            position: relative;
-            overflow: hidden;
         }
 
         .ingredients-section::before {
@@ -20,13 +17,10 @@
         }
 
         .content-container {
-            max-width: 1280px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: 1.1fr 1fr;
             gap: 84px;
             align-items: center;
-            padding: 0 20px;
             position: relative;
             z-index: 1;
         }
@@ -228,47 +222,175 @@
                 transform: translateY(-25px);
             }
         }
+
+        /* media query for mobile  */
+        @media (max-width: 991.98px) {
+            .visual-container {
+                height: 250px;
+            }
+
+            .bottle-wrapper {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .ingredients-section {
+                padding: 36px 0;
+            }
+
+            .content-container {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+
+            .visual-container {
+                height: 220px;
+                margin-left: 0;
+                justify-content: center;
+                order: 1;
+            }
+
+            .bottle-wrapper {
+                width: min(100%, 320px);
+                height: 100%;
+                margin: 0 auto;
+                background-position: center center !important;
+            }
+
+            .text-content {
+                padding-left: 0;
+                text-align: center;
+                order: 2;
+            }
+
+            .text-content h2 {
+                font-size: clamp(2rem, 8vw, 2.5rem);
+                margin-bottom: 18px;
+            }
+
+            .text-content p {
+                font-size: 1rem;
+                margin-bottom: 24px;
+            }
+
+            .explore-btn {
+                justify-content: center;
+                width: 100%;
+                max-width: 320px;
+            }
+
+            .ingredient-badges {
+                justify-content: center;
+                gap: 12px;
+                margin-top: 28px;
+            }
+
+            .ingredient-badge {
+                min-width: 0;
+                width: 100%;
+                flex: 1 1 100%;
+                padding: 14px 16px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .ingredients-section {
+                padding: 28px 0;
+            }
+
+            .content-container {
+                gap: 24px;
+            }
+
+            .visual-container {
+                height: 190px;
+            }
+
+            .bottle-wrapper {
+                width: min(100%, 280px);
+                background-size: contain !important;
+            }
+
+            .text-content h2 {
+                font-size: 1.9rem;
+                line-height: 1.15;
+            }
+
+            .text-content p {
+                font-size: 0.95rem;
+                line-height: 1.65;
+            }
+
+            .explore-btn {
+                max-width: 100%;
+                padding: 13px 22px;
+                font-size: 0.98rem;
+            }
+
+            .ingredient-badges {
+                margin-top: 22px;
+            }
+
+            .badge-icon {
+                font-size: 1.4rem;
+            }
+
+            .badge-label {
+                font-size: 0.7rem;
+            }
+
+            .badge-value {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 @endpush
 
-<section class="ingredients-section">
-    <div class="content-container">
-        <div class="visual-container" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="150">
-            <div class="bottle-wrapper" style="background-image: url('{{ asset('/images/frontend/dropper-bottle.png') }}'); background-size: contain; background-position: center;">
+<section class="home-section-spacing py-5 ingredients-section">
+    <div class="container container-custom home-section-container">
+
+        <div class="row">
+            <div class="visual-container col-lg-6" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="150">
+                <div class="bottle-wrapper"
+                    style="background-image: url('{{ asset('/images/frontend/oil-dropper-bottle.webp') }}'); background-size: contain; background-position: center; background-repeat: no-repeat;">
+                </div>
             </div>
-        </div>
 
-        <!-- Right Text & Badges -->
-        <div class="text-content" data-aos="fade-left" data-aos-duration="900">
-            <h2>Not All<br>Ingredients Are<br>They Seem</h2>
-            <p>We break down what's really inside your cosmetics — so you can choose safer, smarter products for your
-                skin.</p>
-            <a href="#" class="explore-btn">
-                Explore Ingredients
-                <span style="font-size: 1.4rem; line-height: 1;">→</span>
-            </a>
+            <!-- Right Text & Badges -->
+            <div class="text-content col-lg-6" data-aos="fade-left" data-aos-duration="900">
+                <h2>Not All <br> Ingredients Are <br>What They Seem</h2>
+                <p>Some concerning ingredients never appear on the label.
+                    We test every product in accredited laboratories and
+                    publish the full findings — so you know exactly
+                    what you are putting on your skin.</p>
+                <a href="#" class="explore-btn">
+                    Explore Ingredients
+                    <span style="font-size: 1.4rem; line-height: 1;">→</span>
+                </a>
 
-            <!-- Ingredient Info Badges -->
-            <div class="ingredient-badges">
-                <div class="ingredient-badge" data-aos="fade-up" data-aos-delay="100" data-aos-duration="800">
-                    <i class="fas fa-flask badge-icon"></i>
-                    <div class="badge-text">
-                        <span class="badge-label">Lab Tested</span>
-                        <span class="badge-value">50+ Substances</span>
+                <!-- Ingredient Info Badges -->
+                <div class="ingredient-badges">
+                    <div class="ingredient-badge" data-aos="fade-up" data-aos-delay="100" data-aos-duration="800">
+                        <i class="fas fa-flask badge-icon"></i>
+                        <div class="badge-text">
+                            <span class="badge-label">Lab Tested</span>
+                            <span class="badge-value">50+ Substances</span>
+                        </div>
                     </div>
-                </div>
-                <div class="ingredient-badge" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
-                    <i class="fas fa-check-circle badge-icon"></i>
-                    <div class="badge-text">
-                        <span class="badge-label">Safety Score</span>
-                        <span class="badge-value">Science-Based</span>
+                    <div class="ingredient-badge" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
+                        <i class="fas fa-check-circle badge-icon"></i>
+                        <div class="badge-text">
+                            <span class="badge-label">Safety Score</span>
+                            <span class="badge-value">Science-Based</span>
+                        </div>
                     </div>
-                </div>
-                <div class="ingredient-badge" data-aos="fade-up" data-aos-delay="300" data-aos-duration="800">
-                    <i class="fas fa-chart-bar badge-icon"></i>
-                    <div class="badge-text">
-                        <span class="badge-label">Full Transparency</span>
-                        <span class="badge-value">Complete Analysis</span>
+                    <div class="ingredient-badge" data-aos="fade-up" data-aos-delay="300" data-aos-duration="800">
+                        <i class="fas fa-chart-bar badge-icon"></i>
+                        <div class="badge-text">
+                            <span class="badge-label">Full Transparency</span>
+                            <span class="badge-value">Complete Analysis</span>
+                        </div>
                     </div>
                 </div>
             </div>

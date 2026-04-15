@@ -1,8 +1,9 @@
-<div class="container py-5 mb-5">
-    <h2 class="sr-only">OKO-TEST Kosmetik — trust and product discovery sections</h2>
+<section class="home-section-spacing py-5">
+<div class="container container-custom home-section-container">
+    <h2 class="sr-only">OKO-TEST Kosmetik - trust and product discovery sections</h2>
 
     <!-- ══ Section 3: How It Works ══ -->
-    <div class="container mb-5">
+    <div>
         <p class="mag-label" id="how-we-test">How we test products</p>
         <h2 class="mag-title">Three steps from shelf to verdict</h2>
 
@@ -81,3 +82,4 @@
     </div>
 
 </div>
+</section>

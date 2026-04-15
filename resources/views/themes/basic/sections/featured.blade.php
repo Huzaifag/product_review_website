@@ -1,7 +1,7 @@
 @if ($featuredSection && $featuredProducts->count() > 0)
     <section class="section featured-luxe-section" id="featured-products">
         <div class="section-inner">
-            <div class="container container-custom">
+            <div class="container container-custom home-section-container">
                 <div class="section-header featured-luxe-header">
                     <div class="row align-items-center g-3 featured-luxe-header-row">
                         <div class="col text-center text-lg-start featured-luxe-header-main">

@@ -12,7 +12,7 @@
             @endphp
             <div class="row g-5">
                 @if ($hasSocialLinks || $newsletterFooterStatus)
-                    <div class="col-12 col-md-6 col-xxl-5">
+                    <div class="col-12 col-lg-5 col-xxl-5">
                         <livewire:newsletter.footer hasSocialLinks="{{ $hasSocialLinks }}" />
                         @if ($hasSocialLinks)
                             <div>
@@ -59,7 +59,7 @@
                         @endif
                     </div>
                 @endif
-                <div class="col-12 {{ $hasSocialLinks || $newsletterFooterStatus ? 'col-md-6 col-xxl-7' : '' }}">
+                <div class="col-12 {{ $hasSocialLinks || $newsletterFooterStatus ? 'col-lg-7 col-xxl-7' : '' }}">
                     <div
                         class="row row-cols-2  {{ $hasSocialLinks || $newsletterFooterStatus ? 'row-cols-md-2 row-cols-xl-3' : 'row-cols-md-3 row-cols-xl-4' }} g-5">
                         @foreach ($footerLinks as $footerLink)

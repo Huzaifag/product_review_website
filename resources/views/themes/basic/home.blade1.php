@@ -206,13 +206,13 @@
     @endphp
     @include("themes.basic.sections.{$alias}", ['homeSection' => $homeSection])
     @if ($key == 0)
-        <x-ad alias="home_page_top" class="container" />
+        <x-ad alias="home_page_top" @class('container') />
     @elseif ($key == 3)
-        <x-ad alias="home_page_center" class="container" />
+        <x-ad alias="home_page_center" @class('container') />
     @endif
 @endforeach
 
-<x-ad alias="home_page_bottom" class="container mb-5" />
+<x-ad alias="home_page_bottom" @class('container mb-5') />
 
 @push('styles_libs')
     <link rel="stylesheet" href="{{ asset('vendor/libs/simplebar/simplebar.min.css') }}">
@@ -693,11 +693,6 @@
         text-align: center;
     }
 
-    .oeko-hero-left {
-        align-items: center;
-        text-align: center;
-    }
-
     .oeko-trust-pill,
     .oeko-hero-cta-group {
         justify-content: center;
@@ -735,107 +730,19 @@
 
 @media (max-width: 640px) {
     .oeko-hero {
-        min-height: auto;
-        padding: 56px 0 32px;
-        overflow-x: hidden;
+        padding: 60px 0 40px;
     }
 
     .oeko-hero-inner {
-        padding: 0 16px;
-        gap: 32px;
-    }
-
-    .oeko-hero-left {
-        gap: 20px;
+        padding: 0 20px;
     }
 
     .oeko-hero-title {
-        font-size: clamp(34px, 11vw, 40px);
+        font-size: 40px;
     }
 
     .oeko-hero-subtext {
-        font-size: 15px;
-        line-height: 1.65;
-        max-width: 34rem;
-    }
-
-    .oeko-trust-pill {
-        font-size: 11px;
-        padding: 6px 12px 6px 10px;
-    }
-
-    .oeko-trust-badges {
-        width: 100%;
-    }
-
-    .oeko-trust-badge {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .oeko-hero-cta-group {
-        width: 100%;
-        gap: 12px;
-    }
-
-    .oeko-btn-primary,
-    .oeko-btn-ghost {
-        width: 100%;
-        justify-content: center;
-        text-align: center;
-    }
-
-    .oeko-hero-search {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .oeko-hero-search .header-search,
-    .oeko-hero-search form {
-        width: 100%;
-    }
-
-    .oeko-search-input {
-        min-height: 56px;
-    }
-
-    .oeko-hero-stats {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-        width: 100%;
-        padding-top: 0;
-    }
-
-    .oeko-stat {
-        padding: 14px 12px;
-        align-items: center;
-        text-align: center;
-        border: 1px solid #EDE0D4;
-        border-radius: 14px;
-        background: #FFFFFF;
-        box-shadow: 0 4px 18px rgba(44, 26, 14, 0.05);
-    }
-
-    .oeko-stat-divider {
-        display: none;
-    }
-
-    .oeko-stat-label {
-        white-space: normal;
-    }
-
-    .oeko-hero-right {
-        width: 100%;
-        max-width: 100%;
-        flex-direction: column;
-        align-items: center;
-        gap: 14px;
-    }
-
-    .oeko-hero-image-wrap {
-        width: 100%;
-        max-width: 100%;
+        font-size: 16px;
     }
 
     .oeko-float-top,
@@ -845,64 +752,31 @@
         right: auto;
         bottom: auto;
         left: auto;
-        width: 100%;
         max-width: 100%;
-        min-width: 0;
         margin-top: 16px;
         animation: none;
     }
 
     .oeko-hero-image {
-        height: clamp(260px, 82vw, 340px);
+        height: 320px;
     }
 
     .oeko-hero-blob {
-        width: clamp(240px, 72vw, 300px);
-        height: clamp(240px, 72vw, 300px);
+        width: 280px;
+        height: 280px;
     }
 
     .oeko-stat-number {
         font-size: 22px;
     }
 
-    .oeko-float-card {
-        min-width: 0;
-        max-width: 100%;
-    }
-
-    .oeko-wavy-line {
-        display: none;
-    }
-}
-
-@media (max-width: 420px) {
-    .oeko-hero {
-        padding: 48px 0 28px;
-    }
-
-    .oeko-hero-inner {
-        padding: 0 14px;
-        gap: 28px;
-    }
-
-    .oeko-hero-title {
-        font-size: 32px;
-    }
-
-    .oeko-hero-subtext {
-        font-size: 14px;
-    }
-
     .oeko-stat {
-        padding: 12px 10px;
+        padding: 0 12px;
     }
 
-    .oeko-stat-number {
-        font-size: 20px;
-    }
-
-    .oeko-trust-badge {
-        font-size: 12px;
+    .oeko-btn-primary {
+        width: 100%;
+        justify-content: center;
     }
 }
 </style>
