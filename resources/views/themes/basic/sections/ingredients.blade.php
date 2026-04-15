@@ -136,6 +136,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
+            margin-left: -28px;
         }
 
         .bottle-wrapper {

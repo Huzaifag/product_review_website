@@ -58,6 +58,15 @@ class AppServiceProvider extends ServiceProvider
             $this->themeViewComposers();
             $this->adminViewComposers();
         }
+
+        if (config('app.env') === 'production' || request()->isSecure()) {
+            \URL::forceScheme('https');
+        }
+
+
+
+        \URL::forceScheme('https');
+
     }
 
     public function themeViewComposers()
@@ -186,7 +195,7 @@ class AppServiceProvider extends ServiceProvider
                     ->get();
             });
             $newsletterFooterStatus = config('settings.newsletter.status')
-            && config('settings.newsletter.footer_status') && !request()->hasCookie('newsletter_subscribed');
+                && config('settings.newsletter.footer_status') && !request()->hasCookie('newsletter_subscribed');
             $view->with([
                 'footerLinks' => $footerLinks,
                 'newsletterFooterStatus' => $newsletterFooterStatus,
