@@ -7,7 +7,10 @@ use App\Models\Business;
 use App\Models\BusinessOwner;
 use App\Models\BusinessReview;
 use App\Models\BusinessReviewReport;
+use App\Models\Category;
 use App\Models\KycVerification;
+use App\Models\Product;
+use App\Models\SubCategory;
 use App\Models\Subscription;
 use App\Models\Transaction;
 use App\Models\User;
@@ -25,6 +28,17 @@ class DashboardController extends Controller
         $counters['reviews'] = BusinessReview::count();
         $counters['pending_reviews'] = BusinessReview::pending()->count();
         $counters['reported_reviews'] = BusinessReviewReport::count();
+
+        // 1. Products 
+        $counters['products'] = Product::active()->count();
+        // 2. Categories
+        $counters['categories'] = Category::count();
+
+        // 3. SubCategories
+        $counters['subcategories'] = SubCategory::count();
+
+        //All Recently added Products 
+        $products = Product::orderbyDesc('id')->limit(6)->get();
 
         $counters['kyc_verifications'] = KycVerification::count();
         $counters['pending_kyc_verifications'] = KycVerification::pending()->count();
@@ -44,6 +58,7 @@ class DashboardController extends Controller
             'charts' => $charts,
             'users' => $users,
             'businesses' => $businesses,
+            'products' => $products,
         ]);
     }
 

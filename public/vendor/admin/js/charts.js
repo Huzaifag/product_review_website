@@ -89,6 +89,51 @@
         });
     }
 
+    let productsChart = $('#products-chart');
+    if (productsChart.length) {
+        window.Chart && new Chart(productsChart, {
+            type: 'line',
+            data: {
+                labels: chartsConfig.products.labels,
+                datasets: [{
+                    label: chartsConfig.products.title,
+                    data: chartsConfig.products.data,
+                    fill: false,
+                    pointBackgroundColor: config.colors.primary_color,
+                    borderColor: config.colors.primary_color,
+                    borderWidth: 2,
+                    lineTension: .10,
+                    rtl: config.direction == "rtl" ? true : false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: true,
+                            drawBorder: true
+                        },
+                        ticks: {
+                            autoSkip: true,
+                            maxTicksLimit: 17
+                        }
+                    },
+                    y: {
+                        suggestedMax: chartsConfig.products.max,
+                    }
+                }
+            }
+        });
+    }
+
+
     let reviewsChart = $('#reviews-chart');
     if (reviewsChart.length) {
         window.Chart && new Chart(reviewsChart, {

@@ -2,7 +2,7 @@
 @section('title', d_trans('Dashboard'))
 @section('header_title', d_trans('Dashboard'))
 @section('content')
-    @if (!config('settings.cronjob.last_execution'))
+    {{-- @if (!config('settings.cronjob.last_execution'))
         <div class="note note-danger p-4 mb-4">
             <div class="row row-cols-auto g-4">
                 <div class="col">
@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-    @endif
+    @endif --}}
     @if (!config('settings.smtp.status'))
         <div class="alert alert-warning border border-warning p-4 mb-4">
             <div class="row row-cols-auto g-4">
@@ -85,8 +85,8 @@
                     <i class="bi bi-briefcase"></i>
                 </div>
                 <div class="vironeer-counter-card-meta">
-                    <p class="vironeer-counter-card-title">{{ d_trans('Total Businesses') }}</p>
-                    <p class="vironeer-counter-card-number">{{ $counters['businesses'] }}</p>
+                    <p class="vironeer-counter-card-title">{{ d_trans('Total Products') }}</p>
+                    <p class="vironeer-counter-card-number">{{ $counters['products'] }}</p>
                 </div>
             </div>
         </div>
@@ -96,8 +96,8 @@
                     <i class="bi bi-star-fill"></i>
                 </div>
                 <div class="vironeer-counter-card-meta">
-                    <p class="vironeer-counter-card-title">{{ d_trans('Total Reviews') }}</p>
-                    <p class="vironeer-counter-card-number">{{ $counters['reviews'] }}</p>
+                    <p class="vironeer-counter-card-title">{{ d_trans('Total Categories') }}</p>
+                    <p class="vironeer-counter-card-number">{{ $counters['categories'] }}</p>
                 </div>
             </div>
         </div>
@@ -107,8 +107,8 @@
                     <i class="bi bi-star"></i>
                 </div>
                 <div class="vironeer-counter-card-meta">
-                    <p class="vironeer-counter-card-title">{{ d_trans('Pending Reviews') }}</p>
-                    <p class="vironeer-counter-card-number">{{ $counters['pending_reviews'] }}</p>
+                    <p class="vironeer-counter-card-title">{{ d_trans('Total SubCategories') }}</p>
+                    <p class="vironeer-counter-card-number">{{ $counters['subcategories'] }}</p>
                 </div>
             </div>
         </div>
@@ -246,7 +246,7 @@
         <div class="col-12 col-lg-5 col-xxl-4">
             <div class="box h-100 p-0">
                 <div class="box-header border-bottom mb-0 cp-2">
-                    <p class="box-header-title large mb-0">{{ d_trans('Recently added businesses') }}</p>
+                    <p class="box-header-title large mb-0">{{ d_trans('Recently added products') }}</p>
                     <div class="box-header-action">
                         <div class="drop-down" data-dropdown>
                             <button class="drop-down-title btn btn-reset btn-sm">
@@ -254,36 +254,36 @@
                             </button>
                             <div class="drop-down-menu">
                                 <a class="drop-down-item"
-                                    href="{{ route('admin.businesses.index') }}">{{ d_trans('View All') }}</a>
+                                    href="{{ route('admin.products.index') }}">{{ d_trans('View All') }}</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="box-body">
-                    @if ($businesses->count() > 0)
+                    @if ($products->count() > 0)
                         <div class="items">
-                            @foreach ($businesses as $business)
+                            @foreach ($products as $product)
                                 <div class="item d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center">
-                                        <a href="{{ route('admin.businesses.show', $business->id) }}"
+                                        <a href="{{ route('admin.products.show', $product->id) }}"
                                             class="item-img me-3">
-                                            <img src="{{ $business->getLogoLink() }}"
-                                                alt="{{ $business->trans->name }}">
+                                            <img src="{{ asset($product->getImageLink()) }}"
+                                                alt="{{ $product->name }}">
                                         </a>
                                         <div>
-                                            <a href="{{ route('admin.businesses.show', $business->id) }}"
-                                                class="item-title d-block fw-500 mb-1">{{ $business->trans->name }}</a>
+                                            <a href="{{ route('admin.products.show', $product->id) }}"
+                                                class="item-title d-block fw-500 mb-1">{{ $product->name }}</a>
                                             <p class="item-text text-muted small mb-0">
-                                                {{ $business->created_at->diffforhumans() }}
+                                                {{ $product->created_at->diffforhumans() }}
                                             </p>
                                         </div>
                                     </div>
-                                    <div class="ms-3">
-                                        <a href="{{ route('admin.businesses.show', $business->id) }}">
-                                            <img src="{{ $business->getAvgRatingImageLink() }}"
-                                                alt="{{ $business->avg_rating }}" width="120px" />
+                                    {{-- <div class="ms-3">
+                                        <a href="{{ route('admin.products.show', $product->id) }}">
+                                            <img src="{{ $product->getAvgRatingImageLink() }}"
+                                                alt="{{ $product->avg_rating }}" width="120px" />
                                         </a>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             @endforeach
                         </div>
@@ -298,7 +298,7 @@
         <div class="col-12 col-lg-7 col-xxl-8">
             <div class="box h-100">
                 <div class="box-header">
-                    <p class="box-header-title large mb-0">{{ d_trans('Businesses Statistics For This Month') }}</p>
+                    <p class="box-header-title large mb-0">{{ d_trans('Product Statistics For This Month') }}</p>
                     <div class="box-header-action">
                         <div class="drop-down" data-dropdown>
                             <button class="drop-down-title btn btn-reset btn-sm">
@@ -306,14 +306,14 @@
                             </button>
                             <div class="drop-down-menu">
                                 <a class="drop-down-item"
-                                    href="{{ route('admin.businesses.index') }}">{{ d_trans('View All') }}</a>
+                                    href="{{ route('admin.products.index') }}">{{ d_trans('View All') }}</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="box-body">
                     <div class="dashboard-chart">
-                        <canvas id="businesses-chart" class="chart"></canvas>
+                        <canvas id="products-chart" class="chart"></canvas>
                     </div>
                 </div>
             </div>
