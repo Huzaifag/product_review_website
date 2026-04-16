@@ -86,7 +86,7 @@ return new class extends Migration
             $table->string('inci_name')->nullable();
             $table->string('slug')->unique();
 
-            $table->enum('severity', ['avoid', 'concern', 'caution']);
+            $table->enum('severity', ['concern', 'avoid', 'concern', 'caution']);
             $table->text('concern_description');
             $table->text('health_effects')->nullable();
             $table->text('regulatory_status')->nullable();

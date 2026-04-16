@@ -31,7 +31,7 @@ class Product extends Model
         'sub_category_id',
         'name',
         'slug',
-        'brand_name',
+        'brand_id',
         'image',
         'description',
         'price',
@@ -72,6 +72,11 @@ class Product extends Model
                 'source' => 'name',
             ],
         ];
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
     }
 
     public function category()

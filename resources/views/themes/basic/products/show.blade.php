@@ -30,7 +30,7 @@
                 box-sizing: border-box;
             }
 
-         
+
             /* ── Card wrapper ── */
             .card-shell {
                 background: var(--cream);
@@ -506,7 +506,9 @@
                 color: var(--text-mid);
                 border-bottom: 1px dashed rgba(122, 130, 110, .35);
                 padding-bottom: 4px;
-            }left-test-section {
+            }
+
+            left-test-section {
                 border: 1px solid var(--border);
                 border-radius: 12px;
                 background: #f8f2e8;
@@ -622,8 +624,7 @@
             .modal-image img {
                 width: 100%;
                 height: 100%;
-                object-fit: cover
-                gap: 8px;
+                object-fit: cover gap: 8px;
             }
 
             .concern-item {
@@ -1030,7 +1031,7 @@
                 <p class="eyebrow">{{ d_trans('Lab-Tested Product') }}</p>
                 <h1 class="product-title">{{ $product->name }}</h1>
                 <div class="tags">
-                    <span>{{ $product->brand_name ?: d_trans('Unknown brand') }}</span>
+                    <span>{{ $product->brand->name ?: d_trans('Unknown brand') }}</span>
                     <span class="dot"></span>
                     <span>{{ $product->category->trans->name ?? d_trans('Uncategorized') }}</span>
                     <span class="dot"></span>
@@ -1044,11 +1045,14 @@
                 <div class="details-grid">
                     <div class="detail-item">
                         <div class="detail-item-label">{{ d_trans('Overall Grade') }}</div>
-                        <div class="detail-item-value">{{ $product->overall_grade ? str_replace('_', ' ', ucfirst($product->overall_grade)) : d_trans('N/A') }}</div>
+                        <div class="detail-item-value">
+                            {{ $product->overall_grade ? str_replace('_', ' ', ucfirst($product->overall_grade)) : d_trans('N/A') }}
+                        </div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-item-label">{{ d_trans('Test Date') }}</div>
-                        <div class="detail-item-value">{{ $product->test_date ? $product->test_date->format('M d, Y') : d_trans('N/A') }}</div>
+                        <div class="detail-item-value">
+                            {{ $product->test_date ? $product->test_date->format('M d, Y') : d_trans('N/A') }}</div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-item-label">{{ d_trans('Price') }}</div>
@@ -1071,10 +1075,33 @@
                     @php
                         $category = $product->category;
                         $subCategory = $product->subCategory;
-                        $categoryImage = $category?->image ? (\Illuminate\Support\Str::startsWith($category->image, ['http://', 'https://']) ? $category->image : asset($category->image)) : asset('images/placeholder.png');
-                        $subCategoryImage = $subCategory?->image ? (\Illuminate\Support\Str::startsWith($subCategory->image, ['http://', 'https://']) ? $subCategory->image : asset($subCategory->image)) : asset('images/placeholder.png');
+                        $categoryImage = $category?->image
+                            ? (\Illuminate\Support\Str::startsWith($category->image, ['http://', 'https://'])
+                                ? $category->image
+                                : asset($category->image))
+                            : asset('images/placeholder.png');
+                        $subCategoryImage = $subCategory?->image
+                            ? (\Illuminate\Support\Str::startsWith($subCategory->image, ['http://', 'https://'])
+                                ? $subCategory->image
+                                : asset($subCategory->image))
+                            : asset('images/placeholder.png');
+
+                        $brand = $product->brand;
+                        $brandImage = $brand?->logo
+                            ? (\Illuminate\Support\Str::startsWith($brand->logo, ['http://', 'https://'])
+                                ? $brand->logo
+                                : asset($brand->logo))
+                            : asset('images/placeholder.png');
                     @endphp
-                    
+                    <!-- Brand Info Card -->
+                    <div class="roast-card" onclick="selectRoast(this)">
+                        <div class="roast-img">
+                            <img src="{{ $brandImage }}" alt="{{ $brand?->name }}">
+                        </div>
+                        <div class="roast-name">{{ $brand?->name ?: d_trans('Unknown brand') }}</div>
+                        <div class="roast-sub">{{ d_trans('Brand') }}</div>
+                    </div>
+
                     <!-- Category Card -->
                     <div class="roast-card active" onclick="selectRoast(this)">
                         <div class="roast-img">
@@ -1083,7 +1110,7 @@
                         <div class="roast-name">{{ $category?->trans->name ?: d_trans('Category') }}</div>
                         <div class="roast-sub">{{ d_trans('Category') }}</div>
                     </div>
-                    
+
                     <!-- Sub Category Card -->
                     <div class="roast-card" onclick="selectRoast(this)">
                         <div class="roast-img">
@@ -1092,15 +1119,8 @@
                         <div class="roast-name">{{ $subCategory?->trans->name ?: d_trans('Sub Category') }}</div>
                         <div class="roast-sub">{{ d_trans('Sub Category') }}</div>
                     </div>
-                    
-                    <!-- Product Info Card -->
-                    <div class="roast-card" onclick="selectRoast(this)">
-                        <div class="roast-img">
-                            <img src="{{ $productImageUrls->first() }}" alt="{{ $product->name }}">
-                        </div>
-                        <div class="roast-name">{{ $product->name }}</div>
-                        <div class="roast-sub">{{ d_trans('Product') }}</div>
-                    </div>
+
+
                 </div>
 
                 <div class="lab-box">
@@ -1135,6 +1155,55 @@
             </div><!-- /detail-col -->
 
         </div><!-- /product-body -->
+
+
+        @if ($similarProducts->count())
+            <div class="comparison-section" style="margin-top: 40px;">
+                <h3>Compare with Similar Products</h3>
+                <div class="comparison-table" style="overflow-x:auto;">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Overall Grade</th>
+                                <th>Ingredient Grade</th>
+                                <th>Defects Grade</th>
+                                <th>Price</th>
+                                <th>Test Date</th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($similarProducts as $sim)
+                                <tr>
+                                    <td>
+                                        <strong>{{ $sim->name }}</strong><br>
+                                        <span style="font-size:0.9em;color:#888;">{{ $sim->brand->name ?? '' }}</span>
+                                    </td>
+                                    <td>{{ $sim->labTestingResult->overall_grade ?? 'N/A' }}</td>
+                                    <td>{{ $sim->labTestingResult->ingredient_grade ?? 'N/A' }}</td>
+                                    <td>{{ $sim->labTestingResult->defects_grade ?? 'N/A' }}</td>
+                                    <td>
+                                        @if ($sim->price)
+                                            {{ $sim->currency }} {{ numberFormat($sim->price) }}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{ $sim->test_date ? $sim->test_date->format('M d, Y') : 'N/A' }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('products.show', $sim) }}"
+                                            class="btn btn-sm btn-outline-primary">View</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
     </div><!-- /card-shell -->
 
     <!-- Image Modal -->

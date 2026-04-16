@@ -33,7 +33,7 @@ class ImageUploader extends Component
     public function __construct(
         string $name = 'image',
         string $label = null,
-        string $accept = '.png,.jpg,.jpeg',
+        string $accept = '.png,.jpg,.jpeg , webp',
         bool $required = false,
         ?string $src = null,
         ?string $width = null,

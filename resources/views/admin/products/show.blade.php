@@ -58,7 +58,7 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between px-0 py-2">
                             <strong>{{ d_trans('Brand') }}</strong>
-                            <span>{{ $product->brand_name }}</span>
+                            <span>{{ $product->brand->name }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between px-0 py-2">
                             <strong>{{ d_trans('Category') }}</strong>

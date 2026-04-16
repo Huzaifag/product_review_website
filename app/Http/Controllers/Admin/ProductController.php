@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Handlers\FileHandler;
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
+use App\Models\IngredientLibrary;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\SubCategory;
@@ -73,10 +75,14 @@ class ProductController extends Controller
     {
         $categories = Category::select('id', 'name')->get();
         $subCategories = SubCategory::select('id', 'name')->get();
+        $brands = Brand::select('id', 'name')->get();
+        $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
 
         return view('admin.products.create', [
             'categories' => $categories,
             'subCategories' => $subCategories,
+            'brands' => $brands,
+            'ingredientLibraries' => $ingredientLibraries,
             'grades' => $this->availableGrades(),
         ]);
     }
@@ -144,12 +150,16 @@ class ProductController extends Controller
     {
         $product->load(['images']);
         $categories = Category::select('id', 'name')->get();
-        $subCategories = SubCategory::select('id', 'name')->get();
+        $subcategories = SubCategory::select('id', 'name')->get();
+        $brands = Brand::select('id', 'name')->get();
+        $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
 
         return view('admin.products.edit', [
             'product' => $product,
             'categories' => $categories,
-            'subCategories' => $subCategories,
+            'subcategories' => $subcategories,
+            'brands' => $brands,
+            'ingredientLibraries' => $ingredientLibraries,
             'grades' => $this->availableGrades(),
         ]);
     }
@@ -307,8 +317,10 @@ class ProductController extends Controller
     public function labTests(Product $product)
     {
         $product->load(['category', 'subCategory', 'images', 'labTestingResult', 'ingredientConcerns']);
+        $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
         return view('admin.products.lab-tests', [
             'product' => $product,
+            'ingredientLibraries' => $ingredientLibraries,
             'grades' => $this->availableGrades(),
         ]);
     }
@@ -320,7 +332,7 @@ class ProductController extends Controller
             'sub_category_id' => ['nullable', 'integer', 'exists:sub_categories,id'],
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', 'unique:products,slug,' . $productId],
-            'brand_name' => ['required', 'string', 'max:191'],
+            'brand_id' => ['required', 'integer', 'exists:brands,id'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'images' => ['nullable', 'array'],
             'images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],

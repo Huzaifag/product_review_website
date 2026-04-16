@@ -41,16 +41,28 @@
                         </a>
                     </div>
                 </div>
-                <a href="{{ route('admin.businesses.index') }}"
+                {{-- <a href="{{ route('admin.businesses.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('businesses', 2) }}">
                     <p class="dashboard-sidebar-link-title">
                         <span><i class="fa-solid fa-briefcase"></i>{{ d_trans('Businesses') }}</span>
                     </p>
-                </a>
+                </a> --}}
                 <a href="{{ route('admin.products.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('products', 2) }}">
                     <p class="dashboard-sidebar-link-title">
                         <span><i class="fa-solid fa-box"></i>{{ d_trans('Products') }}</span>
+                    </p>
+                </a>
+                <a href="{{ route('admin.brands.index') }}"
+                    class="dashboard-sidebar-link {{ currentLink('brands', 2) }}">
+                    <p class="dashboard-sidebar-link-title">
+                        <span><i class="fa-solid fa-tags"></i>{{ d_trans('Brands') }}</span>
+                    </p>
+                </a>
+                <a href="{{ route('admin.ingredients-library.index') }}"
+                    class="dashboard-sidebar-link {{ currentLink('ingredients-library', 2) }}">
+                    <p class="dashboard-sidebar-link-title">
+                        <span><i class="fa-solid fa-flask"></i>{{ d_trans('Ingredient Library') }}</span>
                     </p>
                 </a>
                 <a href="{{ route('admin.pending-reviews.index') }}"

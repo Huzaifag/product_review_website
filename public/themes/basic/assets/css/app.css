@@ -5951,16 +5951,7 @@ a:hover {
     margin-bottom: 0;
 }
 
-.footer .footer-upper {
-    position: relative;
-    padding-block: 80px;
-}
 
-.footer .footer-lower {
-    position: relative;
-    padding-block: 20px;
-    border-top: 1px solid rgb(var(--footer_border_color));
-}
 
 .footer .footer-copyright {
     color: rgb(var(--footer_text_color));
@@ -6719,7 +6710,8 @@ a:hover {
 }
 
 .featured-luxe-btn {
-    border-color: #C62828;
+    border: 1.5px solid #C62828 !important;
+    border-color: #C62828 !important;
     color: #C62828;
     background: #fff;
     font-weight: 600;
@@ -6729,7 +6721,7 @@ a:hover {
 }
 
 .featured-luxe-btn:hover {
-    border-color: #C62828;
+    border-color: #C62828 !important;
     background: #C62828;
     color: #fff;
     transform: translateY(-2px);

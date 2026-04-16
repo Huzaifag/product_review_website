@@ -10,6 +10,23 @@ Route::get('/optimize-clear', function () {
     return 'Application cache cleared';
 })->name('optimize.clear');
 
+// Run Migrations
+Route::get('/migrate', function () {
+    Artisan::call('migrate', ['--force' => true]);
+    return 'Migrations run successfully';
+})->name('migrate');
+
+
+// Link Storage
+Route::get('/storage-link', function () {
+    try {
+        Artisan::call('storage:link');
+        return 'Storage linked successfully';
+    } catch (Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+})->name('storage.link');
+
 Route::middleware('maintenance')->group(function () {
     Auth::routes(['verify' => true]);
     Route::namespace('Auth')->group(function () {

@@ -140,7 +140,14 @@
                                             <input type="number" step="0.0001" min="0" name="concerns[{{ $index }}][concentration]" class="form-control form-control-md" placeholder="{{ d_trans('Concentration') }}" value="{{ $concern['concentration'] ?? '' }}">
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" min="1" name="concerns[{{ $index }}][ingredient_library_id]" class="form-control form-control-md" placeholder="{{ d_trans('Library ID') }}" value="{{ $concern['ingredient_library_id'] ?? '' }}">
+                                            <select name="concerns[{{ $index }}][ingredient_library_id]" class="form-control form-control-md">
+                                                <option value="">{{ d_trans('Select Ingredient') }}</option>
+                                                @foreach($ingredientLibraries as $ingredient)
+                                                    <option value="{{ $ingredient->id }}" {{ ($concern['ingredient_library_id'] ?? '') == $ingredient->id ? 'selected' : '' }}>
+                                                        {{ $ingredient->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="col-12">
                                             <textarea name="concerns[{{ $index }}][description]" class="form-control form-control-md" rows="2" placeholder="{{ d_trans('Description') }}">{{ $concern['description'] ?? '' }}</textarea>

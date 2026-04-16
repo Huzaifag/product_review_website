@@ -21,11 +21,6 @@ class Footer extends Component
         'newsletterRefresh' => '$refresh',
     ];
 
-    public function mount($hasSocialLinks)
-    {
-        $this->hasSocialLinks = $hasSocialLinks;
-    }
-
     public function subscribe()
     {
         $validator = Validator::make(['email' => $this->email], [

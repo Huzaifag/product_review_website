@@ -124,7 +124,7 @@
                                     </a>
                                     <p class="item-text text-muted small mb-0">{{ $product->slug }}</p>
                                 </td>
-                                <td class="text-center">{{ $product->brand_name }}</td>
+                                <td class="text-center">{{ $product->brand->name ?? '-' }}</td>
                                 <td class="text-center">{{ $product->category->trans->name ?? '-' }}</td>
                                 <td class="text-center">{{ $product->subCategory->trans->name ?? '-' }}</td>
                                 <td class="text-center">

@@ -151,7 +151,7 @@ class ProductController extends Controller
                 $query->where('slug', $slug)
                     ->orWhere('id', $slug);
             })
-            ->with(['category', 'subCategory', 'labTestingResult', 'ingredientConcerns', 'images'])
+            ->with(['brand', 'category', 'subCategory', 'labTestingResult', 'ingredientConcerns', 'images'])
             ->withCount([
                 'userReviews as approved_reviews_count' => function ($query) {
                     $query->approved();
@@ -161,19 +161,16 @@ class ProductController extends Controller
 
         $product->increment('view_count');
 
-        $relatedProducts = Product::active()
-            ->where('id', '!=', $product->id)
-            ->when($product->category_id, function ($query) use ($product) {
-                $query->where('category_id', $product->category_id);
-            })
-            ->with(['category', 'subCategory'])
-            ->inRandomOrder()
-            ->limit(6)
+        $similarProducts = Product::where('id', '!=', $product->id)
+            ->where('category_id', $product->category_id)
+            ->where('sub_category_id', $product->sub_category_id)
+            ->with('labTestingResult')
+            ->limit(4)
             ->get();
 
         return theme_view('products.show', [
             'product' => $product,
-            'relatedProducts' => $relatedProducts,
+            'similarProducts' => $similarProducts,
         ]);
     }
 
