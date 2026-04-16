@@ -6743,7 +6743,7 @@ a:hover {
     display: flex;
     flex-direction: column;
     height: auto;
-    min-height: 330px;
+    min-height: 250px;
     width: 100%;
     padding: 1.5rem;
     border-radius: 24px;

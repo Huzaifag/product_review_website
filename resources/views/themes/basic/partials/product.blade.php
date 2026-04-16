@@ -17,41 +17,42 @@
                 <h5 class="featured-lab-title">
                     {{ \Illuminate\Support\Str::limit($product->name, 42) }}</h5>
                 <p class="featured-lab-description">
-                    {{ \Illuminate\Support\Str::limit($product->brand_name . ($product->description ? ' • ' . $product->description : ''), 112) }}
+                    {{ \Illuminate\Support\Str::limit($product->brand?->name . ($product->description ? ' • ' . $product->description : ''), 112) }}
                 </p>
             </div>
         </div>
 
-        <div class="featured-lab-chips">
-            <span class="featured-lab-index featured-lab-index-category">
-                <i class="bi bi-tag"></i>
-                {{ $product->category->trans->name ?? d_trans('Uncategorized') }}
-            </span>
-            @if ($product->subCategory)
-                <span class="featured-lab-index featured-lab-index-subcategory">
-                    <i class="bi bi-tag"></i>
-                    {{ $product->subCategory->trans->name ?? $product->subCategory->name }}
-                </span>
-            @endif
-            @if ($product->product_size)
-                <span class="featured-lab-index">
-                    <i class="bi bi-rulers"></i>
-                    {{ $product->product_size }}
-                </span>
-            @endif
-            @if ($product->price)
-                {{-- <span class="featured-lab-index featured-lab-index-price">
-                                                <i class="bi bi-cash-coin"></i>
-                                                {{ $product->currency }} {{ numberFormat($product->price) }}
-                                            </span> --}}
-            @endif
-        </div>
 
         <div class="featured-lab-expand">
             <div class="featured-lab-expand-inner">
+                <div class="featured-lab-chips">
+                    <span class="featured-lab-index featured-lab-index-category">
+                        <i class="bi bi-tag"></i>
+                        {{ $product->category->trans->name ?? d_trans('Uncategorized') }}
+                    </span>
+                    @if ($product->subCategory)
+                        <span class="featured-lab-index featured-lab-index-subcategory">
+                            <i class="bi bi-tag"></i>
+                            {{ $product->subCategory->trans->name ?? $product->subCategory->name }}
+                        </span>
+                    @endif
+                    @if ($product->product_size)
+                        <span class="featured-lab-index">
+                            <i class="bi bi-rulers"></i>
+                            {{ $product->product_size }}
+                        </span>
+                    @endif
+                    @if ($product->price)
+                        {{-- <span class="featured-lab-index featured-lab-index-price">
+                                                <i class="bi bi-cash-coin"></i>
+                                                {{ $product->currency }} {{ numberFormat($product->price) }}
+                                            </span> --}}
+                    @endif
+                </div>
+
                 <div class="featured-lab-meta-item">
                     <span>{{ d_trans('Brand') }}</span>
-                    <strong>{{ $product->brand_name }}</strong>
+                    <strong>{{ $product->brand?->name }}</strong>
                 </div>
                 <div class="featured-lab-meta-item">
                     <span>{{ d_trans('Organic Certified') }}</span>
