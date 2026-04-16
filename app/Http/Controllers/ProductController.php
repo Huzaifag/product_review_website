@@ -165,7 +165,7 @@ class ProductController extends Controller
             ->where('category_id', $product->category_id)
             ->where('sub_category_id', $product->sub_category_id)
             ->with('labTestingResult')
-            ->limit(4)
+            ->limit(3)
             ->get();
 
         return theme_view('products.show', [
@@ -173,7 +173,6 @@ class ProductController extends Controller
             'similarProducts' => $similarProducts,
         ]);
     }
-
 
     public function ajaxSearch(Request $request)
     {
@@ -187,10 +186,9 @@ class ProductController extends Controller
         $searchStart = $searchTerm . '%';
 
         $products = Product::active()
-            ->with(['category'])
+            ->with(['category', 'brand'])
             ->where(function ($query) use ($searchLike) {
                 $query->where('name', 'like', $searchLike)
-                    ->orWhere('brand_name', 'like', $searchLike)
                     ->orWhere('description', 'like', $searchLike)
                     ->orWhere('ingredients_inci', 'like', $searchLike);
             })
@@ -199,12 +197,14 @@ class ProductController extends Controller
             ->limit(10)
             ->get();
 
+        
+
         return response()->json($products->map(function (Product $product) {
             return [
                 'name' => $product->name,
-                'brand' => $product->brand_name,
+                'brand' => $product->brand?->name ?: ($product->brand_name ?: d_trans('Unknown brand')),
                 'image' => $product->getImageLink(),
-                'category' => $product->category->trans->name ?? d_trans('Uncategorized'),
+                'category' => $product->category?->trans->name ?? d_trans('Uncategorized'),
                 'grade' => $product->overall_grade ? str_replace('_', ' ', ucfirst($product->overall_grade)) : null,
                 'lab_verified' => $product->lab_verified,
                 'link' => $product->getLink(),

@@ -20,8 +20,12 @@
                 --text-mid: #4a5240;
                 --text-light: #7a826e;
                 --border: #ddd8ce;
-                --selected-bg: #e8eef2;
-                --selected-border: #b8cad4;
+                --grade-good: #16a34a;
+                --grade-good-bg: #dcfce7;
+                --grade-poor: #dc2626;
+                --grade-poor-bg: #fee2e2;
+                --grade-ok: #d97706;
+                --grade-ok-bg: #fef3c7;
             }
 
             *,
@@ -30,137 +34,37 @@
                 box-sizing: border-box;
             }
 
-
-            /* ── Card wrapper ── */
             .card-shell {
                 background: var(--cream);
-                border-radius: 20px;
+                border-radius: 16px;
                 overflow: hidden;
                 width: 100%;
-                box-shadow: 0 32px 80px rgba(0, 0, 0, .28);
+                box-shadow: 0 8px 40px rgba(0, 0, 0, .12);
             }
 
-            /* ── Announcement bar ── */
-            .announce-bar {
-                background: var(--cream-dark);
-                text-align: center;
-                font-size: .72rem;
-                letter-spacing: .04em;
-                padding: 8px 16px;
-                color: var(--text-mid);
-                border-bottom: 1px solid var(--border);
-            }
-
-            .announce-bar strong {
-                color: var(--text-dark);
-            }
-
-            .announce-bar code {
-                font-family: 'DM Sans', sans-serif;
-                background: rgba(0, 0, 0, .06);
-                border-radius: 4px;
-                padding: 1px 5px;
-                font-size: .68rem;
-                letter-spacing: .06em;
-            }
-
-            /* ── Nav ── */
-            .site-nav {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 14px 28px;
-                border-bottom: 1px solid var(--border);
-            }
-
-            .nav-links {
-                display: flex;
-                gap: 20px;
-            }
-
-            .nav-links a,
-            .nav-right a {
-                font-size: .78rem;
-                color: var(--text-mid);
-                text-decoration: none;
-                letter-spacing: .02em;
-            }
-
-            .nav-links a:hover,
-            .nav-right a:hover {
-                color: var(--text-dark);
-            }
-
-            .site-logo {
-                /* font-family: 'Playfair Display', serif; */
-                font-size: 1.25rem;
-                font-weight: 700;
-                color: var(--text-dark);
-                letter-spacing: .02em;
-            }
-
-            .nav-right {
-                display: flex;
-                align-items: center;
-                gap: 18px;
-            }
-
-            .nav-right svg {
-                width: 17px;
-                height: 17px;
-                stroke: var(--text-mid);
-                fill: none;
-                cursor: pointer;
-            }
-
-            .cart-wrap {
-                position: relative;
-            }
-
-            .cart-badge {
-                position: absolute;
-                top: -5px;
-                right: -6px;
-                background: var(--green-dark);
-                color: #fff;
-                font-size: .5rem;
-                width: 13px;
-                height: 13px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            /* ── Body content ── */
+            /* ── Two-column product body ── */
             .product-body {
-                display: flex;
-                gap: 0;
+                display: grid;
+                grid-template-columns: 420px 1fr;
+                min-height: 0;
             }
 
-            /* LEFT column */
+            /* LEFT */
             .img-col {
-                width: 50%;
-                flex-shrink: 0;
                 background: var(--cream-dark);
-                padding: 24px;
+                padding: 16px;
                 display: flex;
                 flex-direction: column;
-                gap: 12px;
-                overflow-y: auto;
-                /* max-height: 100vh; */
+                gap: 10px;
+                border-right: 1px solid var(--border);
             }
 
             .img-main {
                 width: 100%;
-                aspect-ratio: 1 / 1;
-                background: linear-gradient(145deg, #dcd4c4 0%, #c8bfad 100%);
-                border-radius: 12px;
+                aspect-ratio: 1/1;
+                border-radius: 10px;
                 overflow: hidden;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: relative;
+                background: #e8e0d0;
                 flex-shrink: 0;
             }
 
@@ -170,110 +74,21 @@
                 object-fit: cover;
             }
 
-            /* Coffee bag illustration (pure CSS) */
-            .bag {
-                position: relative;
-                width: 120px;
-                margin-bottom: -8px;
-            }
-
-            .bag-body {
-                width: 120px;
-                height: 160px;
-                background: linear-gradient(160deg, #2e4430 0%, #1e2e20 100%);
-                border-radius: 10px 10px 6px 6px;
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 4px 8px 24px rgba(0, 0, 0, .35), inset 2px 0 8px rgba(255, 255, 255, .05);
-            }
-
-            .bag-top {
-                width: 100px;
-                height: 28px;
-                background: linear-gradient(160deg, #2e4430 0%, #1e2e20 100%);
-                border-radius: 50% 50% 0 0 / 60% 60% 0 0;
-                margin: 0 auto;
-                position: absolute;
-                top: -18px;
-                left: 10px;
-                box-shadow: 0 -2px 8px rgba(0, 0, 0, .2);
-            }
-
-            .bag-logo-circle {
-                width: 52px;
-                height: 52px;
-                border-radius: 50%;
-                border: 1.5px solid rgba(255, 255, 255, .25);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 6px;
-            }
-
-            .bag-logo-circle svg {
-                width: 32px;
-                height: 32px;
-            }
-
-            .bag-brand {
-                /* font-family: 'Playfair Display', serif; */
-                font-size: .52rem;
-                color: rgba(255, 255, 255, .8);
-                letter-spacing: .08em;
-                text-align: center;
-                line-height: 1.4;
-            }
-
-            .bag-label {
-                position: absolute;
-                bottom: 22px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: var(--cream);
-                border-radius: 4px;
-                padding: 3px 10px;
-                font-size: .5rem;
-                font-weight: 500;
-                color: var(--text-dark);
-                white-space: nowrap;
-                letter-spacing: .03em;
-            }
-
-            .beans-scatter {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: 70px;
-            }
-
-            .bean {
-                position: absolute;
-                background: #3d2010;
-                border-radius: 50%;
-                box-shadow: inset 0 1px 3px rgba(0, 0, 0, .3);
-            }
-
             .img-thumbs {
                 display: flex;
-                gap: 10px;
-                flex-shrink: 0;
+                gap: 8px;
             }
 
             .img-thumb {
                 flex: 1;
-                aspect-ratio: 1 / 1;
-                background: #b8a890;
-                border-radius: 10px;
+                aspect-ratio: 1/1;
+                border-radius: 8px;
                 overflow: hidden;
-                position: relative;
-                border: 1.5px solid transparent;
+                border: 2px solid transparent;
                 cursor: pointer;
                 padding: 0;
-                transition: border-color .2s ease, transform .2s ease;
+                transition: border-color .2s, transform .2s;
+                background: #c8bfad;
             }
 
             .img-thumb img {
@@ -283,283 +98,355 @@
             }
 
             .img-thumb.active {
-                border-color: var(--selected-border);
+                border-color: var(--green-dark);
                 transform: translateY(-2px);
             }
 
             .img-view-all-btn {
                 flex: 1;
-                aspect-ratio: 1 / 1;
-                background: rgba(44, 61, 46, 0.1);
-                border: 1.5px dashed var(--border);
-                border-radius: 10px;
+                aspect-ratio: 1/1;
+                border: 2px dashed var(--border);
+                border-radius: 8px;
+                background: rgba(44, 61, 46, .07);
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: all .2s ease;
-                font-size: 2.5rem;
-                color: var(--text-dark);
+                font-size: 1.6rem;
+                color: var(--text-mid);
+                transition: all .2s;
             }
 
             .img-view-all-btn:hover {
                 border-color: var(--green-dark);
-                background: rgba(44, 61, 46, 0.15);
+                background: rgba(44, 61, 46, .12);
             }
 
-            .thumb-pour {
-                background: linear-gradient(135deg, #c8b89a 0%, #a89070 100%);
-            }
-
-            .thumb-beans {
-                background: linear-gradient(135deg, #8a6a40 0%, #5a3a18 100%);
-            }
-
-            /* Pour-over illustration */
-            .pour-scene {
-                position: absolute;
-                inset: 0;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .kettle {
-                width: 32px;
-                height: 20px;
-                background: #f0ede8;
-                border-radius: 8px 2px 2px 8px;
-                position: relative;
-                margin-bottom: 4px;
-            }
-
-            .kettle::after {
-                content: '';
-                position: absolute;
-                right: -8px;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 8px;
-                height: 2px;
-                background: #d0cdc8;
-                border-radius: 2px;
-            }
-
-            .dripper {
-                width: 24px;
-                height: 18px;
-                background: #f0ede8;
-                clip-path: polygon(10% 0%, 90% 0%, 70% 100%, 30% 100%);
-                margin-bottom: 2px;
-            }
-
-            .carafe {
-                width: 22px;
-                height: 26px;
-                background: rgba(240, 237, 232, .6);
-                border-radius: 4px 4px 6px 6px;
-                border: 1.5px solid #d0cdc8;
-            }
-
-            /* Beans in hand */
-            .beans-scene {
-                position: absolute;
-                inset: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .hand-shape {
-                width: 44px;
-                height: 30px;
-                background: #c8906a;
-                border-radius: 50% 50% 30% 30%;
-                position: relative;
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                justify-content: center;
-                gap: 2px;
-                padding: 4px;
-            }
-
-            .mini-bean {
-                width: 7px;
-                height: 5px;
-                background: #3d2010;
-                border-radius: 50%;
-            }
-
-            /* RIGHT column */
-            .detail-col {
-                flex: 1;
-                padding: 28px 28px 24px;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .eyebrow {
-                font-size: .65rem;
-                letter-spacing: .12em;
-                text-transform: uppercase;
-                color: var(--text-light);
-                margin-bottom: 4px;
-            }
-
-            .product-title {
-                font-size: 2.2rem;
-                font-weight: 700;
-                color: var(--text-dark);
-                line-height: 1.1;
-                margin: 0 0 8px;
-            }
-
-            .tags {
-                display: flex;
-                gap: 8px;
-                align-items: center;
-                margin-bottom: 16px;
-                font-size: .72rem;
-                color: var(--text-light);
-            }
-
-            .tags span {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-            }
-
-            .tags .dot {
-                width: 3px;
-                height: 3px;
-                border-radius: 50%;
-                background: var(--text-light);
-                display: inline-block;
-            }
-
-            .product-desc {
-                font-size: .82rem;
-                line-height: 1.7;
-                color: var(--text-mid);
-                margin-bottom: 20px;
-            }
-
-            .details-grid {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 10px;
-                margin-bottom: 16px;
-            }
-
-            .detail-item {
+            /* Left info boxes */
+            .left-box {
                 border: 1px solid var(--border);
                 border-radius: 10px;
+                background: #f8f2e8;
                 padding: 10px 12px;
-                background: #f9f4eb;
             }
 
-            .detail-item-label {
-                font-size: .66rem;
+            .left-box-title {
+                font-size: .7rem;
+                font-weight: 700;
                 text-transform: uppercase;
-                letter-spacing: .08em;
+                letter-spacing: .07em;
                 color: var(--text-light);
-                margin-bottom: 4px;
-            }
-
-            .detail-item-value {
-                font-size: .83rem;
-                color: var(--text-dark);
-                font-weight: 600;
-                line-height: 1.35;
-            }
-
-            .lab-box {
-                border: 1px solid var(--border);
-                border-radius: 12px;
-                background: #f8f2e8;
-                padding: 12px;
-                margin-bottom: 14px;
-            }
-
-            .lab-title {
-                font-size: .8rem;
-                font-weight: 700;
-                color: var(--text-dark);
-                margin-bottom: 8px;
-            }
-
-            .lab-list {
-                margin: 0;
-                padding: 0;
-                list-style: none;
-                display: grid;
-                gap: 6px;
-            }
-
-            .lab-list li {
-                display: flex;
-                justify-content: space-between;
-                gap: 10px;
-                font-size: .75rem;
-                color: var(--text-mid);
-                border-bottom: 1px dashed rgba(122, 130, 110, .35);
-                padding-bottom: 4px;
-            }
-
-            left-test-section {
-                border: 1px solid var(--border);
-                border-radius: 12px;
-                background: #f8f2e8;
-                padding: 12px;
-                margin-bottom: 14px;
-                flex-shrink: 0;
-            }
-
-            .left-section-title {
-                font-size: .8rem;
-                font-weight: 700;
-                color: var(--text-dark);
                 margin-bottom: 8px;
             }
 
             .concern-list {
-                max-height: 180px;
-                overflow: auto;
-                display: grid;
-                gap: 8px;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                max-height: 220px;
+                overflow-y: auto;
             }
 
             .concern-item {
-                border: 1px solid var(--border);
-                border-radius: 10px;
-                padding: 9px 10px;
                 background: #fff;
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 8px 10px;
             }
 
             .concern-item h6 {
-                font-size: .78rem;
+                font-size: .76rem;
                 margin: 0 0 3px;
                 color: var(--text-dark);
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                flex-wrap: wrap;
             }
 
             .concern-item p {
                 margin: 0;
-                font-size: .72rem;
+                font-size: .71rem;
                 color: var(--text-mid);
                 line-height: 1.45;
             }
 
-            /* Image Modal */
+            .concern-meta {
+                margin-top: 4px;
+                font-size: .66rem;
+                color: var(--text-light);
+            }
+
+            /* RIGHT */
+            .detail-col {
+                padding: 20px 22px;
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+                overflow-y: auto;
+                min-height: 100vh;
+            }
+
+            .eyebrow {
+                font-size: .62rem;
+                letter-spacing: .12em;
+                text-transform: uppercase;
+                color: var(--text-light);
+                margin: 0;
+            }
+
+            .product-title {
+                font-size: 1.75rem;
+                font-weight: 800;
+                color: var(--text-dark);
+                line-height: 1.1;
+                margin: 0;
+            }
+
+            .product-meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                font-size: .72rem;
+                color: var(--text-light);
+                align-items: center;
+            }
+
+            .meta-sep {
+                color: var(--border);
+            }
+
+            .product-desc {
+                font-size: .8rem;
+                line-height: 1.65;
+                color: var(--text-mid);
+                margin: 0;
+            }
+
+            /* Quick stats row */
+            .quick-stats {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+
+            .stat-box {
+                border: 1px solid var(--border);
+                border-radius: 9px;
+                padding: 9px 10px;
+                background: #f9f4eb;
+            }
+
+            .stat-label {
+                font-size: .6rem;
+                text-transform: uppercase;
+                letter-spacing: .07em;
+                color: var(--text-light);
+                margin-bottom: 3px;
+            }
+
+            .stat-value {
+                font-size: .82rem;
+                font-weight: 700;
+                color: var(--text-dark);
+                line-height: 1.2;
+            }
+
+            /* Grade badge */
+            .grade-badge {
+                display: inline-block;
+                padding: 2px 8px;
+                border-radius: 999px;
+                font-size: .72rem;
+                font-weight: 700;
+            }
+
+            .grade-good {
+                background: var(--grade-good-bg);
+                color: var(--grade-good);
+            }
+
+            .grade-poor {
+                background: var(--grade-poor-bg);
+                color: var(--grade-poor);
+            }
+
+            .grade-ok {
+                background: var(--grade-ok-bg);
+                color: var(--grade-ok);
+            }
+
+            .grade-na {
+                background: #f1f5f9;
+                color: #94a3b8;
+            }
+
+            .bool-yes {
+                color: var(--grade-good);
+                font-weight: 700;
+                font-size: .78rem;
+            }
+
+            .bool-no {
+                color: var(--grade-poor);
+                font-weight: 700;
+                font-size: .78rem;
+            }
+
+            .bool-ok {
+                color: var(--text-light);
+                font-size: .78rem;
+            }
+
+            /* Mini brand/cat cards */
+            .entity-row {
+                display: flex;
+                gap: 8px;
+            }
+
+            .entity-card {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                border: 1px solid var(--border);
+                border-radius: 9px;
+                padding: 8px 10px;
+                background: #f9f4eb;
+                text-decoration: none;
+            }
+
+            .entity-card img {
+                width: 32px;
+                height: 32px;
+                object-fit: contain;
+                border-radius: 5px;
+                flex-shrink: 0;
+                background: #fff;
+            }
+
+            .entity-info {}
+
+            .entity-type {
+                font-size: .58rem;
+                text-transform: uppercase;
+                letter-spacing: .07em;
+                color: var(--text-light);
+            }
+
+            .entity-name {
+                font-size: .76rem;
+                font-weight: 600;
+                color: var(--text-dark);
+            }
+
+            /* Tabs */
+            .tab-bar {
+                display: flex;
+                border-bottom: 2px solid var(--border);
+                gap: 0;
+                margin: 0 -22px;
+                padding: 0 22px;
+            }
+
+            .tab-btn {
+                padding: 8px 14px;
+                font-size: .75rem;
+                font-weight: 600;
+                color: var(--text-light);
+                background: none;
+                border: none;
+                border-bottom: 2px solid transparent;
+                margin-bottom: -2px;
+                cursor: pointer;
+                transition: color .2s, border-color .2s;
+                letter-spacing: .01em;
+            }
+
+            .tab-btn.active {
+                color: var(--green-dark);
+                border-bottom-color: var(--green-dark);
+            }
+
+            .tab-btn:hover:not(.active) {
+                color: var(--text-mid);
+            }
+
+            .tab-panel {
+                display: none;
+            }
+
+            .tab-panel.active {
+                display: block;
+            }
+
+            /* Lab snapshot */
+            .lab-rows {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .lab-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 7px 0;
+                border-bottom: 1px dashed rgba(122, 130, 110, .25);
+                gap: 10px;
+            }
+
+            .lab-row:last-child {
+                border-bottom: none;
+            }
+
+            .lab-row-label {
+                font-size: .71rem;
+                color: var(--text-light);
+                letter-spacing: .02em;
+            }
+
+            .lab-row-value {
+                font-size: .76rem;
+                font-weight: 600;
+                color: var(--text-dark);
+                text-align: right;
+            }
+
+            /* Details grid (complete test) */
+            .details-2col {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0;
+            }
+
+            .drow {
+                display: contents;
+            }
+
+            .drow>div {
+                padding: 6px 4px;
+                border-bottom: 1px dashed rgba(122, 130, 110, .2);
+                font-size: .72rem;
+            }
+
+            .drow>div:first-child {
+                color: var(--text-light);
+                padding-right: 12px;
+            }
+
+            .drow>div:last-child {
+                color: var(--text-dark);
+                font-weight: 600;
+                text-align: right;
+            }
+
+            /* Modal */
             .modal-overlay {
                 display: none;
                 position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.7);
+                inset: 0;
+                background: rgba(0, 0, 0, .7);
                 z-index: 2000;
                 align-items: center;
                 justify-content: center;
@@ -571,378 +458,188 @@
 
             .modal-content {
                 background: #fff;
-                border-radius: 16px;
-                padding: 24px;
-                max-width: 90vw;
-                max-height: 90vh;
+                border-radius: 14px;
+                padding: 20px;
+                max-width: 88vw;
+                max-height: 88vh;
                 overflow-y: auto;
                 position: relative;
             }
 
             .modal-close {
                 position: absolute;
-                top: 12px;
-                right: 12px;
-                width: 32px;
-                height: 32px;
+                top: 10px;
+                right: 10px;
+                width: 30px;
+                height: 30px;
                 background: var(--cream-dark);
                 border: none;
                 border-radius: 50%;
                 cursor: pointer;
+                font-size: 1.1rem;
+                color: var(--text-dark);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 1.2rem;
-                color: var(--text-dark);
-            }
-
-            .modal-close:hover {
-                background: var(--cream);
             }
 
             .modal-images-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 12px;
-                margin-top: 20px;
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 10px;
+                margin-top: 14px;
             }
 
             .modal-image {
-                aspect-ratio: 1 / 1;
-                border-radius: 12px;
+                aspect-ratio: 1/1;
+                border-radius: 10px;
                 overflow: hidden;
                 cursor: pointer;
                 border: 2px solid transparent;
-                transition: border-color .2s ease, transform .2s ease;
+                transition: all .2s;
             }
 
             .modal-image:hover {
                 border-color: var(--green-dark);
-                transform: scale(1.05);
+                transform: scale(1.04);
             }
 
             .modal-image img {
                 width: 100%;
                 height: 100%;
-                object-fit: cover gap: 8px;
+                object-fit: cover;
             }
 
-            .concern-item {
+            /* Lab badge (severity) */
+            .lab-badge {
+                display: inline-block;
+                padding: 1px 6px;
+                border-radius: 999px;
+                font-size: .58rem;
+                font-weight: 700;
+                letter-spacing: .02em;
+                background: rgba(44, 61, 46, .1);
+                color: var(--green-dark);
+            }
+
+            .lab-badge.high {
+                background: var(--grade-poor-bg);
+                color: var(--grade-poor);
+            }
+
+            .lab-badge.medium {
+                background: var(--grade-ok-bg);
+                color: var(--grade-ok);
+            }
+
+            .lab-badge.low {
+                background: var(--grade-good-bg);
+                color: var(--grade-good);
+            }
+
+            /* Comparison table */
+            .comparison-section {
+                padding: 20px 20px 24px;
+                border-top: 1px solid var(--border);
+            }
+
+            .comparison-section h3 {
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: var(--text-dark);
+                margin: 0 0 14px;
+            }
+
+            .comparison-wrap {
+                overflow-x: auto;
                 border: 1px solid var(--border);
                 border-radius: 10px;
-                padding: 9px 10px;
                 background: #fff;
             }
 
-            .concern-item h6 {
-                font-size: .78rem;
-                margin: 0 0 3px;
-                color: var(--text-dark);
-            }
-
-            .concern-item p {
-                margin: 0;
-                font-size: .72rem;
-                color: var(--text-mid);
-                line-height: 1.45;
-            }
-
-            /* Roast selector */
-            .roast-grid {
-                display: flex;
-                gap: 16px;
-                margin-bottom: 20px;
-            }
-
-            .roast-card {
-                flex: 1;
-                border: 2px solid #e5e0d5;
-                border-radius: 12px;
-                padding: 16px 12px 14px;
-                text-align: center;
-                cursor: pointer;
-                transition: all .25s ease;
-                background: #f9f6f0;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                min-height: 180px;
-            }
-
-            .roast-card:hover {
-                border-color: #d9cfc5;
-                background: #faf8f4;
-            }
-
-            .roast-card.active {
-                background: #f0f4f8;
-                border-color: #8db5d1;
-                box-shadow: none;
-            }
-
-            .roast-img {
-                width: 80px;
-                height: 100px;
-                margin: 0 auto 12px;
-                border-radius: 8px;
-                background: #f5f1e8;
-                position: relative;
-                overflow: hidden;
-                border: 1px solid #e8dfd2;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-            }
-
-            .roast-img img {
+            .comp-table {
                 width: 100%;
-                height: 100%;
-                object-fit: contain;
-                padding: 4px;
+                border-collapse: collapse;
+                font-size: .79rem;
+                min-width: 700px;
             }
 
-            .roast-mini-logo {
-                position: absolute;
-                inset: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+            .comp-table th,
+            .comp-table td {
+                padding: 10px 12px;
+                border-bottom: 1px solid var(--border);
+                vertical-align: middle;
             }
 
-            .roast-mini-logo svg {
-                width: 20px;
-                height: 20px;
+            .comp-table thead tr {
+                background: #f8f2e8;
             }
 
-            .roast-name {
-                /* font-family: 'Playfair Display', serif; */
-                font-size: .88rem;
+            .comp-table th:first-child,
+            .comp-table td:first-child {
                 font-weight: 600;
-                color: #2c3a2e;
-                margin-bottom: 3px;
-                line-height: 1.2;
-            }
-
-            .roast-sub {
-                font-size: .65rem;
-                color: #7a826e;
-                line-height: 1.3;
-            }
-
-            /* Purchase options */
-            .purchase-opts {
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                margin-bottom: 14px;
-            }
-
-            .opt-row {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                border: 1.5px solid var(--border);
-                border-radius: 10px;
-                padding: 11px 14px;
-                cursor: pointer;
-                transition: border-color .2s;
-            }
-
-            .opt-row:hover {
-                border-color: var(--tan);
-            }
-
-            .opt-row.active {
-                border-color: var(--green-dark);
-                background: rgba(44, 61, 46, .03);
-            }
-
-            .opt-left {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-
-            .radio-ring {
-                width: 17px;
-                height: 17px;
-                border-radius: 50%;
-                border: 1.5px solid var(--border);
-                flex-shrink: 0;
-                position: relative;
-            }
-
-            .opt-row.active .radio-ring {
-                border-color: var(--green-dark);
-            }
-
-            .opt-row.active .radio-ring::after {
-                content: '';
-                position: absolute;
-                inset: 3px;
-                background: var(--green-dark);
-                border-radius: 50%;
-            }
-
-            .opt-label {
-                font-size: .78rem;
                 color: var(--text-dark);
-                font-weight: 500;
+                border-right: 2px solid var(--border);
+                min-width: 160px;
+                background: #f8f2e8;
             }
 
-            .opt-label span {
-                font-size: .7rem;
-                color: var(--text-light);
-                font-weight: 400;
-            }
-
-            .opt-price {
-                font-size: .8rem;
-                color: var(--text-dark);
-                font-weight: 500;
-                display: flex;
-                gap: 6px;
-                align-items: center;
-            }
-
-            .opt-price .original {
-                color: var(--text-light);
-                text-decoration: line-through;
-                font-weight: 400;
-                font-size: .73rem;
-            }
-
-            /* Frequency dropdown */
-            .freq-select {
-                width: 100%;
-                border: 1.5px solid var(--border);
-                border-radius: 9px;
-                padding: 9px 14px;
-                font-family: 'DM Sans', sans-serif;
-                font-size: .78rem;
-                color: var(--text-light);
-                background: var(--cream) url("data:image/svg+xml,%3Csvg width='12' height='7' viewBox='0 0 12 7' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a826e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
-                appearance: none;
-                margin-bottom: 10px;
-                cursor: pointer;
-            }
-
-            .freq-select:focus {
-                outline: none;
-                border-color: var(--green-dark);
-            }
-
-            /* Perks */
-            .perks {
-                display: flex;
-                gap: 12px;
-                margin-bottom: 18px;
-                flex-wrap: wrap;
-            }
-
-            .perk {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-                font-size: .68rem;
-                color: var(--text-light);
-            }
-
-            .perk svg {
-                width: 14px;
-                height: 14px;
-                stroke: var(--text-light);
-                flex-shrink: 0;
-            }
-
-            /* Add to cart row */
-            .cart-row {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                margin-top: auto;
-            }
-
-            .qty-ctrl {
-                display: flex;
-                align-items: center;
-                gap: 0;
-                border: 1.5px solid var(--border);
-                border-radius: 9px;
-                overflow: hidden;
-                flex-shrink: 0;
-            }
-
-            .qty-btn {
-                width: 34px;
-                height: 42px;
-                background: none;
-                border: none;
-                font-size: 1.1rem;
-                color: var(--text-dark);
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: background .15s;
-            }
-
-            .qty-btn:hover {
-                background: var(--cream-dark);
-            }
-
-            .qty-num {
-                min-width: 28px;
+            .comp-table th {
                 text-align: center;
-                font-size: .85rem;
-                font-weight: 500;
+                font-weight: 600;
+            }
+
+            .comp-table td {
+                text-align: center;
+            }
+
+            .comp-table .current-col {
+                background: #f0f7f0;
+            }
+
+            .comp-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+            .comp-prod-img {
+                width: 56px;
+                height: 80px;
+                object-fit: contain;
+                display: block;
+                margin: 0 auto 6px;
+            }
+
+            .comp-prod-name {
+                font-weight: 700;
+                font-size: .82rem;
                 color: var(--text-dark);
             }
 
-            .btn-add {
-                flex: 1;
-                background: var(--green-dark);
-                color: #fff;
-                border: none;
-                border-radius: 9px;
-                padding: 11px 20px;
-                font-family: 'DM Sans', sans-serif;
-                font-size: .82rem;
-                font-weight: 500;
-                letter-spacing: .03em;
-                cursor: pointer;
-                transition: background .2s;
+            .comp-prod-brand {
+                font-size: .68rem;
+                color: var(--text-mid);
+                margin-top: 2px;
             }
 
-            .btn-add:hover {
-                background: var(--green-mid);
-            }
-
-            /* Responsive */
-            @media (max-width: 700px) {
+            @media (max-width: 768px) {
                 .product-body {
-                    flex-direction: column;
-                }
-
-                .img-col {
-                    width: 100%;
-                }
-
-                .product-title {
-                    font-size: 1.7rem;
-                }
-
-                .roast-grid {
-                    gap: 7px;
-                }
-
-                .details-grid {
                     grid-template-columns: 1fr;
                 }
 
-                .cart-shell {
-                    border-radius: 14px;
+                .detail-col {
+                    max-height: none;
+                }
+
+                .quick-stats {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .entity-row {
+                    flex-wrap: wrap;
+                }
+
+                .details-2col {
+                    grid-template-columns: 1fr;
                 }
             }
         </style>
@@ -960,19 +657,20 @@
         if ($productImageUrls->isEmpty()) {
             $productImageUrls = collect([$product->getImageLink()]);
         }
+
+        $lab = $product->labTestingResult;
+        $concerns = $product->ingredientConcerns ?? collect();
     @endphp
+
     <div class="card-shell">
-        <!-- Product body -->
         <div class="product-body">
 
-            <!-- LEFT: Images -->
+            {{-- ══ LEFT: Images + supplementary info ══ --}}
             <div class="img-col">
-                <!-- Main product image -->
                 <div class="img-main">
                     <img id="mainProductImage" src="{{ $productImageUrls->first() }}" alt="{{ $product->name }}">
                 </div>
 
-                <!-- Thumbnails - Show 4 images + View All button -->
                 <div class="img-thumbs">
                     @foreach ($productImageUrls->take(3) as $index => $imageUrl)
                         <button type="button" class="img-thumb {{ $index === 0 ? 'active' : '' }}"
@@ -981,230 +679,332 @@
                         </button>
                     @endforeach
                     @if ($productImageUrls->count() > 3)
-                        <button type="button" class="img-view-all-btn" onclick="openImageModal()">
-                            +
-                        </button>
+                        <button type="button" class="img-view-all-btn" onclick="openImageModal()">+</button>
                     @endif
                 </div>
 
-                <!-- Ingredient Concerns Section -->
-                @php
-                    $concerns = $product->ingredientConcerns;
-                @endphp
                 @if ($concerns->count() > 0)
-                    <div class="left-test-section">
-                        <div class="left-section-title">{{ d_trans('Ingredient Concerns') }}</div>
+                    <div class="left-box">
+                        <div class="left-box-title">⚠ {{ d_trans('Ingredient Concerns') }}</div>
                         <div class="concern-list">
                             @foreach ($concerns as $concern)
                                 <div class="concern-item">
                                     <h6>
                                         {{ $concern->ingredient_name }}
-                                        <span class="lab-badge">{{ ucfirst($concern->severity) }}</span>
+                                        <span
+                                            class="lab-badge {{ strtolower($concern->severity) }}">{{ ucfirst($concern->severity) }}</span>
                                     </h6>
                                     <p>{{ $concern->description ?: d_trans('No description provided.') }}</p>
+                                    @if ($concern->inci_name || $concern->concentration)
+                                        <div class="concern-meta">
+                                            @if ($concern->inci_name)
+                                                <div>INCI: {{ $concern->inci_name }}</div>
+                                            @endif
+                                            @if ($concern->concentration)
+                                                <div>{{ d_trans('Concentration') }}:
+                                                    {{ number_format((float) $concern->concentration, 4) }}%</div>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
                     </div>
                 @endif
 
-                <!-- Test Summary Section -->
-                @php
-                    $lab = $product->labTestingResult;
-                @endphp
-                @if ($lab?->test_summary)
-                    <div class="left-test-section">
-                        <div class="left-section-title">{{ d_trans('Test Summary') }}</div>
-                        <p style="margin:0;font-size:.75rem;color:var(--text-mid);line-height:1.55;">
-                            {{ $lab->test_summary }}
-                        </p>
-                    </div>
-                @endif
-            </div><!-- /img-col -->
+                
+            </div>
 
-            <!-- RIGHT: Product details -->
+            {{-- ══ RIGHT: Product details ══ --}}
             <div class="detail-col">
-                @php
-                    $lab = $product->labTestingResult;
-                    $concerns = $product->ingredientConcerns;
-                @endphp
-                <p class="eyebrow">{{ d_trans('Lab-Tested Product') }}</p>
-                <h1 class="product-title">{{ $product->name }}</h1>
-                <div class="tags">
-                    <span>{{ $product->brand->name ?: d_trans('Unknown brand') }}</span>
-                    <span class="dot"></span>
-                    <span>{{ $product->category->trans->name ?? d_trans('Uncategorized') }}</span>
-                    <span class="dot"></span>
-                    <span>{{ $product->subCategory->trans->name ?? d_trans('No sub category') }}</span>
+                <div>
+                    <p class="eyebrow">{{ d_trans('Lab-Tested Product') }}</p>
+                    <h1 class="product-title">{{ $product->name }}</h1>
+                    <div class="product-meta" style="margin-top:6px;">
+                        <span>{{ $product->brand?->name ?: d_trans('Unknown brand') }}</span>
+                        <span class="meta-sep">·</span>
+                        <span>{{ $product->category->trans->name ?? d_trans('Uncategorized') }}</span>
+                        @if ($product->subCategory)
+                            <span class="meta-sep">·</span>
+                            <span>{{ $product->subCategory->trans->name }}</span>
+                        @endif
+                    </div>
                 </div>
 
                 <p class="product-desc">
-                    {{ \Illuminate\Support\Str::limit(strip_tags($product->description ?: d_trans('No description available for this product.')), 220) }}
+                    {{ \Illuminate\Support\Str::limit(strip_tags($product->description ?: d_trans('No description available.')), 260) }}
                 </p>
 
-                <div class="details-grid">
-                    <div class="detail-item">
-                        <div class="detail-item-label">{{ d_trans('Overall Grade') }}</div>
-                        <div class="detail-item-value">
-                            {{ $product->overall_grade ? str_replace('_', ' ', ucfirst($product->overall_grade)) : d_trans('N/A') }}
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-item-label">{{ d_trans('Test Date') }}</div>
-                        <div class="detail-item-value">
-                            {{ $product->test_date ? $product->test_date->format('M d, Y') : d_trans('N/A') }}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-item-label">{{ d_trans('Price') }}</div>
-                        <div class="detail-item-value">
-                            @if ($product->price)
-                                {{ $product->currency }} {{ numberFormat($product->price) }}
+                {{-- Quick stats ──────────────────── --}}
+                <div class="quick-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">{{ d_trans('Overall Grade') }}</div>
+                        <div class="stat-value">
+                            @php $g = $product->overall_grade; @endphp
+                            @if ($g)
+                                <span
+                                    class="grade-badge {{ str_contains($g, 'good') ? 'grade-good' : (str_contains($g, 'poor') ? 'grade-poor' : 'grade-ok') }}">
+                                    {{ str_replace('_', ' ', ucfirst($g)) }}
+                                </span>
                             @else
-                                {{ d_trans('N/A') }}
+                                <span class="grade-badge grade-na">N/A</span>
                             @endif
                         </div>
                     </div>
-                    <div class="detail-item">
-                        <div class="detail-item-label">{{ d_trans('Size') }}</div>
-                        <div class="detail-item-value">{{ $product->product_size ?: d_trans('N/A') }}</div>
+                    <div class="stat-box">
+                        <div class="stat-label">{{ d_trans('Test Date') }}</div>
+                        <div class="stat-value">{{ $product->test_date ? $product->test_date->format('M d, Y') : 'N/A' }}
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">{{ d_trans('Price') }}</div>
+                        <div class="stat-value">
+                            {{ $product->price ? $product->currency . ' ' . numberFormat($product->price) : 'N/A' }}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">{{ d_trans('Size') }}</div>
+                        <div class="stat-value">{{ $product->product_size ?: 'N/A' }}</div>
                     </div>
                 </div>
 
-                <!-- Roast selector -->
-                <div class="roast-grid">
+                {{-- Brand / Category cards ──────── --}}
+                <div class="entity-row">
+                    <div class="entity-card">
+                        <img src="{{ asset($product->brand?->logo) }}" alt="{{ $product->brand?->name }}">
+                        <div class="entity-info">
+                            <div class="entity-type">{{ d_trans('Brand') }}</div>
+                            <div class="entity-name">{{ $product->brand?->name ?: 'N/A' }}</div>
+                        </div>
+                    </div>
+                    <div class="entity-card">
+                        <img src="{{ asset($product->category->image) }}" alt="{{ $product->category->trans->name }}">>
+                        <div class="entity-info">
+                            <div class="entity-type">{{ d_trans('Category') }}</div>
+                            <div class="entity-name">{{ $product->category->trans->name ?: 'N/A' }}</div>
+                        </div>
+                    </div>
+                    @if ($product->subCategory)
+                        <div class="entity-card">
+                            <img src="{{ asset($product->subCategory->image) }}"
+                                alt="{{ $product->subCategory->trans->name }}">
+                            <div class="entity-info">
+                                <div class="entity-type">{{ d_trans('Sub Category') }}</div>
+                                <div class="entity-name">{{ $product->subCategory->trans->name }}</div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Tabs ───────────────────────── --}}
+                <div class="tab-bar">
+                    <button class="tab-btn active"
+                        onclick="switchTab(this,'tab-snapshot')">{{ d_trans('Lab Snapshot') }}</button>
+                    <button class="tab-btn"
+                        onclick="switchTab(this,'tab-details')">{{ d_trans('Full Test Details') }}</button>
+                </div>
+
+                {{-- Tab: Lab Snapshot --}}
+                <div class="tab-panel active" id="tab-snapshot">
+                    <div class="lab-rows">
+                        @php
+                            $snapRows = [
+                                d_trans('Lab Name') => $lab?->lab_name ?: 'N/A',
+                                d_trans('Ingredient Grade') => $lab?->ingredient_grade,
+                                d_trans('Defects Grade') => $lab?->defects_grade,
+                                d_trans('Overall Grade') => $lab?->overall_grade,
+                                d_trans('Fragrance') => $lab ? ($lab->has_fragrance ? 'yes' : 'no') : null,
+                                d_trans('Concerning UV Filter') => $lab
+                                    ? ($lab->concerning_uv_filter
+                                        ? 'yes'
+                                        : 'no')
+                                    : null,
+                            ];
+                        @endphp
+                        @foreach ($snapRows as $label => $val)
+                            <div class="lab-row">
+                                <span class="lab-row-label">{{ $label }}</span>
+                                <span class="lab-row-value">
+                                    @if (is_null($val))
+                                        <span class="bool-ok">N/A</span>
+                                    @elseif ($val === 'yes')
+                                        <span class="bool-yes">✓ Yes</span>
+                                    @elseif ($val === 'no')
+                                        <span class="bool-no">✗ No</span>
+                                    @elseif (in_array($val, ['very_good', 'good']))
+                                        <span
+                                            class="grade-badge grade-good">{{ str_replace('_', ' ', ucfirst($val)) }}</span>
+                                    @elseif (in_array($val, ['poor', 'bad']))
+                                        <span
+                                            class="grade-badge grade-poor">{{ str_replace('_', ' ', ucfirst($val)) }}</span>
+                                    @else
+                                        {{ is_string($val) ? str_replace('_', ' ', ucfirst($val)) : $val }}
+                                    @endif
+                                </span>
+                            </div>
+                        @endforeach
+                    </div>
+                    @if ($lab?->test_summary)
+                    <div class="left-box mt-4">
+                        <div class="left-box-title">📋 {{ d_trans('Test Summary') }}</div>
+                        <p style="margin:0;font-size:.74rem;color:var(--text-mid);line-height:1.55;">
+                            {{ $lab->test_summary }}</p>
+                    </div>
+                @endif
+                </div>
+
+                {{-- Tab: Full Test Details --}}
+                <div class="tab-panel" id="tab-details">
                     @php
-                        $category = $product->category;
-                        $subCategory = $product->subCategory;
-                        $categoryImage = $category?->image
-                            ? (\Illuminate\Support\Str::startsWith($category->image, ['http://', 'https://'])
-                                ? $category->image
-                                : asset($category->image))
-                            : asset('images/placeholder.png');
-                        $subCategoryImage = $subCategory?->image
-                            ? (\Illuminate\Support\Str::startsWith($subCategory->image, ['http://', 'https://'])
-                                ? $subCategory->image
-                                : asset($subCategory->image))
-                            : asset('images/placeholder.png');
-
-                        $brand = $product->brand;
-                        $brandImage = $brand?->logo
-                            ? (\Illuminate\Support\Str::startsWith($brand->logo, ['http://', 'https://'])
-                                ? $brand->logo
-                                : asset($brand->logo))
-                            : asset('images/placeholder.png');
+                        $boolVal = fn($v) => $v ? 'yes' : 'no';
+                        $rows = [
+                            d_trans('Lab Verified') => $boolVal($product->lab_verified),
+                            d_trans('Test Date') => $product->test_date?->format('M d, Y') ?: 'N/A',
+                            d_trans('Test Year') => $product->test_year ?: 'N/A',
+                            d_trans('Test Edition') => $product->test_edition ?: 'N/A',
+                            d_trans('Magazine Page') => $product->magazine_page ?: 'N/A',
+                            d_trans('Organic Certified') => $boolVal($product->organic_certified),
+                            d_trans('Organic Certifier') => $product->organic_certifier ?: 'N/A',
+                            d_trans('Lab Name') => $lab?->lab_name ?: 'N/A',
+                            d_trans('Lab Tested At') => $lab?->tested_at?->format('M d, Y') ?: 'N/A',
+                            d_trans('Mineral UV Filter') => $lab?->mineral_uv_filter ?: 'N/A',
+                            d_trans('Concerning UV Filter') => $lab ? $boolVal($lab->concerning_uv_filter) : 'N/A',
+                            d_trans('Has Fragrance') => $lab ? $boolVal($lab->has_fragrance) : 'N/A',
+                            d_trans('Further Concerns') => $lab ? $boolVal($lab->further_concerns) : 'N/A',
+                            d_trans('Further Concerns Detail') => $lab?->further_concerns_detail ?: 'N/A',
+                            d_trans('Plastic Compounds') => $lab ? $boolVal($lab->plastic_compounds) : 'N/A',
+                            d_trans('Further Defects') => $lab ? $boolVal($lab->further_defects) : 'N/A',
+                            d_trans('Further Defects Detail') => $lab?->further_defects_detail ?: 'N/A',
+                            d_trans('Ingredient Grade') => $lab?->ingredient_grade
+                                ? str_replace('_', ' ', ucfirst($lab->ingredient_grade))
+                                : 'N/A',
+                            d_trans('Defects Grade') => $lab?->defects_grade
+                                ? str_replace('_', ' ', ucfirst($lab->defects_grade))
+                                : 'N/A',
+                            d_trans('Overall Grade') => $lab?->overall_grade
+                                ? str_replace('_', ' ', ucfirst($lab->overall_grade))
+                                : 'N/A',
+                            d_trans('Footnote Reference') => $lab?->footnote_ref ?: 'N/A',
+                            d_trans('Footnote Text') => $lab?->footnote_text ?: 'N/A',
+                        ];
                     @endphp
-                    <!-- Brand Info Card -->
-                    <div class="roast-card" onclick="selectRoast(this)">
-                        <div class="roast-img">
-                            <img src="{{ $brandImage }}" alt="{{ $brand?->name }}">
-                        </div>
-                        <div class="roast-name">{{ $brand?->name ?: d_trans('Unknown brand') }}</div>
-                        <div class="roast-sub">{{ d_trans('Brand') }}</div>
+                    <div class="lab-rows">
+                        @foreach ($rows as $label => $val)
+                            <div class="lab-row">
+                                <span class="lab-row-label">{{ $label }}</span>
+                                <span class="lab-row-value">
+                                    @if ($val === 'yes')
+                                        <span class="bool-yes">✓ Yes</span>
+                                    @elseif ($val === 'no')
+                                        <span class="bool-no">✗ No</span>
+                                    @else
+                                        {{ $val }}
+                                    @endif
+                                </span>
+                            </div>
+                        @endforeach
                     </div>
-
-                    <!-- Category Card -->
-                    <div class="roast-card active" onclick="selectRoast(this)">
-                        <div class="roast-img">
-                            <img src="{{ $categoryImage }}" alt="{{ $category?->trans->name }}">
-                        </div>
-                        <div class="roast-name">{{ $category?->trans->name ?: d_trans('Category') }}</div>
-                        <div class="roast-sub">{{ d_trans('Category') }}</div>
-                    </div>
-
-                    <!-- Sub Category Card -->
-                    <div class="roast-card" onclick="selectRoast(this)">
-                        <div class="roast-img">
-                            <img src="{{ $subCategoryImage }}" alt="{{ $subCategory?->trans->name }}">
-                        </div>
-                        <div class="roast-name">{{ $subCategory?->trans->name ?: d_trans('Sub Category') }}</div>
-                        <div class="roast-sub">{{ d_trans('Sub Category') }}</div>
-                    </div>
-
-
                 </div>
 
-                <div class="lab-box">
-                    <div class="lab-title">{{ d_trans('Lab Test Snapshot') }}</div>
-                    <ul class="lab-list">
-                        <li>
-                            <span>{{ d_trans('Lab Name') }}</span>
-                            <strong>{{ $lab?->lab_name ?: d_trans('N/A') }}</strong>
-                        </li>
-                        <li>
-                            <span>{{ d_trans('Ingredient Grade') }}</span>
-                            <strong>{{ $lab?->ingredient_grade ? str_replace('_', ' ', ucfirst($lab->ingredient_grade)) : d_trans('N/A') }}</strong>
-                        </li>
-                        <li>
-                            <span>{{ d_trans('Defects Grade') }}</span>
-                            <strong>{{ $lab?->defects_grade ? str_replace('_', ' ', ucfirst($lab->defects_grade)) : d_trans('N/A') }}</strong>
-                        </li>
-                        <li>
-                            <span>{{ d_trans('Overall Grade') }}</span>
-                            <strong>{{ $lab?->overall_grade ? str_replace('_', ' ', ucfirst($lab->overall_grade)) : d_trans('N/A') }}</strong>
-                        </li>
-                        <li>
-                            <span>{{ d_trans('Fragrance') }}</span>
-                            <strong>{{ $lab ? ($lab->has_fragrance ? d_trans('Yes') : d_trans('No')) : d_trans('N/A') }}</strong>
-                        </li>
-                        <li>
-                            <span>{{ d_trans('Concerning UV Filter') }}</span>
-                            <strong>{{ $lab ? ($lab->concerning_uv_filter ? d_trans('Yes') : d_trans('No')) : d_trans('N/A') }}</strong>
-                        </li>
-                    </ul>
-                </div>
-            </div><!-- /detail-col -->
+            </div>{{-- /detail-col --}}
+        </div>{{-- /product-body --}}
 
-        </div><!-- /product-body -->
-
-
+        {{-- ══ Comparison Table ══ --}}
         @if ($similarProducts->count())
-            <div class="comparison-section" style="margin-top: 40px;">
-                <h3>Compare with Similar Products</h3>
-                <div class="comparison-table" style="overflow-x:auto;">
-                    <table class="table table-bordered">
+            <div class="comparison-section mt-5">
+                <h3>{{ d_trans('Compare with Similar Products') }}</h3>
+                <div class="comparison-wrap">
+                    <table class="comp-table">
                         <thead>
                             <tr>
-                                <th>Product</th>
-                                <th>Overall Grade</th>
-                                <th>Ingredient Grade</th>
-                                <th>Defects Grade</th>
-                                <th>Price</th>
-                                <th>Test Date</th>
-                                <th>View</th>
+                                <th style="text-align:left;">{{ d_trans('Attribute') }}</th>
+                                <th class="current-col">
+                                    <img class="comp-prod-img"
+                                        src="{{ asset($product->image ?? 'images/placeholder.png') }}"
+                                        alt="{{ $product->name }}">
+                                    <div class="comp-prod-name">{{ $product->name }}</div>
+                                    <div class="comp-prod-brand">{{ $product->brand?->name }}</div>
+                                </th>
+                                @foreach ($similarProducts as $sim)
+                                    <th>
+                                        <img class="comp-prod-img"
+                                            src="{{ asset($sim->image ?? 'images/placeholder.png') }}"
+                                            alt="{{ $sim->name }}">
+                                        <div class="comp-prod-name">{{ $sim->name }}</div>
+                                        <div class="comp-prod-brand">{{ $sim->brand?->name }}</div>
+                                    </th>
+                                @endforeach
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($similarProducts as $sim)
-                                <tr>
-                                    <td>
-                                        <strong>{{ $sim->name }}</strong><br>
-                                        <span style="font-size:0.9em;color:#888;">{{ $sim->brand->name ?? '' }}</span>
-                                    </td>
-                                    <td>{{ $sim->labTestingResult->overall_grade ?? 'N/A' }}</td>
-                                    <td>{{ $sim->labTestingResult->ingredient_grade ?? 'N/A' }}</td>
-                                    <td>{{ $sim->labTestingResult->defects_grade ?? 'N/A' }}</td>
-                                    <td>
-                                        @if ($sim->price)
-                                            {{ $sim->currency }} {{ numberFormat($sim->price) }}
-                                        @else
-                                            N/A
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ $sim->test_date ? $sim->test_date->format('M d, Y') : 'N/A' }}
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('products.show', $sim) }}"
-                                            class="btn btn-sm btn-outline-primary">View</a>
-                                    </td>
-                                </tr>
-                            @endforeach
+                            @php
+                                $gradeCell = function ($g) {
+                                    if (!$g) {
+                                        return '<span style="color:#94a3b8">N/A</span>';
+                                    }
+                                    $cls = str_contains($g, 'good')
+                                        ? 'grade-good'
+                                        : (str_contains($g, 'poor')
+                                            ? 'grade-poor'
+                                            : 'grade-ok');
+                                    return '<span class="grade-badge ' .
+                                        $cls .
+                                        '">' .
+                                        str_replace('_', ' ', ucfirst($g)) .
+                                        '</span>';
+                                };
+                                $boolCell = fn($v) => $v
+                                    ? '<span class="bool-yes">✓ Yes</span>'
+                                    : '<span class="bool-no">✗ No</span>';
+                            @endphp
+                            <tr>
+                                <td>{{ d_trans('Price') }}</td>
+                                <td class="current-col" style="font-weight:700;">{{ $product->currency ?? '€' }}
+                                    {{ numberFormat($product->price ?? 0) }}</td>
+                                @foreach ($similarProducts as $sim)
+                                    <td>{{ $sim->currency ?? '€' }} {{ numberFormat($sim->price ?? 0) }}</td>
+                                @endforeach
+                            </tr>
+                            <tr>
+                                <td>{{ d_trans('Overall Grade') }}</td>
+                                <td class="current-col">{!! $gradeCell($product->labTestingResult?->overall_grade) !!}</td>
+                                @foreach ($similarProducts as $sim)
+                                    <td>{!! $gradeCell($sim->labTestingResult?->overall_grade) !!}</td>
+                                @endforeach
+                            </tr>
+                            <tr>
+                                <td>{{ d_trans('Ingredient Grade') }}</td>
+                                <td class="current-col">{!! $gradeCell($product->labTestingResult?->ingredient_grade) !!}</td>
+                                @foreach ($similarProducts as $sim)
+                                    <td>{!! $gradeCell($sim->labTestingResult?->ingredient_grade) !!}</td>
+                                @endforeach
+                            </tr>
+                            <tr>
+                                <td>{{ d_trans('Mineral UV Filter') }}</td>
+                                <td class="current-col">{!! $boolCell($product->labTestingResult?->mineral_uv_filter) !!}</td>
+                                @foreach ($similarProducts as $sim)
+                                    <td>{!! $boolCell($sim->labTestingResult?->mineral_uv_filter) !!}</td>
+                                @endforeach
+                            </tr>
+                            <tr>
+                                <td>{{ d_trans('Fragrance') }}</td>
+                                <td class="current-col">{!! $boolCell($product->labTestingResult?->has_fragrance) !!}</td>
+                                @foreach ($similarProducts as $sim)
+                                    <td>{!! $boolCell($sim->labTestingResult?->has_fragrance) !!}</td>
+                                @endforeach
+                            </tr>
+                            <tr>
+                                <td>{{ d_trans('Concerning UV Filter') }}</td>
+                                <td class="current-col">{!! $boolCell($product->labTestingResult?->concerning_uv_filter) !!}</td>
+                                @foreach ($similarProducts as $sim)
+                                    <td>{!! $boolCell($sim->labTestingResult?->concerning_uv_filter) !!}</td>
+                                @endforeach
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         @endif
-    </div><!-- /card-shell -->
+    </div>{{-- /card-shell --}}
 
     <!-- Image Modal -->
     <div class="modal-overlay" id="imageModal">
@@ -1270,6 +1070,48 @@
                 if (e.key === 'Escape') {
                     closeImageModal();
                 }
+            });
+
+
+
+            function selectRoast(el) {
+                document.querySelectorAll('.roast-card').forEach(c => c.classList.remove('active'));
+                el.classList.add('active');
+            }
+
+            function selectPreview(el, imageUrl) {
+                document.getElementById('mainProductImage').src = imageUrl;
+                document.querySelectorAll('.img-thumb').forEach(t => t.classList.remove('active'));
+                el.classList.add('active');
+            }
+
+            function openImageModal() {
+                document.getElementById('imageModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeImageModal() {
+                document.getElementById('imageModal').classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            function selectPreviewFromModal(el, imageUrl) {
+                document.getElementById('mainProductImage').src = imageUrl;
+                closeImageModal();
+            }
+
+            function switchTab(btn, panelId) {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(panelId).classList.add('active');
+            }
+
+            document.getElementById('imageModal')?.addEventListener('click', function(e) {
+                if (e.target === this) closeImageModal();
+            });
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') closeImageModal();
             });
         </script>
     @endpush

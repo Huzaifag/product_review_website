@@ -14,7 +14,14 @@
             <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                @include('admin.products.partials.form', ['buttonLabel' => d_trans('Save Changes') , ['brands' => $brands, 'categories' => $categories, 'subcategories' => $subcategories]])
+                @include('admin.products.partials.form', [
+                    'buttonLabel' => d_trans('Save Changes'),
+                    'brands' => $brands,
+                    'categories' => $categories,
+                    'subcategories' => $subcategories,
+                    'ingredientLibraries' => $ingredientLibraries,
+                    'grades' => $grades
+                ])
             </form>
         </div>
     </div>

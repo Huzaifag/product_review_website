@@ -12,7 +12,14 @@
         <div class="card-body">
             <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                @include('admin.products.partials.form', ['buttonLabel' => d_trans('Create Product') ,['brands' => $brands, /* other variables */]])
+                @include('admin.products.partials.form', [
+                    'buttonLabel' => d_trans('Create Product'),
+                    'brands' => $brands,
+                    'categories' => $categories,
+                    'subcategories' => $subCategories,
+                    'ingredientLibraries' => $ingredientLibraries,
+                    'grades' => $grades
+                ])
             </form>
         </div>
     </div>

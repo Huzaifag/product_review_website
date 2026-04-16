@@ -130,7 +130,12 @@
                 </div>
 
                 <div class="col-12 mt-2">
-                    <h6 class="mb-3">{{ d_trans('Ingredient Concerns') }}</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">{{ d_trans('Ingredient Concerns') }}</h6>
+                        <button type="button" class="btn btn-sm btn-success" id="add-concern-btn">
+                            <i class="fa-solid fa-plus"></i> {{ d_trans('Add Ingredient') }}
+                        </button>
+                    </div>
                     @php
                         $oldConcerns = old('concerns');
                         $rows = is_array($oldConcerns)
@@ -139,9 +144,9 @@
                                 ? $concerns->toArray()
                                 : [[], [], []]);
                     @endphp
-                    <div class="row g-2">
+                    <div class="row g-2" id="concerns-container">
                         @foreach ($rows as $index => $concern)
-                            <div class="col-12 border rounded p-2">
+                            <div class="col-12 border rounded p-2 concern-row">
                                 <div class="row g-2">
                                     <div class="col-md-3">
                                         <input type="text" name="concerns[{{ $index }}][ingredient_name]"
@@ -174,10 +179,15 @@
                                             placeholder="{{ d_trans('Concentration') }}"
                                             value="{{ $concern['concentration'] ?? '' }}">
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn btn-sm btn-danger remove-concern-btn w-100">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-1">
                                         <select name="concerns[{{ $index }}][ingredient_library_id]"
                                             class="form-control form-control-md">
-                                            <option value="">{{ d_trans('Select Ingredient') }}</option>
+                                            <option value="">{{ d_trans('Select') }}</option>
                                             @foreach($ingredientLibraries as $ingredient)
                                                 <option value="{{ $ingredient->id }}" {{ ($concern['ingredient_library_id'] ?? '') == $ingredient->id ? 'selected' : '' }}>
                                                     {{ $ingredient->name }}
@@ -202,4 +212,86 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('concerns-container');
+        const addBtn = document.getElementById('add-concern-btn');
+
+        addBtn?.addEventListener('click', function(e) {
+            e.preventDefault();
+            const rows = container.querySelectorAll('.concern-row');
+            const newIndex = rows.length;
+            const ingredientLibraries = @json($ingredientLibraries);
+
+            const newRow = document.createElement('div');
+            newRow.className = 'col-12 border rounded p-2 concern-row';
+            newRow.innerHTML = `
+                <div class="row g-2">
+                    <div class="col-md-3">
+                        <input type="text" name="concerns[${newIndex}][ingredient_name]"
+                            class="form-control form-control-md"
+                            placeholder="{{ d_trans('Ingredient name') }}">
+                    </div>
+                    <div class="col-md-2">
+                        <select name="concerns[${newIndex}][severity]"
+                            class="form-select form-select-md">
+                            <option value="">{{ d_trans('Severity') }}</option>
+                            <option value="avoid">{{ d_trans('Avoid') }}</option>
+                            <option value="concern">{{ d_trans('Concern') }}</option>
+                            <option value="caution">{{ d_trans('Caution') }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="concerns[${newIndex}][inci_name]"
+                            class="form-control form-control-md"
+                            placeholder="{{ d_trans('INCI name') }}">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" step="0.0001" min="0"
+                            name="concerns[${newIndex}][concentration]"
+                            class="form-control form-control-md"
+                            placeholder="{{ d_trans('Concentration') }}">
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-sm btn-danger remove-concern-btn w-100">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-1">
+                        <select name="concerns[${newIndex}][ingredient_library_id]"
+                            class="form-control form-control-md">
+                            <option value="">{{ d_trans('Select') }}</option>
+                            ${ingredientLibraries.map(ing => `<option value="${ing.id}">${ing.name}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <textarea name="concerns[${newIndex}][description]" 
+                            class="form-control form-control-md" rows="2"
+                            placeholder="{{ d_trans('Description') }}"></textarea>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(newRow);
+            attachRemoveListener(newRow.querySelector('.remove-concern-btn'));
+        });
+
+        function attachRemoveListener(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (container.querySelectorAll('.concern-row').length > 1) {
+                    btn.closest('.concern-row').remove();
+                } else {
+                    alert('{{ d_trans("You must keep at least one ingredient concern") }}');
+                }
+            });
+        }
+
+        // Attach listeners to existing remove buttons
+        document.querySelectorAll('.remove-concern-btn').forEach(btn => {
+            attachRemoveListener(btn);
+        });
+    });
+</script>
 @endsection

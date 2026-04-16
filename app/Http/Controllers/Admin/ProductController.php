@@ -30,7 +30,6 @@ class ProductController extends Controller
             $products->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'like', $searchTerm)
                     ->orWhere('slug', 'like', $searchTerm)
-                    ->orWhere('brand_name', 'like', $searchTerm)
                     ->orWhere('overall_grade', 'like', $searchTerm);
             });
         }
@@ -41,6 +40,11 @@ class ProductController extends Controller
 
         if (request()->filled('sub_category')) {
             $products->where('sub_category_id', request('sub_category'));
+        }
+
+        //brand filter
+        if (request()->filled('brand')) {
+            $products->where('brand_id', request('brand'));
         }
 
         if (request()->filled('status')) {
@@ -80,7 +84,7 @@ class ProductController extends Controller
 
         return view('admin.products.create', [
             'categories' => $categories,
-            'subCategories' => $subCategories,
+            'subcategories' => $subCategories,
             'brands' => $brands,
             'ingredientLibraries' => $ingredientLibraries,
             'grades' => $this->availableGrades(),
@@ -98,7 +102,19 @@ class ProductController extends Controller
             foreach ($validator->errors()->all() as $error) {
                 toastr()->error($error);
             }
-            return back()->withInput();
+            
+            $categories = Category::select('id', 'name')->get();
+            $subCategories = SubCategory::select('id', 'name')->get();
+            $brands = Brand::select('id', 'name')->get();
+            $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
+
+            return view('admin.products.create', [
+                'categories' => $categories,
+                'subCategories' => $subCategories,
+                'brands' => $brands,
+                'ingredientLibraries' => $ingredientLibraries,
+                'grades' => $this->availableGrades(),
+            ])->withInput();
         }
 
         $data = $validator->validated();
@@ -120,6 +136,11 @@ class ProductController extends Controller
 
         $product = Product::create($data);
 
+        // brands , categories, subcategories
+        $brands = Brand::select('id', 'name')->get();
+        $categories = Category::select('id', 'name')->get();
+        $subCategories = SubCategory::select('id', 'name')->get();
+
         $this->storeProductImages($product, $uploadedImages);
 
         toastr()->success(d_trans('Created Successfully'));
@@ -134,11 +155,15 @@ class ProductController extends Controller
         $product->load(['category', 'subCategory', 'labTestingResult', 'ingredientConcerns', 'images']);
         $categories = Category::select('id', 'name')->get();
         $subCategories = SubCategory::select('id', 'name')->get();
+        $brands = Brand::select('id', 'name')->get();
+        $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
 
         return view('admin.products.show', [
             'product' => $product,
             'categories' => $categories,
             'subCategories' => $subCategories,
+            'brands' => $brands,
+            'ingredientLibraries' => $ingredientLibraries,
             'grades' => $this->availableGrades(),
         ]);
     }
@@ -175,7 +200,20 @@ class ProductController extends Controller
             foreach ($validator->errors()->all() as $error) {
                 toastr()->error($error);
             }
-            return back()->withInput();
+            
+            $categories = Category::select('id', 'name')->get();
+            $subcategories = SubCategory::select('id', 'name')->get();
+            $brands = Brand::select('id', 'name')->get();
+            $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
+
+            return view('admin.products.edit', [
+                'product' => $product,
+                'categories' => $categories,
+                'subcategories' => $subcategories,
+                'brands' => $brands,
+                'ingredientLibraries' => $ingredientLibraries,
+                'grades' => $this->availableGrades(),
+            ])->withInput();
         }
 
         $data = $validator->validated();
@@ -224,86 +262,100 @@ class ProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'mineral_uv_filter' => ['nullable', 'string', 'max:255'],
-            'concerning_uv_filter' => ['nullable', 'boolean'],
-            'has_fragrance' => ['nullable', 'boolean'],
-            'further_concerns' => ['nullable', 'boolean'],
-            'further_concerns_detail' => ['nullable', 'string', 'max:255'],
+            'lab_name' => ['nullable', 'string', 'max:255'],
             'ingredient_grade' => ['nullable', 'string', 'in:' . implode(',', $this->availableGrades())],
-            'plastic_compounds' => ['nullable', 'boolean'],
-            'further_defects' => ['nullable', 'boolean'],
-            'further_defects_detail' => ['nullable', 'string', 'max:255'],
             'defects_grade' => ['nullable', 'string', 'in:' . implode(',', $this->availableGrades())],
             'overall_grade' => ['nullable', 'string', 'in:' . implode(',', $this->availableGrades())],
+            'tested_at' => ['nullable', 'date'],
             'footnote_ref' => ['nullable', 'string', 'max:255'],
             'footnote_text' => ['nullable', 'string'],
             'test_summary' => ['nullable', 'string'],
-            'tested_at' => ['nullable', 'date'],
-            'lab_name' => ['nullable', 'string', 'max:255'],
+            'concerning_uv_filter' => ['nullable', 'boolean'],
+            'has_fragrance' => ['nullable', 'boolean'],
+            'plastic_compounds' => ['nullable', 'boolean'],
+            'further_concerns' => ['nullable', 'boolean'],
+            'further_concerns_detail' => ['nullable', 'string', 'max:500'],
+            'further_defects' => ['nullable', 'boolean'],
+            'further_defects_detail' => ['nullable', 'string', 'max:500'],
+
             'concerns' => ['nullable', 'array'],
             'concerns.*.ingredient_library_id' => ['nullable', 'integer', 'exists:ingredients_library,id'],
-            'concerns.*.ingredient_name' => ['nullable', 'string', 'max:255'],
+            'concerns.*.ingredient_name' => ['required_with:concerns.*.severity', 'string', 'max:255'],
             'concerns.*.inci_name' => ['nullable', 'string', 'max:255'],
-            'concerns.*.severity' => ['nullable', 'string', 'in:avoid,concern,caution'],
-            'concerns.*.description' => ['nullable', 'string'],
+            'concerns.*.severity' => ['required_with:concerns.*.ingredient_name', 'string', 'in:avoid,concern,caution'],
             'concerns.*.concentration' => ['nullable', 'numeric', 'min:0'],
+            'concerns.*.description' => ['nullable', 'string', 'max:1000'],
         ]);
 
         if ($validator->fails()) {
             foreach ($validator->errors()->all() as $error) {
                 toastr()->error($error);
             }
-            return back()->withInput();
+            
+            $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
+            
+            return back()->withInput()->with([
+                'ingredientLibraries' => $ingredientLibraries,
+                'grades' => $this->availableGrades(),
+            ]);
         }
 
         $data = $validator->validated();
 
+        // Prepare Lab Testing Data
         $labData = [
             'mineral_uv_filter' => $data['mineral_uv_filter'] ?? null,
-            'concerning_uv_filter' => $request->boolean('concerning_uv_filter'),
-            'has_fragrance' => $request->boolean('has_fragrance'),
-            'further_concerns' => $request->boolean('further_concerns'),
-            'further_concerns_detail' => $data['further_concerns_detail'] ?? null,
+            'lab_name' => $data['lab_name'] ?? null,
             'ingredient_grade' => $data['ingredient_grade'] ?? null,
-            'plastic_compounds' => $request->boolean('plastic_compounds'),
-            'further_defects' => $request->boolean('further_defects'),
-            'further_defects_detail' => $data['further_defects_detail'] ?? null,
             'defects_grade' => $data['defects_grade'] ?? null,
             'overall_grade' => $data['overall_grade'] ?? null,
+            'tested_at' => $data['tested_at'] ?? null,
             'footnote_ref' => $data['footnote_ref'] ?? null,
             'footnote_text' => $data['footnote_text'] ?? null,
             'test_summary' => $data['test_summary'] ?? null,
-            'tested_at' => $data['tested_at'] ?? null,
-            'lab_name' => $data['lab_name'] ?? null,
+            'concerning_uv_filter' => $request->boolean('concerning_uv_filter'),
+            'has_fragrance' => $request->boolean('has_fragrance'),
+            'plastic_compounds' => $request->boolean('plastic_compounds'),
+            'further_concerns' => $request->boolean('further_concerns'),
+            'further_concerns_detail' => $data['further_concerns_detail'] ?? null,
+            'further_defects' => $request->boolean('further_defects'),
+            'further_defects_detail' => $data['further_defects_detail'] ?? null,
         ];
 
-        $concerns = collect($request->input('concerns', []))
+        // === IMPROVED CONCERNS PROCESSING ===
+        $concernsData = collect($data['concerns'] ?? [])
             ->map(function ($concern) {
                 return [
                     'ingredient_library_id' => !empty($concern['ingredient_library_id']) ? (int) $concern['ingredient_library_id'] : null,
-                    'ingredient_name' => trim((string) ($concern['ingredient_name'] ?? '')),
-                    'inci_name' => trim((string) ($concern['inci_name'] ?? '')) ?: null,
+                    'ingredient_name' => trim($concern['ingredient_name'] ?? ''),
+                    'inci_name' => trim($concern['inci_name'] ?? '') ?: null,
                     'severity' => $concern['severity'] ?? null,
-                    'description' => trim((string) ($concern['description'] ?? '')) ?: null,
                     'concentration' => $concern['concentration'] ?? null,
+                    'description' => trim($concern['description'] ?? '') ?: null,
                 ];
             })
             ->filter(function ($concern) {
+                // Keep only rows that have at least name + severity
                 return !empty($concern['ingredient_name']) && !empty($concern['severity']);
             })
-            ->values();
+            ->values()
+            ->all();
 
-        DB::transaction(function () use ($product, $labData, $concerns) {
+        DB::transaction(function () use ($product, $labData, $concernsData) {
+            // Update or create lab test record
             $product->labTestingResult()->updateOrCreate(
                 ['product_id' => $product->id],
                 $labData
             );
 
+            // Delete old concerns and insert new ones
             $product->ingredientConcerns()->delete();
 
-            if ($concerns->isNotEmpty()) {
-                $product->ingredientConcerns()->createMany($concerns->all());
+            if (!empty($concernsData)) {
+                $product->ingredientConcerns()->createMany($concernsData);
             }
 
+            // Optional: sync overall grade
             if (!empty($labData['overall_grade'])) {
                 $product->update(['overall_grade' => $labData['overall_grade']]);
             }

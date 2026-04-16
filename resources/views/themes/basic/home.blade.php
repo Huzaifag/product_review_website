@@ -76,7 +76,7 @@
                         data-ajax-empty="{{ d_trans('No results found') }}"
                         method="GET">
                         <div class="search-input oeko-search-input">
-                            <button aria-label="{{ d_trans('Search') }}" class="icon" type="submit">
+                            <button aria-label="{{ d_trans('Search') }}" class="icon btn-danger" type="submit" style="background-color: #C62828">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2">
                                     <circle cx="11" cy="11" r="8"/>

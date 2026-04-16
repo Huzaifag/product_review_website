@@ -47,7 +47,7 @@
                     <div class="col-12">
                         <label class="form-label">{{ d_trans('Severity') }}</label>
                         <select name="severity" class="form-select form-select-md">
-                            <option value="">{{ d_trans('None') }}</option>
+                            <option value="none">{{ d_trans('None') }}</option>
                             <option value="avoid" {{ old('severity', $ingredient->severity) === 'avoid' ? 'selected' : '' }}>{{ d_trans('Avoid') }}</option>
                             <option value="concern" {{ old('severity', $ingredient->severity) === 'concern' ? 'selected' : '' }}>{{ d_trans('Concern') }}</option>
                             <option value="caution" {{ old('severity', $ingredient->severity) === 'caution' ? 'selected' : '' }}>{{ d_trans('Caution') }}</option>
