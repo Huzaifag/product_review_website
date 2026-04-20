@@ -81,7 +81,7 @@
             {{ d_trans('You have reached the maximum number of product views and searches allowed under your current plan. To continue, please upgrade your plan.') }}
         </p>
 
-        <a href="{{ route('admin.plans.index') }}" class="btn btn-primary mt-3">
+        <a href="{{ route('plans') }}" class="btn btn-primary mt-3">
             {{ d_trans('Upgrade Plan') }}
         </a>
     </div>

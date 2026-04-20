@@ -10,6 +10,7 @@ use App\Models\Faq;
 use App\Models\HomeSection;
 use App\Models\Language;
 use App\Models\Page;
+use App\Models\Plan;
 use App\Models\Setting;
 use App\Models\IngredientLibrary;
 use Carbon\Carbon;
@@ -192,6 +193,12 @@ class GeneralController extends Controller
         return back();
     }
 
+    public function showPlans()
+    {
+        $plans = Plan::active()->get();
+
+        return theme_view('plans.show', ['plans' => $plans]);
+    }
     public function localize($code)
     {
         $language = Language::where('code', $code)->firstOrFail();

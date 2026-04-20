@@ -126,6 +126,7 @@ Route::middleware('maintenance')->group(function () {
             Route::get('contact-us', 'GeneralController@contact');
             Route::post('contact-us', 'GeneralController@contactSend')->name('contact');
         });
+        Route::get('plans', 'GeneralController@showPlans')->name('plans');
         Route::get('{slug}', 'GeneralController@page')->name('page');
     });
 });
