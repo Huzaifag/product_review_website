@@ -175,11 +175,11 @@ class ProductController extends Controller
         $userProductViewCount = $this->retrieveOrCreateUserProductViewCount($product->id);
 
         $plan = $userProductViewCount->plan;
-        
 
-        $canSeeDetails = $this->canSeeProductDetails($plan->products_limit, $userProductViewCount);
 
-        
+        $canSeeDetails = $this->canSeeProductDetails($plan->products_limit, $userProductViewCount, $product->id);
+
+
         return theme_view('products.show', [
             'product' => $product,
             'similarProducts' => $similarProducts,
@@ -191,8 +191,9 @@ class ProductController extends Controller
 
     private function retrieveOrCreateUserProductViewCount($productId)
     {
-        // Best method - Trust Cloudflare headers
-        $ip = request()->header('CF-Connecting-IP');
+        // Trust Cloudflare header first, then fall back to request IP.
+        $ip = request()->header('CF-Connecting-IP') ?: request()->ip();
+        
         $userId = auth()->check() ? auth()->id() : null;
 
         $subscription = null;
@@ -205,23 +206,29 @@ class ProductController extends Controller
                 ->first();
         }
 
+        $defaultPlan = Plan::where('interval', Plan::INTERVAL_LIFETIME)->first();
+
         // Retrieve or create the UserProductViewCount record
         $userProductViewCount = UserProductViewCount::firstOrCreate(
             [
                 'ip_address' => $ip,
                 'user_id' => $userId,
-                'plan_id' => $subscription ? $subscription->plan_id : Plan::where('interval', Plan::INTERVAL_LIFETIME)->first()?->id,
+                'plan_id' => $subscription ? $subscription->plan_id : $defaultPlan?->id,
                 'subscription_id' => $subscription ? $subscription->id : null,
             ]
         );
 
-        // Only increment if this product hasn't been viewed yet
+        $productsLimit = $subscription?->plan?->products_limit ?? $defaultPlan?->products_limit;
+
+        // Only increment if this product hasn't been viewed yet and the limit allows it.
         $productIds = $userProductViewCount->product_ids ?? [];
 
         // Ensure it's an array (important if coming from JSON/DB)
         $productIds = is_array($productIds) ? $productIds : [];
+        $alreadyViewed = in_array($productId, $productIds);
+        $canAddNewView = is_null($productsLimit) || $alreadyViewed || count($productIds) < (int) $productsLimit;
 
-        if (!in_array($productId, $productIds)) {
+        if (!$alreadyViewed && $canAddNewView) {
             $productIds[] = $productId;
 
             $userProductViewCount->product_ids = $productIds;
@@ -231,14 +238,22 @@ class ProductController extends Controller
 
         return $userProductViewCount;
     }
-    
-    private function canSeeProductDetails($products_limit , $userProductViewCount)
+
+    private function canSeeProductDetails($products_limit, $userProductViewCount, $productId)
     {
         if (is_null($products_limit)) {
             return true; // Unlimited products
         }
 
-        return $userProductViewCount->products_viewed <= $products_limit;
+        $productIds = $userProductViewCount->product_ids ?? [];
+        $productIds = is_array($productIds) ? $productIds : [];
+
+        // Always allow details for products already counted as viewed.
+        if (in_array($productId, $productIds)) {
+            return true;
+        }
+
+        return count($productIds) < (int) $products_limit;
     }
 
     public function ajaxSearch(Request $request)

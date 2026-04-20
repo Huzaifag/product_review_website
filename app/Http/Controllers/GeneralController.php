@@ -26,10 +26,13 @@ class GeneralController extends Controller
 {
     public function home()
     {
-        $homeSections = Cache::remember('home_sections_active',
-            now()->addDay(), function () {
+        $homeSections = Cache::remember(
+            'home_sections_active',
+            now()->addDay(),
+            function () {
                 return HomeSection::active()->get();
-            });
+            }
+        );
         return theme_view('home', ['homeSections' => HomeSection::active()->get()]);
     }
 
@@ -198,6 +201,13 @@ class GeneralController extends Controller
         $plans = Plan::active()->get();
 
         return theme_view('plans.show', ['plans' => $plans]);
+    }
+
+    public function planDetails($slug)
+    {
+        $plan = Plan::where('slug', $slug)->firstOrFail();
+
+        return theme_view('plans.details', ['plan' => $plan]);
     }
     public function localize($code)
     {

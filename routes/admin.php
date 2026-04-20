@@ -56,6 +56,9 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
     Route::resource('products', 'ProductController')->middleware('demo');
     Route::resource('brands', 'BrandController')->middleware('demo');
     Route::resource('plans', 'PlanController')->except(['show']);
+    Route::resource('payment-methods', 'PaymentGatewayController')->middleware('demo');
+    // payment-methods.sortable
+    Route::post('payment-methods/sortable', 'PaymentGatewayController@sortable')->name('payment-methods.sortable')->middleware('demo');
     Route::resource('ingredients-library', 'IngredientLibraryController')->middleware('demo');
     Route::post('products/{product}/lab-tests', 'ProductController@labTestsUpdate')->name('products.lab-tests.update')->middleware('demo');
     Route::get('products/{product}/lab-tests', 'ProductController@labTests')->name('products.lab-tests');

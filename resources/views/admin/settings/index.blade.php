@@ -60,7 +60,7 @@
                     </div>
                 </a>
             </div>
-            <div class="col page-search-element">
+            {{-- <div class="col page-search-element">
                 <a href="{{ route('admin.settings.business.index') }}" class="box box-system v2">
                     <div class="box-system-icon">
                         <i class="bi bi-briefcase"></i>
@@ -69,6 +69,19 @@
                         <h6 class="box-system-title">{{ d_trans('Business Settings') }}</h6>
                         <p class="box-system-text">
                             {{ d_trans('Manage and control the business settings.') }}
+                        </p>
+                    </div>
+                </a>
+            </div> --}}
+             <div class="col page-search-element">
+                <a href="{{ route('admin.payment-methods.index') }}" class="box box-system v2">
+                    <div class="box-system-icon">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+                    <div class="box-system-info">
+                        <h6 class="box-system-title">{{ d_trans('Payment Methods') }}</h6>
+                        <p class="box-system-text">
+                            {{ d_trans('Manage available payment methods.') }}
                         </p>
                     </div>
                 </a>
@@ -220,6 +233,7 @@
                     </a>
                 </div>
             @endif
+           
         </div>
     </div>
 @endsection

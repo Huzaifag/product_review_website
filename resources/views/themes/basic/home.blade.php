@@ -22,7 +22,7 @@
             <h1 class="oeko-hero-title">
                 {{ d_trans("What's Really") }}<br>
                 {{ d_trans('Inside Your') }}
-                <span class="oeko-hero-star">&#10022;</span><br>
+                <span class="oeko-hero-star">&#10020;</span><br>
                 {{ d_trans('Cosmetics?') }}
             </h1>
 

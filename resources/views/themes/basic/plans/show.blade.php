@@ -242,16 +242,11 @@
 
                             {{-- CTA --}}
                             <div class="plan-card-footer">
-                                @if (authBusinessOwner())
-                                    <a href="{{ route('business.subscription.plans.index') }}"
-                                        class="btn btn-primary w-100">
-                                        {{ d_trans('Manage subscription') }}
-                                    </a>
-                                @else
-                                    <a href="{{ businessUrl('register') }}"
+                                @if ($plan->price > 0)
+                                     <a href="{{ route('plans.details', $plan->slug) }}"
                                         class="{{ $plan->isFeatured() ? 'btn btn-primary' : 'btn btn-outline-primary' }} w-100">
                                         {{ d_trans('Get started') }}
-                                    </a>
+                                    </a> 
                                 @endif
                             </div>
 
