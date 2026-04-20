@@ -11,6 +11,7 @@ use App\Models\HomeSection;
 use App\Models\Language;
 use App\Models\Page;
 use App\Models\Setting;
+use App\Models\IngredientLibrary;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -42,6 +43,12 @@ class GeneralController extends Controller
     {
         $faqs = Faq::paginate(10);
         return theme_view('faqs', ['faqs' => $faqs]);
+    }
+
+    public function ingredients()
+    {
+        $ingredients = IngredientLibrary::where('is_published', true)->paginate(47);
+        return theme_view('ingredients', ['ingredients' => $ingredients]);
     }
 
     public function contact()

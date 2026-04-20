@@ -29,7 +29,7 @@
                         <th>{{ d_trans('Name') }}</th>
                         <th>{{ d_trans('Interval') }}</th>
                         <th class="text-center">{{ d_trans('Price') }}</th>
-                        <th class="text-center">{{ d_trans('Downloads') }}</th>
+                        <th class="text-center">{{ d_trans('Products Limit') }}</th>
                         <th class="text-center">{{ d_trans('Status') }}</th>
                         <th></th>
                     </thead>
@@ -51,7 +51,7 @@
                                 <td class="text-center">
                                     {{ getAmount($plan->price) }}</td>
                                 <td class="text-center">
-                                    {{ !$plan->businesses ? d_trans('Unlimited') : number_format($plan->businesses) }}
+                                    {{ !$plan->products_limit ? d_trans('Unlimited') : number_format($plan->products_limit) }}
                                 </td>
                                 <td class="text-center">
                                     @if ($plan->isActive())

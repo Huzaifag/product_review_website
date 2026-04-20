@@ -74,12 +74,13 @@
 
 <style>
     :root {
-        --primary_color: #C62828;
+        --primary_color: 198, 40, 40;
+        --primary_color_hex: #C62828;
         --footer_border_color: 200, 40, 40;
     }
 
     .footer {
-        background: var(--primary_color) !important;
+        background: rgb(var(--primary_color)) !important;
         color: #ffffff !important;
         border-top: none !important;
     }

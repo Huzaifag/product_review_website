@@ -59,6 +59,12 @@
                         <span><i class="fa-solid fa-tags"></i>{{ d_trans('Brands') }}</span>
                     </p>
                 </a>
+                <a href="{{ route('admin.plans.index') }}"
+                    class="dashboard-sidebar-link {{ currentLink('plans', 2) }}">
+                    <p class="dashboard-sidebar-link-title">
+                        <span><i class="fa-solid fa-list"></i>{{ d_trans('Plans') }}</span>
+                    </p>
+                </a>
                 <a href="{{ route('admin.ingredients-library.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('ingredients-library', 2) }}">
                     <p class="dashboard-sidebar-link-title">

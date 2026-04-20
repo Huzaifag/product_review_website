@@ -108,7 +108,7 @@ class Plan extends Model
         'name',
         'interval',
         'price',
-        'businesses',
+        'products_limit',
         'categories',
         'employees',
         'custom_features',

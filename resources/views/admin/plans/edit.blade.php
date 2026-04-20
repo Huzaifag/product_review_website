@@ -37,23 +37,28 @@
                     </div>
                     <div class="col-12">
                         <label class="form-label">{{ d_trans('Interval') }}</label>
-                        <select class="form-select form-select-md" disabled>
-                            <option value="" selected>{{ $plan->getIntervalName() }}</option>
+                        <select name="interval" class="form-select form-select-md">
+                            @foreach ($intervals as $intervalKey => $intervalValue)
+                                <option value="{{ $intervalKey }}" @selected($plan->interval == $intervalKey)>{{ $intervalValue }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-12">
-                        <div class="input-group">
-                            <x-input-price label="{{ d_trans('Price') }}" name="price" value="{{ price($plan->price) }}"
-                                size="md" :required=true />
+                        <label class="form-label">{{ d_trans('Price') }}</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">$</span>
+                            <input type="text" class="form-control form-control-md" aria-label="Amount (to the nearest dollar)" name="price" value="{{ price($plan->price) ?? '' }}" required>
+                            <span class="input-group-text">.00</span>
                         </div>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">{{ d_trans('Total Businesses') }}</label>
-                        <input type="number" name="businesses" class="form-control form-control-md" placeholder="0"
-                            value="{{ $plan->businesses }}">
-                        <div class="form-text">{{ d_trans('Leave the field empty for unlimited businesses.') }}</div>
+                        <label class="form-label">{{ d_trans('Total Products') }}</label>
+                        <input type="number" name="products_limit" class="form-control form-control-md" placeholder="0"
+                            value="{{ $plan->products_limit ?? '' }}">
+                        <div class="form-text">{{ d_trans('Leave the field empty for unlimited products.') }}</div>
                     </div>
-                    <div class="col-12 col-lg">
+                    {{-- <div class="col-12 col-lg">
                         <label class="form-label">{{ d_trans('Employees') }}</label>
                         <input type="checkbox" name="employees" data-toggle="toggle" data-height="40px"
                             data-on="{{ d_trans('Enabled') }}" @checked($plan->hasEmployeesFeature())>
@@ -62,7 +67,7 @@
                         <label class="form-label">{{ d_trans('Categories') }}</label>
                         <input type="checkbox" name="categories" data-toggle="toggle" data-height="40px"
                             data-on="{{ d_trans('Enabled') }}" @checked($plan->hasCategoriesFeature())>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

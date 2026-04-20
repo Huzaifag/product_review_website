@@ -84,6 +84,11 @@ Breadcrumbs::for('faqs', function (BreadcrumbTrail $trail) {
     $trail->push(d_trans('FAQs'), route('faqs'));
 });
 
+Breadcrumbs::for('ingredients', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push(d_trans('Ingredient Guide'), route('ingredients'));
+});
+
 Breadcrumbs::for('contact', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push(d_trans('Contact US'), route('contact'));

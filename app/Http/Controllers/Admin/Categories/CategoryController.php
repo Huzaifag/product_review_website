@@ -54,7 +54,7 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'unique:categories', 'max:255'],
             'slug' => ['required', 'string', 'alpha_dash', 'unique:categories', 'max:255'],
-            'image' => ['required', 'image', 'mimes:png,jpg,jpeg', 'max:2048'],
+            'image' => ['required', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
             'keywords' => ['nullable', 'string', 'max:255'],
@@ -101,7 +101,7 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255', 'unique:categories,slug,' . $category->id],
             'slug' => ['required', 'string', 'alpha_dash', 'max:255', 'unique:categories,slug,' . $category->id],
-            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
             'keywords' => ['nullable', 'string', 'max:255'],

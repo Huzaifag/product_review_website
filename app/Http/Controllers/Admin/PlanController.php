@@ -56,9 +56,10 @@ class PlanController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'interval' => ['required', 'string', 'in:' . implode(',', array_keys(Plan::getAvailableIntervals()))],
-            'price' => ['required', 'numeric', 'regex:/^\d*(\.\d{2})?$/', 'min:0.01'],
-            'businesses' => ['nullable', 'integer', 'min:1'],
-            'custom_features.*' => ['required', 'string', 'max:255'],
+            'price' => ['required', 'numeric', 'min:0'],           // Changed: allow 0 for Free plans
+            'products_limit' => ['nullable', 'integer', 'min:0'],           // allow 0 or null
+            'custom_features.*' => ['nullable', 'string', 'max:255'],          // made nullable
+                      
         ]);
 
         if ($validator->fails()) {
@@ -68,49 +69,54 @@ class PlanController extends Controller
             return back()->withInput();
         }
 
-        $request->businesses = $request->has('businesses') && !is_null($request->businesses) ? $request->businesses : null;
+        // Process checkboxes and defaults
+        $data = $request->only([
+            'name',
+            'interval',
+            'price',
+            'products_limit',
+            'custom_features',
+        ]);
 
-        $request->status = $request->has('status') ? Plan::STATUS_ACTIVE : Plan::STATUS_DISABLED;
-        $request->featured = $request->has('featured') ? Plan::FEATURED : Plan::NOT_FEATURED;
-        $request->employees = $request->has('employees') ? Plan::EMPLOYEES_FEATURE : Plan::NO_EMPLOYEES_FEATURE;
-        $request->categories = $request->has('categories') ? Plan::CATEGORIES_FEATURE : Plan::NO_CATEGORIES_FEATURE;
+        $data['status'] = $request->has('status') ? Plan::STATUS_ACTIVE : Plan::STATUS_DISABLED;
+        $data['is_featured'] = $request->has('featured') ? Plan::FEATURED : Plan::NOT_FEATURED;
+        $data['employees'] = $request->has('employees') ? Plan::EMPLOYEES_FEATURE : Plan::NO_EMPLOYEES_FEATURE;
+        $data['categories'] = $request->has('categories') ? Plan::CATEGORIES_FEATURE : Plan::NO_CATEGORIES_FEATURE;
 
-        $plan = new Plan();
-        $plan->name = $request->name;
-        $plan->price = $request->price;
-        $plan->interval = $request->interval;
-        $plan->businesses = $request->businesses;
-        $plan->employees = $request->employees;
-        $plan->categories = $request->categories;
-        $plan->custom_features = $request->custom_features;
-        $plan->status = $request->status;
-        $plan->is_featured = $request->featured;
-        $plan->save();
+        // Handle null/empty values
+        $data['products_limit'] = $request->filled('products_limit') ? $request->products_limit : null;
+        $data['custom_features'] = $request->filled('custom_features') ? $request->custom_features : [];
 
-        if ($plan->isFeatured()) {
-            $plans = Plan::where('interval', $plan->interval)
-                ->whereNot('id', $plan->id)
+        $plan = Plan::create($data);
+
+        // Unfeature other plans in same interval
+        if ($plan->is_featured) {
+            Plan::where('interval', $plan->interval)
+                ->where('id', '!=', $plan->id)
                 ->update(['is_featured' => Plan::NOT_FEATURED]);
         }
 
         toastr()->success(d_trans('Created Successfully'));
         return redirect()->route('admin.plans.edit', $plan->id);
     }
-
     public function edit(Plan $plan)
     {
+         $intervals = Plan::getAvailableIntervals();
         return view('admin.plans.edit', [
             'plan' => $plan,
+            'intervals' => $intervals,
         ]);
     }
 
     public function update(Request $request, Plan $plan)
     {
-        $validator = Validator::make($request->all(), [
+       $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'price' => ['required', 'numeric', 'regex:/^\d*(\.\d{2})?$/', 'min:0.01'],
-            'businesses' => ['nullable', 'integer', 'min:1'],
-            'custom_features.*' => ['required', 'string', 'max:255'],
+            'interval' => ['required', 'string', 'in:' . implode(',', array_keys(Plan::getAvailableIntervals()))],
+            'price' => ['required', 'numeric', 'min:0'],           // Changed: allow 0 for Free plans
+            'products_limit' => ['nullable', 'integer', 'min:0'],           // allow 0 or null
+            'custom_features.*' => ['nullable', 'string', 'max:255'],          // made nullable
+            'businesses' => ['nullable', 'integer', 'min:0'],           // added if needed
         ]);
 
         if ($validator->fails()) {
@@ -120,7 +126,7 @@ class PlanController extends Controller
             return back()->withInput();
         }
 
-        $request->businesses = $request->has('businesses') && !is_null($request->businesses) ? $request->businesses : null;
+
 
         $request->status = $request->has('status') ? Plan::STATUS_ACTIVE : Plan::STATUS_DISABLED;
         $request->featured = $request->has('featured') ? Plan::FEATURED : Plan::NOT_FEATURED;
@@ -129,10 +135,11 @@ class PlanController extends Controller
 
         $plan->name = $request->name;
         $plan->price = $request->price;
-        $plan->businesses = $request->businesses;
+        $plan->interval = $request->interval;
         $plan->employees = $request->employees;
         $plan->categories = $request->categories;
         $plan->custom_features = $request->custom_features;
+        $plan->products_limit = $request->products_limit;
         $plan->status = $request->status;
         $plan->is_featured = $request->featured;
         $plan->update();

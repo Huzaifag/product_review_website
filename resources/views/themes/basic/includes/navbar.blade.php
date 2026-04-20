@@ -5,7 +5,7 @@
                 <img src="{{ asset(config('theme.settings.general.logo_light')) }}"
                     alt="{{ m_trans(config('settings.general.site_name')) }}" />
             </a>
-            <div class="nav-bar-menu">
+            <div class="nav-bar-menu desktop-nav">
                 <div class="overlay"></div>
                 <div class="nav-bar-menu-inner">
                     <div class="nav-bar-menu-header">
@@ -85,10 +85,78 @@
                         @csrf
                     </form>
                 @endauth
-                <div class="nav-bar-menu-btn ms-3 gradient-icon">
+                <button class="btn btn-reset nav-bar-menu-btn mobile-nav-toggle ms-3 gradient-icon"
+                    type="button" aria-label="Open menu">
                     <i class="fa-solid fa-bars fa-lg"></i>
-                </div>
+                </button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="mobile-nav" aria-hidden="true">
+    <div class="mobile-nav-overlay" data-mobile-nav-close></div>
+    <div class="mobile-nav-panel" role="dialog" aria-modal="true" aria-label="Site menu">
+        <div class="mobile-nav-header">
+            <a href="{{ route('home') }}" class="logo logo-sm">
+                <img src="{{ asset(config('theme.settings.general.logo_light')) }}"
+                    alt="{{ m_trans(config('settings.general.site_name')) }}" />
+            </a>
+            <button class="btn btn-reset mobile-nav-close" type="button" data-mobile-nav-close
+                aria-label="Close menu">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <nav class="mobile-nav-links">
+            @foreach ($navbarLinks as $navbarLink)
+                @if ($navbarLink->children->count() > 0)
+                    <details class="mobile-nav-group">
+                        <summary class="mobile-nav-link">
+                            <span>{{ $navbarLink->name }}</span>
+                            <i class="bi bi-chevron-down"></i>
+                        </summary>
+                        <div class="mobile-nav-children">
+                            @foreach ($navbarLink->children as $child)
+                                <a href="{{ $child->link }}" {{ $child->isExternal() ? 'target=_blank' : '' }}>
+                                    {{ $child->name }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </details>
+                @else
+                    <a href="{{ $navbarLink->link }}" {{ $navbarLink->isExternal() ? 'target=_blank' : '' }}
+                        class="mobile-nav-link">
+                        {{ $navbarLink->name }}
+                    </a>
+                @endif
+            @endforeach
+            <div class="mobile-nav-language">
+                @include('themes.basic.partials.language-menu', ['language_simple' => true])
+            </div>
+        </nav>
+        <div class="mobile-nav-actions">
+            @guest
+                <a href="{{ route('login') }}" class="mobile-nav-action">
+                    <i class="fa-solid fa-arrow-right-to-bracket me-2"></i>{{ d_trans('Sign In') }}
+                </a>
+                @if (config('settings.user.actions.registration'))
+                    <a href="{{ route('register') }}" class="mobile-nav-action">
+                        <i class="fa-solid fa-user-plus me-2"></i>{{ d_trans('Sign Up') }}
+                    </a>
+                @endif
+            @endguest
+            @auth
+                <a href="{{ authUser()->getProfileLink() }}" class="mobile-nav-action">
+                    <i class="fa fa-user me-2"></i>{{ d_trans('Profile') }}
+                </a>
+                <a href="{{ authUser()->getSettingsLink() }}" class="mobile-nav-action">
+                    <i class="fa fa-cog me-2"></i>{{ d_trans('Settings') }}
+                </a>
+                <a href="#" class="mobile-nav-action text-danger"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fa fa-power-off me-2"></i>{{ d_trans('Logout') }}
+                </a>
+            @endauth
         </div>
     </div>
 </div>

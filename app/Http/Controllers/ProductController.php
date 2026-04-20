@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Plan;
 use App\Models\Product;
+use App\Models\Subscription;
+use App\Models\UserProductViewCount;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -168,10 +171,74 @@ class ProductController extends Controller
             ->limit(3)
             ->get();
 
+
+        $userProductViewCount = $this->retrieveOrCreateUserProductViewCount($product->id);
+
+        $plan = $userProductViewCount->plan;
+        
+
+        $canSeeDetails = $this->canSeeProductDetails($plan->products_limit, $userProductViewCount);
+
+        
         return theme_view('products.show', [
             'product' => $product,
             'similarProducts' => $similarProducts,
+            'canSeeDetails' => $canSeeDetails,
         ]);
+    }
+
+    //retrieve or save UserProductViewCount for current user or guest and increment viewed product count
+
+    private function retrieveOrCreateUserProductViewCount($productId)
+    {
+        // Best method - Trust Cloudflare headers
+        $ip = request()->header('CF-Connecting-IP');
+        $userId = auth()->check() ? auth()->id() : null;
+
+        $subscription = null;
+        if ($userId) {
+            $subscription = Subscription::active()
+                ->where('user_id', $userId)
+                ->whereHas('plan', function ($query) {
+                    $query->whereNot('interval', Plan::INTERVAL_LIFETIME);
+                })
+                ->first();
+        }
+
+        // Retrieve or create the UserProductViewCount record
+        $userProductViewCount = UserProductViewCount::firstOrCreate(
+            [
+                'ip_address' => $ip,
+                'user_id' => $userId,
+                'plan_id' => $subscription ? $subscription->plan_id : Plan::where('interval', Plan::INTERVAL_LIFETIME)->first()?->id,
+                'subscription_id' => $subscription ? $subscription->id : null,
+            ]
+        );
+
+        // Only increment if this product hasn't been viewed yet
+        $productIds = $userProductViewCount->product_ids ?? [];
+
+        // Ensure it's an array (important if coming from JSON/DB)
+        $productIds = is_array($productIds) ? $productIds : [];
+
+        if (!in_array($productId, $productIds)) {
+            $productIds[] = $productId;
+
+            $userProductViewCount->product_ids = $productIds;
+            $userProductViewCount->products_viewed = count($productIds);
+            $userProductViewCount->save();
+        }
+
+        return $userProductViewCount;
+    }
+    
+    private function canSeeProductDetails($products_limit , $userProductViewCount)
+    {
+        if (is_null($products_limit)) {
+            return true; // Unlimited products
+        }
+
+        return $userProductViewCount->products_viewed <= $products_limit;
     }
 
     public function ajaxSearch(Request $request)
@@ -197,7 +264,7 @@ class ProductController extends Controller
             ->limit(10)
             ->get();
 
-        
+
 
         return response()->json($products->map(function (Product $product) {
             return [
@@ -210,5 +277,20 @@ class ProductController extends Controller
                 'link' => $product->getLink(),
             ];
         }));
+    }
+
+    public function ingredients(Request $request, $slug)
+    {
+        $product = Product::active()
+            ->where(function ($query) use ($slug) {
+                $query->where('slug', $slug)
+                    ->orWhere('id', $slug);
+            })
+            ->with(['ingredientConcerns', 'labTestingResult'])
+            ->firstOrFail();
+
+        return theme_view('products.ingredients', [
+            'product' => $product,
+        ]);
     }
 }

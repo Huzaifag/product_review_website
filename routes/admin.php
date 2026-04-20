@@ -55,6 +55,7 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
 
     Route::resource('products', 'ProductController')->middleware('demo');
     Route::resource('brands', 'BrandController')->middleware('demo');
+    Route::resource('plans', 'PlanController')->except(['show']);
     Route::resource('ingredients-library', 'IngredientLibraryController')->middleware('demo');
     Route::post('products/{product}/lab-tests', 'ProductController@labTestsUpdate')->name('products.lab-tests.update')->middleware('demo');
     Route::get('products/{product}/lab-tests', 'ProductController@labTests')->name('products.lab-tests');
@@ -157,7 +158,7 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
 
         Route::middleware(['license:2', 'subscription.disable'])->group(function () {
             Route::post('plans/sortable', 'PlanController@sortable')->name('plans.sortable');
-            Route::resource('plans', 'PlanController')->except(['show']);
+            
             Route::resource('subscriptions', 'SubscriptionController')->except(['edit', 'update']);
             Route::name('transactions.')->prefix('transactions')->group(function () {
                 Route::get('/', 'TransactionController@index')->name('index');

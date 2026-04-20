@@ -44,24 +44,29 @@
                         </select>
                     </div>
                     <div class="col-12">
-                        <x-input-price label="{{ d_trans('Price') }}" name="price" size="md" :required=true />
+                        <label class="form-label">{{ d_trans('Price') }}</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">$</span>
+                            <input type="text" class="form-control form-control-md" aria-label="Amount (to the nearest dollar)" name="price" value="{{ old('price') }}" required>
+                            <span class="input-group-text">.00</span>
+                        </div>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">{{ d_trans('Total Businesses') }}</label>
-                        <input type="number" name="businesses" class="form-control form-control-md" placeholder="0"
-                            value="{{ old('businesses') }}">
-                        <div class="form-text">{{ d_trans('Leave the field empty for unlimited businesses.') }}</div>
+                        <label class="form-label">{{ d_trans('Total Products') }}</label>
+                        <input type="number" name="products_limit" class="form-control form-control-md" placeholder="0"
+                            value="{{ old('products_limit') }}">
+                        <div class="form-text">{{ d_trans('Leave the field empty for unlimited products.') }}</div>
                     </div>
-                    <div class="col-12 col-lg">
+                    {{-- <div class="col-12 col-lg">
                         <label class="form-label">{{ d_trans('Employees') }}</label>
                         <input type="checkbox" name="employees" data-toggle="toggle" data-height="40px"
                             data-on="{{ d_trans('Enabled') }}" @checked(old('employees'))>
-                    </div>
-                    <div class="col-12 col-lg">
+                    </div> --}}
+                    {{-- <div class="col-12 col-lg">
                         <label class="form-label">{{ d_trans('Categories') }}</label>
                         <input type="checkbox" name="categories" data-toggle="toggle" data-height="40px"
                             data-on="{{ d_trans('Enabled') }}" @checked(old('categories'))>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

@@ -131,17 +131,17 @@
                 const rect = interactiveSection.getBoundingClientRect();
                 const mouseX = e.clientX - rect.left;
 
-                if (mouseX < rect.width / 2) {
-                    // LEFT SIDE CLICKED
-                    // Insert your logic to slide left here. Example:
-                    // swiperInstance.slidePrev();
-                    console.log('Sliding Left'); 
-                } else {
-                    // RIGHT SIDE CLICKED
-                    // Insert your logic to slide right here. Example:
-                    // swiperInstance.slideNext();
-                    console.log('Sliding Right');
-                }
+                // if (mouseX < rect.width / 2) {
+                //     // LEFT SIDE CLICKED
+                //     // Insert your logic to slide left here. Example:
+                //     // swiperInstance.slidePrev();
+                //     //console.log('Sliding Left'); 
+                // } else {
+                //     // RIGHT SIDE CLICKED
+                //     // Insert your logic to slide right here. Example:
+                //     // swiperInstance.slideNext();
+                //     console.log('Sliding Right');
+                // }
             });
         }
     });

@@ -51,7 +51,7 @@
 
             {{-- Primary CTA --}}
             <div class="oeko-hero-cta-group">
-                <a href="{{ route('businesses.index') }}" class="oeko-btn-primary">
+                <a href="{{ route('ingredients') }}" class="oeko-btn-primary">
                     {{ d_trans('Explore Test Results') }}
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2.5">
@@ -240,7 +240,8 @@
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding: 80px 0 60px;
+    /* padding: 20px 0 60px; */
+    padding-block: 20px 60px;
     overflow: visible;
     position: relative;
     z-index: 50;
