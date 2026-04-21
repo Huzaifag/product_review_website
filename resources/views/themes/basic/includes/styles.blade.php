@@ -5,6 +5,7 @@
 @stack('styles_libs')
 @themeColors
 <link rel="stylesheet" href="{{ theme_asset_with_version('assets/css/app.css') }}">
+<link rel="stylesheet" href="{{ asset('themes/basic/assets/css/product-card-toggle.css') }}">
 @if (config('system.rtl') && getDirection() == 'rtl')
 <link rel="stylesheet" href="{{ theme_asset_with_version('assets/css/app.rtl.css') }}">
 @endif
