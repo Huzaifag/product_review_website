@@ -149,6 +149,9 @@ class ProductController extends Controller
 
     public function show($slug)
     {
+        $sessionId = session()->getId();
+
+
         $product = Product::active()
             ->where(function ($query) use ($slug) {
                 $query->where('slug', $slug)
@@ -191,10 +194,9 @@ class ProductController extends Controller
 
     private function retrieveOrCreateUserProductViewCount($productId)
     {
-        // Trust Cloudflare header first, then fall back to request IP.
         $ip = request()->header('CF-Connecting-IP') ?: request()->ip();
-        
         $userId = auth()->check() ? auth()->id() : null;
+        $sessionId = session()->getId();
 
         $subscription = null;
         if ($userId) {
@@ -208,29 +210,32 @@ class ProductController extends Controller
 
         $defaultPlan = Plan::where('interval', Plan::INTERVAL_LIFETIME)->first();
 
-        // Retrieve or create the UserProductViewCount record
-        $userProductViewCount = UserProductViewCount::firstOrCreate(
+        // Build lookup key: user_id for auth, session_id for guest
+        $lookupKey = $userId
+            ? ['user_id' => $userId]
+            : ['session_id' => $sessionId, 'user_id' => null];
+
+        $userProductViewCount = UserProductViewCount::updateOrCreate(
+            $lookupKey,
             [
-                'ip_address' => $ip,
-                'user_id' => $userId,
                 'plan_id' => $subscription ? $subscription->plan_id : $defaultPlan?->id,
                 'subscription_id' => $subscription ? $subscription->id : null,
+                'ip_address' => $ip,
+                'session_id' => $sessionId,
             ]
         );
 
         $productsLimit = $subscription?->plan?->products_limit ?? $defaultPlan?->products_limit;
 
-        // Only increment if this product hasn't been viewed yet and the limit allows it.
-        $productIds = $userProductViewCount->product_ids ?? [];
+        $productIds = is_array($userProductViewCount->product_ids)
+            ? $userProductViewCount->product_ids
+            : [];
 
-        // Ensure it's an array (important if coming from JSON/DB)
-        $productIds = is_array($productIds) ? $productIds : [];
         $alreadyViewed = in_array($productId, $productIds);
         $canAddNewView = is_null($productsLimit) || $alreadyViewed || count($productIds) < (int) $productsLimit;
 
         if (!$alreadyViewed && $canAddNewView) {
             $productIds[] = $productId;
-
             $userProductViewCount->product_ids = $productIds;
             $userProductViewCount->products_viewed = count($productIds);
             $userProductViewCount->save();

@@ -3,6 +3,7 @@
 
 <head>
     @include('themes.basic.includes.head')
+    @stack('styles')
 </head>
 
 <body class="bg-custom">
@@ -49,11 +50,19 @@
                 <div class="section-inner">
                     <div class="container container-custom-xs">
                         <div class="row row-cols-auto g-2">
+                            
                             <div class="col">
                                 <a href="{{ $user->getProfileLink() }}"
                                     class="custom-tab {{ request()->routeIs('user.profile') ? 'current' : '' }}">
                                     <i class="bi bi-star"></i>
                                     <span>{{ d_trans('Reviews') }}</span>
+                                </a>
+                            </div>
+                            <div class="col">
+                                <a href="{{ route('plans.usage') }}"
+                                    class="custom-tab {{ request()->routeIs('plans.usage') ? 'current' : '' }}">
+                                    <i class="bi bi-graph-up"></i>
+                                    <span>{{ d_trans('Plan Usage') }}</span>
                                 </a>
                             </div>
                             <div class="col">
@@ -102,6 +111,7 @@
     </section>
     @include('themes.basic.includes.footer')
     @include('themes.basic.includes.scripts')
+    @stack('scripts')
 </body>
 
 </html>

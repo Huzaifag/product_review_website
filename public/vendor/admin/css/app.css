@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 :root {
+    --primary_color: 184, 134, 11;
     --navbar_height: 52px;
     --sidebar_width: 240px;
     --border_radius: 0.125rem;
@@ -781,8 +782,8 @@ a.btn {
 }
 
 .btn.btn-primary {
-    background-color: rgb(var(--primary_color));
-    border-color: rgb(var(--primary_color));
+    background-color: #B8860B;
+    border-color: #B8860B;
 }
 
 .btn.btn-primary:active,

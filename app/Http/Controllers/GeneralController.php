@@ -11,6 +11,7 @@ use App\Models\HomeSection;
 use App\Models\Language;
 use App\Models\Page;
 use App\Models\Plan;
+use App\Models\Product;
 use App\Models\Setting;
 use App\Models\IngredientLibrary;
 use Carbon\Carbon;
@@ -208,6 +209,27 @@ class GeneralController extends Controller
         $plan = Plan::where('slug', $slug)->firstOrFail();
 
         return theme_view('plans.details', ['plan' => $plan]);
+    }
+
+    public function planUsage()
+    {
+        $user = authUser();
+        $userProductViewCount = $user->userProductViewCounts()->with('plan')->latest()->first();
+        $plan = $userProductViewCount?->plan;
+        $productIds = $userProductViewCount?->getViewedProductIds() ?? [];
+        $productViewed = Product::whereIn('id', $productIds)->get();
+
+
+        if (!$plan) {
+            toastr()->error(d_trans('You do not have an active plan'));
+            return redirect()->route('plans');
+        }
+        return theme_view('plans.usage', [
+            'plan' => $plan,
+            'userProductViewCount' => $userProductViewCount,
+            'productViewed' => $productViewed,
+            'user' => $user,
+        ]);
     }
     public function localize($code)
     {

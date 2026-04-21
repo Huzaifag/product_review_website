@@ -76,4 +76,13 @@ class Subscription extends Model
     {
         return $this->belongsTo(Plan::class);
     }
+
+    //active scope
+    public function scopeActive($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('expiry_at')
+                ->orWhere('expiry_at', '>', Carbon::now());
+        });
+    }
 }

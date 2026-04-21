@@ -10,6 +10,8 @@ class UserProductViewCount extends Model
 
     protected $fillable = [
         'ip_address',
+        'session_id',
+        'season_id',
         'user_id',
         'plan_id',
         'subscription_id',

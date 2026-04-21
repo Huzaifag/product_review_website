@@ -324,4 +324,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(SavedProduct::class);
     }
+
+    public function userProductViewCounts()
+    {
+        return $this->hasMany(UserProductViewCount::class);
+    }
 }
