@@ -224,38 +224,26 @@
         }
 
         /* media query for mobile  */
+        /* ── TABLET (≤ 991px) ─────────────────────────── */
         @media (max-width: 991.98px) {
-            .visual-container {
-                height: 250px;
-            }
-
-            .bottle-wrapper {
-                width: 250px;
-            }
-        }
-
-        @media (max-width: 767.98px) {
-            .ingredients-section {
-                padding: 36px 0;
-            }
-
             .content-container {
                 grid-template-columns: 1fr;
-                gap: 28px;
+                gap: 32px;
             }
 
             .visual-container {
-                height: 220px;
+                height: 320px;
+                /* was 250px — too short for bg-image */
                 margin-left: 0;
                 justify-content: center;
                 order: 1;
             }
 
             .bottle-wrapper {
-                width: min(100%, 320px);
+                width: min(100%, 300px);
                 height: 100%;
-                margin: 0 auto;
                 background-position: center center !important;
+                background-size: contain !important;
             }
 
             .text-content {
@@ -265,42 +253,84 @@
             }
 
             .text-content h2 {
-                font-size: clamp(2rem, 8vw, 2.5rem);
-                margin-bottom: 18px;
+                font-size: clamp(2rem, 5vw, 2.6rem);
             }
 
             .text-content p {
-                font-size: 1rem;
-                margin-bottom: 24px;
+                max-width: 520px;
+                margin-left: auto;
+                margin-right: auto;
             }
 
             .explore-btn {
                 justify-content: center;
+            }
+
+            /* badges: keep 3-col grid on tablet, not flex */
+            .ingredient-badges {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+                margin-top: 28px;
+                justify-items: center;
+            }
+
+            .ingredient-badge {
+                width: 100%;
+                flex: unset;
+                min-width: unset;
+                padding: 14px 10px;
+            }
+        }
+
+        /* ── MOBILE (≤ 767px) ─────────────────────────── */
+        @media (max-width: 767.98px) {
+            .ingredients-section {
+                padding: 36px 0;
+            }
+
+            .visual-container {
+                height: 230px;
+            }
+
+            .bottle-wrapper {
+                width: min(100%, 260px);
+            }
+
+            .text-content h2 {
+                font-size: clamp(1.8rem, 8vw, 2.4rem);
+                margin-bottom: 16px;
+            }
+
+            .text-content p {
+                font-size: 1rem;
+                margin-bottom: 22px;
+            }
+
+            .explore-btn {
                 width: 100%;
                 max-width: 320px;
             }
 
+            /* stack badges 1-col on small mobile */
             .ingredient-badges {
-                justify-content: center;
-                gap: 12px;
-                margin-top: 28px;
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin-top: 22px;
             }
 
             .ingredient-badge {
-                min-width: 0;
-                width: 100%;
-                flex: 1 1 100%;
+                flex-direction: row;
+                text-align: left;
+                gap: 12px;
                 padding: 14px 16px;
             }
         }
 
+        /* ── SMALL MOBILE (≤ 575px) ──────────────────── */
         @media (max-width: 575.98px) {
             .ingredients-section {
-                padding: 28px 0;
-            }
-
-            .content-container {
-                gap: 24px;
+                padding: 24px 0;
             }
 
             .visual-container {
@@ -308,42 +338,31 @@
             }
 
             .bottle-wrapper {
-                width: min(100%, 280px);
-                background-size: contain !important;
+                width: min(100%, 230px);
             }
 
             .text-content h2 {
-                font-size: 1.9rem;
+                font-size: 1.8rem;
                 line-height: 1.15;
             }
 
             .text-content p {
-                font-size: 0.95rem;
-                line-height: 1.65;
-            }
-
-            .explore-btn {
-                max-width: 100%;
-                padding: 13px 22px;
-                font-size: 0.98rem;
-            }
-
-            .ingredient-badges {
-                margin-top: 22px;
+                font-size: 0.92rem;
             }
 
             .badge-icon {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
             }
 
             .badge-label {
-                font-size: 0.7rem;
+                font-size: 0.68rem;
             }
 
             .badge-value {
-                font-size: 0.9rem;
+                font-size: 0.88rem;
             }
         }
+
     </style>
 @endpush
 

@@ -2901,7 +2901,7 @@ a.btn {
 .drop-down .drop-down-menu {
     position: absolute;
     background-color: #fff;
-    min-width: 180px;
+    min-width: 250px;
     padding-top: .5rem;
     padding-bottom: .5rem;
     border-radius: var(--border_radius);

@@ -33,12 +33,12 @@
                                 <span>{{ d_trans('Admins') }}</span>
                             </p>
                         </a>
-                        <a href="{{ route('admin.members.business-owners.index') }}"
+                        {{-- <a href="{{ route('admin.members.business-owners.index') }}"
                             class="dashboard-sidebar-link {{ currentLink('business-owners', 3) }}">
                             <p class="dashboard-sidebar-link-title">
                                 <span>{{ d_trans('Business Owners') }}</span>
                             </p>
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
                 {{-- <a href="{{ route('admin.businesses.index') }}"
@@ -71,7 +71,13 @@
                         <span><i class="fa-solid fa-flask"></i>{{ d_trans('Ingredient Library') }}</span>
                     </p>
                 </a>
-                <a href="{{ route('admin.pending-reviews.index') }}"
+                <a href="{{ route('admin.reviews.index') }}"
+                    class="dashboard-sidebar-link {{ currentLink('reviews', 2) }}">
+                    <p class="dashboard-sidebar-link-title">
+                        <span><i class="fas fa-star"></i>{{ d_trans('Reviews') }}</span>
+                    </p>
+                </a>
+                {{-- <a href="{{ route('admin.pending-reviews.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('pending-reviews', 2) }}">
                     <p class="dashboard-sidebar-link-title">
                         <span><i class="fas fa-history"></i>{{ d_trans('Pending Reviews') }}</span>
@@ -79,8 +85,8 @@
                             <span class="counter">{{ numberFormat($sidebarCounters['pending_reviews']) }}</span>
                         @endif
                     </p>
-                </a>
-                <a href="{{ route('admin.reported-reviews.index') }}"
+                </a> --}}
+                {{-- <a href="{{ route('admin.reported-reviews.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('reported-reviews', 2) }}">
                     <p class="dashboard-sidebar-link-title">
                         <span><i class="fas fa-flag"></i>{{ d_trans('Reported Reviews') }}</span>
@@ -88,7 +94,7 @@
                             <span class="counter">{{ numberFormat($sidebarCounters['reported_reviews']) }}</span>
                         @endif
                     </p>
-                </a>
+                </a> --}}
                 @if (isAddonActive('ai_reviewer'))
                     <a href="{{ route('admin.ai-reviewer.index') }}"
                         class="dashboard-sidebar-link {{ currentLink('ai-reviewer', 2) }}">
@@ -108,6 +114,7 @@
                         </p>
                     </a>
                 @endif
+                @if (config('settings.kyc.actions.status'))
                 <a href="{{ route('admin.kyc-verifications.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('kyc-verifications', 2) }}">
                     <p class="dashboard-sidebar-link-title">
@@ -117,6 +124,7 @@
                         @endif
                     </p>
                 </a>
+                @endif
                 <a href="{{ route('admin.advertisements.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('advertisements', 2) }}">
                     <p class="dashboard-sidebar-link-title">

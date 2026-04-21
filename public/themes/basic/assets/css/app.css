@@ -5972,7 +5972,7 @@ a:hover {
 @media (max-width: 575.98px) {
     .cookies.show {
         width: 100%;
-        bottom: 0;
+        bottom: 250;
     }
 }
 

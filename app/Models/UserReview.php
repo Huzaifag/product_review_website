@@ -73,4 +73,16 @@ class UserReview extends Model
 		$starsHtml .= str_repeat('<i class="far fa-star text-warning"></i>', $emptyStars);
 		return $starsHtml;	
 	}
+
+	//getStatusName
+	public function getStatusName()
+	{
+		if ($this->is_approved) {
+			return 'Approved';
+		} elseif ($this->is_flagged) {
+			return 'Flagged';
+		} else {
+			return 'Pending';
+		}
+	}
 }

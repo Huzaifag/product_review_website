@@ -8,6 +8,7 @@
 @livewireScripts
 @stack('scripts_libs')
 <script src="{{ theme_asset_with_version('assets/js/app.js') }}"></script>
+<script src="{{ asset('themes/basic/product-card-toggle.js') }}"></script>
 @stack('scripts')
 @toastrRender
 {!! config('theme.settings.extra_codes.footer_code') !!}

@@ -7,10 +7,39 @@ use App\Http\Controllers\Controller;
 use App\Jobs\User\SendBusinessReviewRejectedNotification;
 use App\Models\BusinessReview;
 use App\Models\BusinessReviewReport;
+use App\Models\UserReview;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
+    public function index()
+    {
+        $reviews = UserReview::with('user', 'product')->latest()->paginate(20);
+        return view('admin.reviews.index', compact('reviews'));
+    }
+
+    public function show(UserReview $review)
+    {
+        return view('admin.reviews.show', compact('review'));
+    }
+
+    // Approve a review
+    public function approve(UserReview $review)
+    {
+        $review->is_approved = true;
+        $review->save();
+        toastr()->success(d_trans('Review approved successfully'));
+       return redirect()->route('admin.reviews.show' , $review->id);
+    }
+
+    // Reject a review
+    public function reject(UserReview $review)
+    {        $review->is_approved = false;
+        $review->save();
+        toastr()->success(d_trans('Review rejected successfully'));
+        return redirect()->route('admin.reviews.show' , $review->id);
+    }
+
     public function pendingReviews()
     {
         $reviews = BusinessReview::pending();

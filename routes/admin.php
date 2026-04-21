@@ -2,24 +2,25 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::namespace('Auth')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('admin.login');
-    })->name('index');
-    Route::get('login', 'LoginController@showLoginForm')->name('login');
-    Route::post('login', 'LoginController@login')->name('login.store');
-    Route::post('logout', 'LoginController@logout')->name('logout');
-    Route::middleware('smtp')->group(function () {
-        Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
-        Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-    });
-    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
-    Route::post('password/reset', 'ResetPasswordController@reset')->name('password.update');
-    Route::middleware('auth:admin')->group(function () {
-        Route::get('2fa/verify', 'TwoFactorController@show2FaVerifyForm')->name('2fa.verify');
-        Route::post('2fa/verify', 'TwoFactorController@verify2fa');
-    });
-});
+Route::
+        namespace('Auth')->group(function () {
+            Route::get('/', function () {
+                return redirect()->route('admin.login');
+            })->name('index');
+            Route::get('login', 'LoginController@showLoginForm')->name('login');
+            Route::post('login', 'LoginController@login')->name('login.store');
+            Route::post('logout', 'LoginController@logout')->name('logout');
+            Route::middleware('smtp')->group(function () {
+                Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
+                Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+            });
+            Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
+            Route::post('password/reset', 'ResetPasswordController@reset')->name('password.update');
+            Route::middleware('auth:admin')->group(function () {
+                Route::get('2fa/verify', 'TwoFactorController@show2FaVerifyForm')->name('2fa.verify');
+                Route::post('2fa/verify', 'TwoFactorController@verify2fa');
+            });
+        });
 
 Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
     Route::prefix('dashboard')->group(function () {
@@ -63,6 +64,14 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
     Route::post('products/{product}/lab-tests', 'ProductController@labTestsUpdate')->name('products.lab-tests.update')->middleware('demo');
     Route::get('products/{product}/lab-tests', 'ProductController@labTests')->name('products.lab-tests');
 
+    // Reviews
+    Route::get('reviews', 'ReviewController@index')->name('reviews.index');
+    Route::get('reviews/{review}', 'ReviewController@show')->name('reviews.show');
+    Route::delete('reviews/{review}', 'ReviewController@destroy')->name('reviews.destroy')->middleware('demo');
+
+    //Approve and reject reviews
+    Route::post('reviews/{review}/approve', 'ReviewController@approve')->name('reviews.approve');
+    Route::post('reviews/{review}/reject', 'ReviewController@reject')->name('reviews.reject');
     Route::name('pending-reviews.')->prefix('pending-reviews')->group(function () {
         Route::get('/', 'ReviewController@pendingReviews')->name('index');
         Route::get('{businessReview}', 'ReviewController@pendingReviewsShow')->name('show');
@@ -161,7 +170,7 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
 
         Route::middleware(['license:2', 'subscription.disable'])->group(function () {
             Route::post('plans/sortable', 'PlanController@sortable')->name('plans.sortable');
-            
+
             Route::resource('subscriptions', 'SubscriptionController')->except(['edit', 'update']);
             Route::name('transactions.')->prefix('transactions')->group(function () {
                 Route::get('/', 'TransactionController@index')->name('index');

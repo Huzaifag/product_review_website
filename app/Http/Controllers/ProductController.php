@@ -193,7 +193,7 @@ class ProductController extends Controller
 
     public function reviewStore(Request $request, $slug)
     {
-        
+
         $user = authUser();
         if (!$user) {
             toastr()->info(d_trans('Please sign in to your account in order to leave a review'));
@@ -235,12 +235,13 @@ class ProductController extends Controller
         $review->title = $request->title;
         $review->rating = $request->rating;
         $review->body = $request->body;
-        $review->is_approved = true;
+        $review->is_approved = false;
         $review->is_flagged = false;
         $review->helpful_count = 0;
         $review->save();
+        self::adminReviewNotify($user, $review, $product);
 
-        toastr()->success(d_trans('Your review has been submitted successfully'));
+        toastr()->success(d_trans('Your review has been submitted successfully wait for admin approval'));
         return back();
     }
 
@@ -392,5 +393,17 @@ class ProductController extends Controller
         return theme_view('products.ingredients', [
             'product' => $product,
         ]);
+    }
+
+
+    public static function adminReviewNotify($user, $review, $product)
+    {
+        $title = d_trans(':username added a review for :product', [
+            'username' => $user->getName(),
+            'product' => $product->name,
+        ]);
+        $image = $user->getAvatar();
+        $link = route('admin.reviews.show', $review->id);
+        return adminNotify($title, $image, $link);
     }
 }

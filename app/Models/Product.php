@@ -146,4 +146,9 @@ class Product extends Model
     {
         return $query->where('is_active', self::STATUS_ACTIVE);
     }
+
+    public function isFeatured()
+    {
+        return $this->is_featured;
+    }
 }
