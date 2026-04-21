@@ -100,6 +100,9 @@ Route::middleware('maintenance')->group(function () {
             Route::post('{slug}', 'GeneralController@blogComment')->name('article')->middleware('auth');
         });
         Route::name('products.')->prefix('products')->group(function () {
+            Route::post('reviews/{review}/helpful', 'ProductController@reviewHelpful')
+                ->name('reviews.helpful')->middleware('auth');
+            Route::post('{slug}/review', 'ProductController@reviewStore')->name('reviews.store')->middleware('auth');
             Route::get('{slug}', 'ProductController@show')->name('show');
             Route::get('/', 'ProductController@index')->name('index');
             Route::post('ajax-search', 'ProductController@ajaxSearch')->name('ajax-search');

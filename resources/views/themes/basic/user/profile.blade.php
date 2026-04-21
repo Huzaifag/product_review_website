@@ -1,6 +1,6 @@
 @extends('themes.basic.user.layout')
 @section('title', d_trans(':username Profile', ['username' => ucfirst($user->getName())]))
-@section('header_title', d_trans('Reviews'))
+@section('header_title', d_trans('My Reviews'))
 @section('breadcrumbs', Breadcrumbs::render('user.profile', $user))
 @section('breadcrumbs_schema', Breadcrumbs::view('breadcrumbs::json-ld', 'user.profile', $user))
 @section('content')
@@ -20,7 +20,7 @@
             'empty_image' => 'v2',
             'title' => d_trans('No Reviews Found'),
             'description' => d_trans(
-                "This user hasn't reviewed any businesses yet. Their reviews will appear here once submitted"),
+                "This user hasn't reviewed any products yet. Their reviews will appear here once submitted"),
         ])
     @endif
 @endsection

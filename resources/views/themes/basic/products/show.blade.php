@@ -460,8 +460,8 @@
                 background: #fff;
                 border-radius: 14px;
                 padding: 20px;
-                max-width: 88vw;
-                max-height: 88vh;
+                /* max-width: 88vw;
+                max-height: 88vh; */
                 overflow-y: auto;
                 position: relative;
             }
@@ -1008,7 +1008,13 @@
                 </div>
             @endif
         </div>{{-- /card-shell --}}
-
+        <div class="mt-4">
+            @include('themes.basic.partials.user-reviews', [
+                'userReviews' => $product->userReviews()->approved()->latest()->get(),
+                'reviewProduct' => $product,
+                'reviewAction' => route('products.reviews.store', $product->slug ?? $product->id),
+            ])
+        </div>
         <!-- Image Modal -->
         <div class="modal-overlay" id="imageModal">
             <div class="modal-content">

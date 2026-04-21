@@ -21,7 +21,7 @@ class UserController extends Controller
             ->whereDataCompleted()
             ->firstOrFail();
 
-        $reviews = $user->reviews()->published()
+        $reviews = $user->productReviews()
             ->orderbyDesc('id')->paginate(20);
 
         return theme_view('user.profile', [

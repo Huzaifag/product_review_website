@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Plan;
 use App\Models\Product;
 use App\Models\Subscription;
+use App\Models\UserReview;
 use App\Models\UserProductViewCount;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -188,6 +189,85 @@ class ProductController extends Controller
             'similarProducts' => $similarProducts,
             'canSeeDetails' => $canSeeDetails,
         ]);
+    }
+
+    public function reviewStore(Request $request, $slug)
+    {
+        
+        $user = authUser();
+        if (!$user) {
+            toastr()->info(d_trans('Please sign in to your account in order to leave a review'));
+            return redirect()->route('login');
+        }
+
+        $product = Product::active()
+            ->where(function ($query) use ($slug) {
+                $query->where('slug', $slug)
+                    ->orWhere('id', $slug);
+            })
+            ->firstOrFail();
+
+        $validator = Validator::make($request->all(), [
+            'title' => ['required', 'string', 'block_patterns', 'max:255'],
+            'body' => ['required', 'string', 'block_patterns', 'min:20', 'max:2000'],
+            'rating' => ['required', 'integer', 'between:1,5'],
+        ]);
+
+        if ($validator->fails()) {
+            foreach ($validator->errors()->all() as $error) {
+                toastr()->error($error);
+            }
+            return back()->withInput();
+        }
+
+        $alreadyReviewed = UserReview::where('product_id', $product->id)
+            ->where('user_id', $user->id)
+            ->exists();
+
+        if ($alreadyReviewed) {
+            toastr()->error(d_trans('You already submitted a review for this product'));
+            return back()->withInput();
+        }
+
+        $review = new UserReview();
+        $review->product_id = $product->id;
+        $review->user_id = $user->id;
+        $review->title = $request->title;
+        $review->rating = $request->rating;
+        $review->body = $request->body;
+        $review->is_approved = true;
+        $review->is_flagged = false;
+        $review->helpful_count = 0;
+        $review->save();
+
+        toastr()->success(d_trans('Your review has been submitted successfully'));
+        return back();
+    }
+
+    public function reviewHelpful($review)
+    {
+        $user = authUser();
+        if (!$user) {
+            toastr()->info(d_trans('Please sign in to your account in order to mark a review as helpful'));
+            return redirect()->route('login');
+        }
+
+        $review = UserReview::approved()->where('id', $review)->firstOrFail();
+
+        $cacheKey = 'user_review_helpful:' . $user->id . ':' . $review->id;
+        if (Cache::has($cacheKey)) {
+            toastr()->info(d_trans('You already marked this review as helpful'));
+            return back();
+        }
+
+        $review->helpful_count = ($review->helpful_count ?? 0) + 1;
+        $review->is_helpful = true;
+        $review->save();
+
+        Cache::put($cacheKey, true, now()->addDays(30));
+
+        toastr()->success(d_trans('Thanks for your feedback'));
+        return back();
     }
 
     //retrieve or save UserProductViewCount for current user or guest and increment viewed product count
