@@ -14,8 +14,21 @@ class IngredientLibraryController extends Controller
      */
     public function index()
     {
-        $ingredients = IngredientLibrary::orderBy('name')
-            ->paginate(20);
+        $ingredients = IngredientLibrary::orderBy('name');
+
+         if (request()->filled('search')) {
+            $searchTerm = '%' . request('search') . '%';
+            $ingredients->where(function ($query) use ($searchTerm) {
+                $query->where('name', 'like', $searchTerm)
+                    ->orWhere('inci_name', 'like', $searchTerm)
+                    ->orWhere('severity', 'like', $searchTerm)
+                    ->orWhere('concern_description', 'like', $searchTerm)
+                    ->orWhere('health_effects', 'like', $searchTerm)
+                    ->orWhere('regulatory_status', 'like', $searchTerm);
+            });
+        }
+        $ingredients = $ingredients->paginate(20);
+        $ingredients->appends(request()->only(['search']));
         return view('admin.ingredients-library.index', compact('ingredients'));
     }
 

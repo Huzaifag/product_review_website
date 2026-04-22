@@ -53,6 +53,12 @@
                         <span><i class="fa-solid fa-box"></i>{{ d_trans('Products') }}</span>
                     </p>
                 </a>
+                <a href="{{ route('admin.categories.index') }}"
+                    class="dashboard-sidebar-link {{ currentLink('categories', 2) }}">
+                    <p class="dashboard-sidebar-link-title">
+                        <span><i class="fa-solid fa-tags"></i>{{ d_trans('Categories') }}</span>
+                    </p>
+                </a>
                 <a href="{{ route('admin.brands.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('brands', 2) }}">
                     <p class="dashboard-sidebar-link-title">
@@ -151,12 +157,7 @@
                         </p>
                     </a>
                 @endif
-                <a href="{{ route('admin.categories.index') }}"
-                    class="dashboard-sidebar-link {{ currentLink('categories', 2) }}">
-                    <p class="dashboard-sidebar-link-title">
-                        <span><i class="fa-solid fa-tags"></i>{{ d_trans('Categories') }}</span>
-                    </p>
-                </a>
+                
                 <div class="dashboard-sidebar-link {{ activeLink('navigation', 2) }}" data-toggle>
                     <p class="dashboard-sidebar-link-title toggle-title">
                         <span><i class="fa-solid fa-list-ul"></i>{{ d_trans('Navigation') }}</span>

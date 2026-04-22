@@ -7773,6 +7773,28 @@ a:hover {
     transform: scale(.98);
 }
 
+ @media (max-width: 575.98px) {
+    .cta-left {
+        padding: 2rem;
+    }
+
+    .cta-title {
+        font-size: 28px;
+    }
+
+    .cta-desc {
+        font-size: 15px;
+    }
+
+    .cta-btn {
+        width: 100%;
+        justify-content: center;
+        font-size: 15px;
+        padding: 15px 22px;
+        min-height: 52px;
+    }
+}
+
 .cta-perks {
     display: flex;
     gap: 1.25rem;

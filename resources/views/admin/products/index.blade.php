@@ -50,7 +50,7 @@
 
     <div class="card">
         <div class="card-header border-bottom">
-            <form action="{{ url()->current() }}" method="GET">
+            <form action="{{ url()->current() }}" method="GET" id="productFiltersForm">
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
                         <input type="text" name="search" class="form-control" placeholder="{{ d_trans('Search...') }}"
@@ -58,6 +58,7 @@
                     </div>
                     <div class="col-12 col-lg-2">
                         <select name="category" class="selectpicker" title="{{ d_trans('Category') }}">
+                            <option value="">{{ d_trans('All') }}</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}" @selected(request('category') == "$category->id")>
                                     {{ $category->trans->name ?? $category->name }}
@@ -67,6 +68,7 @@
                     </div>
                     <div class="col-12 col-lg-2">
                         <select name="sub_category" class="selectpicker" title="{{ d_trans('Sub Category') }}">
+                            <option value="">{{ d_trans('All') }}</option>
                             @foreach ($subCategories as $subCategory)
                                 <option value="{{ $subCategory->id }}" @selected(request('sub_category') == "$subCategory->id")>
                                     {{ $subCategory->trans->name ?? $subCategory->name }}
@@ -75,19 +77,31 @@
                         </select>
                     </div>
                     <div class="col-12 col-lg-2">
+                        <select name="brand" class="selectpicker" title="{{ d_trans('Brand') }}">
+                            <option value="">{{ d_trans('All') }}</option>
+                            @foreach ($brands as $brand)
+                                <option value="{{ $brand->id }}" @selected(request('brand') == "$brand->id")>
+                                    {{ $brand->name ?? $brand->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-12 col-lg-2">
                         <select name="status" class="selectpicker" title="{{ d_trans('Status') }}">
+                            <option value="">{{ d_trans('All') }}</option>
                             <option value="1" @selected(request('status') === '1')>{{ d_trans('Active') }}</option>
                             <option value="0" @selected(request('status') === '0')>{{ d_trans('Inactive') }}</option>
                         </select>
                     </div>
                     <div class="col-12 col-lg-2">
                         <select name="featured" class="selectpicker" title="{{ d_trans('Featured') }}">
+                            <option value="">{{ d_trans('All') }}</option>
                             <option value="1" @selected(request('featured') === '1')>{{ d_trans('Yes') }}</option>
                             <option value="0" @selected(request('featured') === '0')>{{ d_trans('No') }}</option>
                         </select>
                     </div>
                     <div class="col">
-                        <button class="btn btn-primary w-100"><i class="fa fa-search"></i></button>
+                        <button type="submit" class="btn btn-primary w-100"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="col">
                         <a href="{{ url()->current() }}" class="btn btn-soft w-100">{{ d_trans('Reset') }}</a>
@@ -188,6 +202,27 @@
 
     @push('scripts_libs')
         <script src="{{ asset('vendor/libs/bootstrap/select/bootstrap-select.min.js') }}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const filterForm = document.getElementById('productFiltersForm');
+                if (!filterForm) {
+                    return;
+                }
+
+                filterForm.querySelectorAll('select').forEach(function(select) {
+                    select.addEventListener('change', function() {
+                        filterForm.submit();
+                    });
+                });
+
+                filterForm.querySelector('input[name="search"]').addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        filterForm.submit();
+                    }
+                });
+            });
+        </script>
     @endpush
 
     {{ $products->links() }}

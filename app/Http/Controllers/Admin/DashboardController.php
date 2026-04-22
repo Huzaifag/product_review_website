@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Business;
 use App\Models\BusinessOwner;
 use App\Models\BusinessReview;
@@ -14,6 +15,7 @@ use App\Models\SubCategory;
 use App\Models\Subscription;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserReview;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -37,20 +39,25 @@ class DashboardController extends Controller
         // 3. SubCategories
         $counters['subcategories'] = SubCategory::count();
 
+        // 4. Brands
+        $counters['brands'] = Brand::count();
+
         //All Recently added Products 
         $products = Product::orderbyDesc('id')->limit(6)->get();
+        $brands = Brand::orderbyDesc('id')->limit(6)->get();
 
         $counters['kyc_verifications'] = KycVerification::count();
         $counters['pending_kyc_verifications'] = KycVerification::pending()->count();
 
         $counters['business_owners'] = BusinessOwner::count();
         $counters['users'] = User::count();
+        $counters['reviews'] = UserReview::count();
 
         $users = User::orderbyDesc('id')->limit(6)->get();
         $businesses = Business::orderbyDesc('id')->limit(6)->get();
 
         $charts['users'] = $this->generateUsersChartData();
-        $charts['businesses'] = $this->generateBusinessesChartData();
+        $charts['products'] = $this->generateProductsChartData();
         $charts['reviews'] = $this->generateReviewsChartData();
 
         return view('admin.dashboard', [
@@ -59,6 +66,7 @@ class DashboardController extends Controller
             'users' => $users,
             'businesses' => $businesses,
             'products' => $products,
+            'brands' => $brands,
         ]);
     }
 
@@ -89,24 +97,24 @@ class DashboardController extends Controller
         return $chart;
     }
 
-    private function generateBusinessesChartData()
+    private function generateProductsChartData()
     {
-        $chart['title'] = d_trans('Businesses');
+        $chart['title'] = d_trans('Products');
 
         $startDate = Carbon::now()->startOfMonth();
         $endDate = Carbon::now()->endOfMonth();
         $dates = chartDates($startDate, $endDate);
 
-        $businessesRecord = Business::where('created_at', '>=', $startDate)
+        $productsRecord = Product::where('created_at', '>=', $startDate)
             ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
             ->groupBy('date')
             ->pluck('count', 'date');
 
-        $businessesRecordData = $dates->merge($businessesRecord);
+        $productsRecordData = $dates->merge($productsRecord);
 
         $chart['labels'] = [];
         $chart['data'] = [];
-        foreach ($businessesRecordData as $date => $value) {
+        foreach ($productsRecordData as $date => $value) {
             $chart['labels'][] = Carbon::parse($date)->translatedFormat('d F');
             $chart['data'][] = $value;
         }
@@ -118,13 +126,13 @@ class DashboardController extends Controller
 
     private function generateReviewsChartData()
     {
-        $chart['title'] = d_trans('Reviews');
+        $chart['title'] = d_trans('User Reviews');
 
         $startDate = Carbon::now()->startOfMonth();
         $endDate = Carbon::now()->endOfMonth();
         $dates = chartDates($startDate, $endDate);
 
-        $reviewsRecord = BusinessReview::where('created_at', '>=', $startDate)
+        $reviewsRecord = UserReview::where('created_at', '>=', $startDate)
             ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
             ->groupBy('date')
             ->pluck('count', 'date');

@@ -118,8 +118,8 @@
                     <i class="bi bi-flag"></i>
                 </div>
                 <div class="vironeer-counter-card-meta">
-                    <p class="vironeer-counter-card-title">{{ d_trans('Reported Reviews') }}</p>
-                    <p class="vironeer-counter-card-number">{{ $counters['reported_reviews'] }}</p>
+                    <p class="vironeer-counter-card-title">{{ d_trans('Brands') }}</p>
+                    <p class="vironeer-counter-card-number">{{ $counters['brands'] }}</p>
                 </div>
             </div>
         </div>
@@ -129,8 +129,8 @@
                     <i class="bi bi-person-circle"></i>
                 </div>
                 <div class="vironeer-counter-card-meta">
-                    <p class="vironeer-counter-card-title">{{ d_trans('Business Owners') }}</p>
-                    <p class="vironeer-counter-card-number">{{ $counters['business_owners'] }}</p>
+                    <p class="vironeer-counter-card-title">{{ d_trans('User Reviews') }}</p>
+                    <p class="vironeer-counter-card-number">{{ $counters['reviews'] }}</p>
                 </div>
             </div>
         </div>
@@ -172,7 +172,7 @@
         <div class="col-12 col-lg-7 col-xxl-8">
             <div class="box h-100">
                 <div class="box-header">
-                    <p class="box-header-title large mb-0">{{ d_trans('Users Statistics For This Month') }}</p>
+                    <p class="box-header-title large mb-0">{{ d_trans('New users registered each day during this month') }}</p>
                     <div class="box-header-action">
                         <div class="drop-down" data-dropdown>
                             <button class="drop-down-title btn btn-reset btn-sm">
@@ -298,7 +298,7 @@
         <div class="col-12 col-lg-7 col-xxl-8">
             <div class="box h-100">
                 <div class="box-header">
-                    <p class="box-header-title large mb-0">{{ d_trans('Product Statistics For This Month') }}</p>
+                    <p class="box-header-title large mb-0">{{ d_trans('Products added each day during this month') }}</p>
                     <div class="box-header-action">
                         <div class="drop-down" data-dropdown>
                             <button class="drop-down-title btn btn-reset btn-sm">
@@ -321,7 +321,7 @@
         <div class="col-12">
             <div class="box h-100">
                 <div class="box-header">
-                    <p class="box-header-title large mb-0">{{ d_trans('Reviews Statistics For This Month') }}</p>
+                    <p class="box-header-title large mb-0">{{ d_trans('User reviews submitted each day during this month') }}</p>
                 </div>
                 <div class="box-body">
                     <div class="dashboard-chart">

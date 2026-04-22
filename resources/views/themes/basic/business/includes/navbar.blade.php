@@ -83,7 +83,7 @@
             <div class="drop-down-btn">
                 <img src="{{ authBusinessOwner()->getAvatar() }}" alt="{{ authBusinessOwner()->getName() }}"
                     class="user-img me-0">
-                <span class="user-name ms-2">{{ authBusinessOwner()->getName() }}</span>
+                <span class="user-name ms-2 text-dark">{{ authBusinessOwner()->getName() }}</span>
                 <i class="fa fa-angle-down ms-2"></i>
             </div>
             <div class="drop-down-menu">

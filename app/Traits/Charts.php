@@ -2,22 +2,18 @@
 
 namespace App\Traits;
 
-use App\Models\BusinessReview;
-use App\Models\BusinessView;
+use App\Models\Product;
+use App\Models\UserReview;
 use Carbon\Carbon;
 
 trait Charts
 {
     public function reviewsChart($startDate, $endDate, $business = null)
     {
-        $chart['title'] = d_trans('Reviews');
+        $chart['title'] = d_trans('User Reviews');
         $dates = chartDates($startDate, $endDate);
 
-        $reviews = BusinessReview::published();
-
-        if ($business) {
-            $reviews->where('business_id', $business->id);
-        }
+        $reviews = UserReview::approved();
 
         $reviews = $reviews->where('created_at', '>=', $startDate)
             ->where('created_at', '<=', $endDate)
@@ -42,14 +38,10 @@ trait Charts
 
     public function viewsChart($startDate, $endDate, $business = null)
     {
-        $chart['title'] = d_trans('Views');
+        $chart['title'] = d_trans('Products');
         $dates = chartDates($startDate, $endDate);
 
-        $views = BusinessView::query();
-
-        if ($business) {
-            $views->where('business_id', $business->id);
-        }
+        $views = Product::query();
 
         $views = $views->where('created_at', '>=', $startDate)
             ->where('created_at', '<=', $endDate)

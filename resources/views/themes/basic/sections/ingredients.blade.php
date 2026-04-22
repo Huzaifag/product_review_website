@@ -331,7 +331,10 @@
         @media (max-width: 575.98px) {
             .ingredients-section {
                 padding: 24px 0;
+                padding-inline: 22px;
             }
+
+            
 
             .visual-container {
                 height: 190px;

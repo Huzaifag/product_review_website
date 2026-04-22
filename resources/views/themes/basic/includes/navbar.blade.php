@@ -65,7 +65,7 @@
                     <div class="drop-down user-menu ms-3" data-dropdown data-dropdown-position="top">
                         <div class="drop-down-btn">
                             <img src="{{ authUser()->getAvatar() }}" alt="{{ authUser()->getName() }}" class="user-img">
-                            <span class="user-name ms-2">{{ authUser()->getName() }}</span>
+                            <span class="user-name ms-2 text-dark">{{ authUser()->getName() }}</span>
                             <i class="fa fa-angle-down ms-2"></i>
                         </div>
                         <div class="drop-down-menu">

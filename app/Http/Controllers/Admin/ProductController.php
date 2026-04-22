@@ -24,7 +24,7 @@ class ProductController extends Controller
         $products = Product::query()->with(['category', 'subCategory']);
         $categories = Category::select('id', 'name')->get();
         $subCategories = SubCategory::select('id', 'name')->get();
-
+        $brands = Brand::select('id', 'name')->get();
         if (request()->filled('search')) {
             $searchTerm = '%' . request('search') . '%';
             $products->where(function ($query) use ($searchTerm) {
@@ -62,13 +62,14 @@ class ProductController extends Controller
         $counters['lab_verified'] = $filteredProducts->where('lab_verified', true)->count();
 
         $products = $products->orderbyDesc('id')->paginate(50);
-        $products->appends(request()->only(['search', 'category', 'sub_category', 'status', 'featured']));
+        $products->appends(request()->only(['search', 'category', 'sub_category', 'brand', 'status', 'featured']));
 
         return view('admin.products.index', [
             'counters' => $counters,
             'products' => $products,
             'categories' => $categories,
             'subCategories' => $subCategories,
+            'brands' => $brands,
         ]);
     }
 

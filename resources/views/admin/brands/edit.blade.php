@@ -21,7 +21,7 @@
                         <label class="form-label">{{ d_trans('Logo (Optional)') }}</label>
                         <input type="file" name="logo" class="form-control" />
                         @if($brand->logo)
-                            <img src="{{ asset('storage/' . $brand->logo) }}" alt="Logo" width="100" height="100" class="mt-2" />
+                            <img src="{{ asset($brand->logo) }}" alt="Logo" width="100" height="100" class="mt-2" />
                         @endif
                         @error('logo')
                             <div class="text-danger mt-1">{{ $message }}</div>

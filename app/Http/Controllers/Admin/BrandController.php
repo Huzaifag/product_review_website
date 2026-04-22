@@ -16,8 +16,21 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::active()->orderBy('name')
-            ->paginate(20);
+        $brands = Brand::active();
+
+        if (request()->filled('search')) {
+            $searchTerm = '%' . request('search') . '%';
+            $brands->where(function ($query) use ($searchTerm) {
+                $query->where('name', 'like', $searchTerm)
+                    ->orWhere('slug', 'like', $searchTerm)
+                    ->orWhere('description', 'like', $searchTerm)
+                    ->orWhere('website_url', 'like', $searchTerm);
+            });
+        }
+
+        $brands = $brands->orderBy('name')->paginate(20);
+        $brands->appends(request()->only(['search']));
+
         return view('admin.brands.index', compact('brands'));
     }
 
