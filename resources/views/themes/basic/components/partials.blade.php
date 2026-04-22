@@ -4,9 +4,9 @@
 @endphp
 
 @if (config('settings.actions.gdpr_cookie') && !request()->hasCookie('gdpr_cookie'))
-    <div class="cookies">
+    <div class="cookies cookie-banner">
         <div class="cookies-img">
-            <svg enable-background="new 0 0 80 80" height="80" viewBox="0 0 512 512" width="80" fill="#0000000"
+            <svg enable-background="new 0 0 80 80" viewBox="0 0 512 512" fill="#000000"
                 xmlns="http://www.w3.org/2000/svg">
                 <g>
                     <path
@@ -43,16 +43,66 @@
         <p class="cookies-text text-center my-3">
             {{ d_trans('We use cookies to personalize your experience. By continuing to visit this website you agree to our use of cookies') }}
         </p>
-        <div class="d-flex justify-content-center">
-            <button id="acceptCookie" class="btn btn-primary px-5">{{ d_trans('Got it') }}</button>
+        
+        {{-- Changed button container to use responsive flex directions and gaps --}}
+        <div class="d-flex flex-column flex-sm-row justify-content-center w-100 gap-2 gap-sm-3">
+            <button id="acceptCookie" class="btn btn-primary px-4 px-sm-5 flex-grow-1 flex-sm-grow-0">{{ d_trans('Got it') }}</button>
             @if (config('settings.links.gdpr_cookie_policy_link'))
-                <a class="btn btn-outline-primary btn-md px-5 ms-3"
+                <a class="btn btn-outline-primary px-4 px-sm-5 flex-grow-1 flex-sm-grow-0"
                     href="{{ config('settings.links.gdpr_cookie_policy_link') }}">{{ d_trans('More') }}</a>
             @endif
         </div>
     </div>
+
+    {{-- Accompanying Styles for the Cookie Banner --}}
+    <style>
+        .cookie-banner {
+            position: fixed;
+            bottom: clamp(15px, 3vw, 30px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 30px);
+            max-width: 480px;
+            background: #ffffff;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            padding: clamp(20px, 4vw, 30px);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid rgba(0,0,0,0.05);
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .cookie-banner .cookies-img svg {
+            width: clamp(50px, 12vw, 70px);
+            height: clamp(50px, 12vw, 70px);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .cookie-banner .cookies-text {
+            font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+            color: #4a4a4a;
+            line-height: 1.5;
+            margin-bottom: 1.25rem !important;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+    </style>
 @endif
 
+{{-- Analytics Scripts remain untouched --}}
 @if ($googleAnalytics)
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ $googleAnalytics->credentials->measurement_id }}">
     </script>

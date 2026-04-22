@@ -14,11 +14,16 @@ class CategoryController extends Controller
     {
         $search = request('search');
 
-        $categories = Category::with(['products','subCategories' => function ($query) {
-            $query->with('subSubCategories');
-        }])->withCount(['products' => function ($query) {
-            $query->active();
-        }])
+        $categories = Category::with([
+            'products',
+            'subCategories' => function ($query) {
+                $query->with('subSubCategories');
+            }
+        ])->withCount([
+                    'products' => function ($query) {
+                        $query->active();
+                    }
+                ])
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
@@ -52,7 +57,7 @@ class CategoryController extends Controller
                 ->orWhere('description', 'like', "%{$search}%")
                 ->orWhere('keywords', 'like', "%{$search}%");
         })->limit(10)->get();
-        
+
 
         return theme_view('categories.index', [
             'categories' => $categories,
@@ -72,6 +77,8 @@ class CategoryController extends Controller
         $popularSearches = $category->subCategories()
             ->orderbyDesc('views')->limit(10)->get()->shuffle();
 
+        $search_brands = Brand::inRandomOrder()->limit(10)->get();
+
         $products = ProductController::getResultByParams($category);
 
         incrementViews($category, 'categories');
@@ -81,6 +88,7 @@ class CategoryController extends Controller
             'searchCategories' => $searchCategories,
             'popularSearches' => $popularSearches,
             'products' => $products,
+            'search_brands' => $search_brands,
         ]);
     }
 
@@ -101,6 +109,7 @@ class CategoryController extends Controller
             ->orderbyDesc('views')->limit(10)->get()->shuffle();
 
         $products = ProductController::getResultByParams($category, $subCategory);
+        $search_brands = Brand::inRandomOrder()->limit(10)->get();
 
         incrementViews($subCategory, 'sub_categories');
 
@@ -110,6 +119,7 @@ class CategoryController extends Controller
             'searchCategories' => $searchCategories,
             'popularSearches' => $popularSearches,
             'products' => $products,
+            'search_brands' => $search_brands,
         ]);
     }
 
@@ -132,6 +142,8 @@ class CategoryController extends Controller
         $popularSearches = $subCategory->subSubCategories()
             ->orderbyDesc('views')->limit(10)->get()->shuffle();
 
+        $search_brands = Brand::inRandomOrder()->limit(10)->get();
+
         $products = ProductController::getResultByParams($category, $subCategory, $subSubCategory);
 
         incrementViews($subCategory, 'sub_sub_categories');
@@ -143,6 +155,7 @@ class CategoryController extends Controller
             'searchCategories' => $searchCategories,
             'popularSearches' => $popularSearches,
             'products' => $products,
+            'search_brands' => $search_brands,
         ]);
     }
 }

@@ -83,8 +83,8 @@
             </div>
         </div>
 
-        <div class="mag-footer d-block d-lg-none">
-            <a href="{{ route('categories.index') }}" class="mag-view-all">
+        <div class="d-flex justify-content-center py-4 px-4">
+            <a href="{{ route('categories.index') }}" class="home-modern-btn">
                 {{ d_trans('View All') }}
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"/>

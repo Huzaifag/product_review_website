@@ -737,7 +737,7 @@
 @media (max-width: 640px) {
     .oeko-hero {
         min-height: auto;
-        padding: 56px 0 32px;
+        padding: 56px 20px 32px;
         overflow-x: hidden;
     }
 
@@ -878,7 +878,7 @@
 
 @media (max-width: 420px) {
     .oeko-hero {
-        padding: 48px 0 28px;
+        padding: 48px 20px 28px;
     }
 
     .oeko-hero-inner {

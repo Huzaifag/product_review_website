@@ -14,6 +14,7 @@
             'search_params_classes' => 'col-lg-4 col-xxl-3',
             'search_categories_title' => d_trans('Related Categories'),
             'search_categories' => $searchCategories,
+            'search_brands' => $search_brands,
         ])
         <div class="col-lg-8 col-xxl-9">
             @include('themes.basic.partials.grid-header', [

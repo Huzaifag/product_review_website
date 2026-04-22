@@ -13,11 +13,11 @@
                 <p class="fw-medium">{{ d_trans('Search') }}</p>
                 <form class="search-form" method="GET">
                     <div class="form-search form-search-reverse mb-4">
-                        <button class="icon">
+                        <button type="button" class="icon search-submit-btn">
                             <i class="bi bi-search"></i>
                         </button>
                         <input type="text" name="search" placeholder="{{ d_trans('Search...') }}"
-                            class="form-control form-control-md" value="{{ request('search') ?? '' }}">
+                            class="form-control form-control-md search-param" value="{{ request('search') ?? '' }}">
                     </div>
                 </form>
 
@@ -42,10 +42,10 @@
                         title="{{ d_trans('Brand') }}" data-size="10" data-live-search="true">
                         <option value="">{{ d_trans('All') }}</option>
                         @foreach ($search_brands as $brand)
-                                <option value="{{ $brand->slug }}" @selected(request('brand') == $brand->slug)>
-                                    {{ $brand->name }}
-                                </option>
-                            @endforeach
+                            <option value="{{ $brand->slug }}" @selected(request('brand') == $brand->slug)>
+                                {{ $brand->name }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 
@@ -55,14 +55,16 @@
                         <div class="form-group">
                             <label for="minPrice" class="form-label text-muted">{{ d_trans('Min Price') }}</label>
                             <input type="number" name="min_price" placeholder="0" step="0.01"
-                                class="form-control form-control-md search-param" value="{{ request('min_price') ?? '' }}">
+                                class="form-control form-control-md search-param"
+                                value="{{ request('min_price') ?? '' }}">
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
                             <label for="maxPrice" class="form-label text-muted">{{ d_trans('Max Price') }}</label>
                             <input type="number" name="max_price" placeholder="0" step="0.01"
-                                class="form-control form-control-md search-param" value="{{ request('max_price') ?? '' }}">
+                                class="form-control form-control-md search-param"
+                                value="{{ request('max_price') ?? '' }}">
                         </div>
                     </div>
                 </div>
@@ -99,7 +101,8 @@
                 <div class="row row-cols-1 g-3">
                     <div class="col">
                         <input type="text" name="product_size" placeholder="{{ d_trans('Enter product size') }}"
-                            class="form-control form-control-md search-param" value="{{ request('product_size') ?? '' }}">
+                            class="form-control form-control-md search-param"
+                            value="{{ request('product_size') ?? '' }}">
                     </div>
                 </div>
             </div>
@@ -129,11 +132,11 @@
                         <p class="fw-medium">{{ d_trans('Search') }}</p>
                         <form class="search-form" method="GET">
                             <div class="form-search form-search-reverse mb-4">
-                                <button class="icon">
+                                <button type="button" class="icon search-submit-btn">
                                     <i class="bi bi-search"></i>
                                 </button>
                                 <input type="text" name="search" placeholder="{{ d_trans('Search...') }}"
-                                    class="form-control form-control-md" value="{{ request('search') ?? '' }}">
+                                    class="form-control form-control-md search-param" value="{{ request('search') ?? '' }}">
                             </div>
                         </form>
 
@@ -169,16 +172,20 @@
                         <div class="row row-cols-1 g-3">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="minPrice2" class="form-label text-muted">{{ d_trans('Min Price') }}</label>
-                                    <input type="number" id="minPrice2" name="min_price" placeholder="0" step="0.01"
-                                        class="form-control form-control-md search-param" value="{{ request('min_price') ?? '' }}">
+                                    <label for="minPrice2"
+                                        class="form-label text-muted">{{ d_trans('Min Price') }}</label>
+                                    <input type="number" id="minPrice2" name="min_price" placeholder="0"
+                                        step="0.01" class="form-control form-control-md search-param"
+                                        value="{{ request('min_price') ?? '' }}">
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="maxPrice2" class="form-label text-muted">{{ d_trans('Max Price') }}</label>
-                                    <input type="number" id="maxPrice2" name="max_price" placeholder="0" step="0.01"
-                                        class="form-control form-control-md search-param" value="{{ request('max_price') ?? '' }}">
+                                    <label for="maxPrice2"
+                                        class="form-label text-muted">{{ d_trans('Max Price') }}</label>
+                                    <input type="number" id="maxPrice2" name="max_price" placeholder="0"
+                                        step="0.01" class="form-control form-control-md search-param"
+                                        value="{{ request('max_price') ?? '' }}">
                                 </div>
                             </div>
                         </div>
@@ -214,8 +221,10 @@
                         <p class="fw-medium">{{ d_trans('Product Size') }}</p>
                         <div class="row row-cols-1 g-3">
                             <div class="col">
-                                <input type="text" name="product_size" placeholder="{{ d_trans('Enter product size') }}"
-                                    class="form-control form-control-md search-param" value="{{ request('product_size') ?? '' }}">
+                                <input type="text" name="product_size"
+                                    placeholder="{{ d_trans('Enter product size') }}"
+                                    class="form-control form-control-md search-param"
+                                    value="{{ request('product_size') ?? '' }}">
                             </div>
                         </div>
                     </div>
@@ -234,7 +243,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const filterInputs = document.querySelectorAll('.search-select');
-            let filterTimeout;
 
             // Select dropdowns - submit immediately on change
             filterInputs.forEach(select => {
@@ -243,22 +251,32 @@
                 });
             });
 
-            // Number inputs and text inputs - debounce to avoid too many submissions
-            // const textInputs = document.querySelectorAll('input[type="number"], input[type="text"]');
-            // textInputs.forEach(input => {
-            //     // Only apply debounce to search/filter inputs, not other inputs
-            //     if (input.classList.contains('search-param')) {
-            //         input.addEventListener('blur', function() {
-            //             // Submit on blur (when user leaves the field)
-            //             submitFilters();
-            //         });
-            //         input.addEventListener('change', function() {
-            //             // Also submit on change
-            //             clearTimeout(filterTimeout);
-            //             filterTimeout = setTimeout(submitFilters, 1000);
-            //         });
-            //     }
-            // });
+            // Prevent native form submission from refreshing the page unexpectedly.
+            document.querySelectorAll('.search-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    submitFilters();
+                });
+            });
+
+            document.querySelectorAll('.search-submit-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    submitFilters();
+                });
+            });
+
+            const enterSubmitInputs = document.querySelectorAll(
+                '.search-param:not([type="checkbox"])'
+            );
+            enterSubmitInputs.forEach(input => {
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        submitFilters();
+                    }
+                });
+            });
 
             // Checkboxes
             const checkboxes = document.querySelectorAll('input[type="checkbox"].search-param');
@@ -268,7 +286,7 @@
 
             function submitFilters() {
                 const formData = new FormData();
-                
+
                 // Collect all filter values
                 document.querySelectorAll('.search-param, .search-select').forEach(input => {
                     if (input.type === 'checkbox') {
@@ -283,15 +301,15 @@
                 // Get current URL and update with new params
                 const params = new URLSearchParams(formData);
                 const url = new URL(window.location);
-                
+
                 // Clear existing params except those we want to keep
                 url.search = '';
-                
+
                 // Add filtered params
                 for (let [key, value] of params) {
                     url.searchParams.append(key, value);
                 }
-                
+
                 // Navigate to new URL
                 window.location.href = url.toString();
             }

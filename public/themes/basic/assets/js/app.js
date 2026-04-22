@@ -641,7 +641,7 @@
     });
 
 
-    $(document).on('click', '.search-param', function() {
+    $(document).on('change', '.search-param[type="checkbox"], .search-param[type="radio"]', function() {
         let url = new URL($(location).attr('href')),
             param = $(this).attr('name'),
             value = $(this).val(),
