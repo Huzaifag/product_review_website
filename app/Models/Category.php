@@ -60,8 +60,13 @@ class Category extends Model
         return $this->hasMany(SubCategory::class);
     }
 
-    public function businesses()
+        public function businesses()
+        {
+            return $this->hasMany(Business::class);
+        }
+
+    public function products()
     {
-        return $this->hasMany(Business::class);
+        return $this->hasMany(Product::class);  
     }
 }

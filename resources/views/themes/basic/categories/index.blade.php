@@ -20,7 +20,7 @@
                             <div class="mt-1">
                                 <h5 class="category-title mb-2">{{ $category->trans->name }}</h5>
                                 <p class="category-text mb-0">
-                                    {{ translate_choice(':count Business|:count Businesses', $category->businesses_count, ['count' => $category->businesses_count]) }}
+                                    {{ translate_choice(':count Product|:count Products', optional($category->products)->count() ?? 0, ['count' => optional($category->products)->count() ?? 0]) }}
                                 </p>
                             </div>
                         </a>
@@ -36,8 +36,8 @@
                                 @endforeach
                             </div>
                         </div>
-                        <a href="{{ $category->getLink() }}" class="category-action pt-4 border-top">
-                            <small>{{ d_trans('View Businesses') }}</small>
+                        <a href="/products?category={{ $category->slug }}" class="category-action pt-4 border-top">
+                            <small>{{ d_trans('View Products') }}</small>
                             <i class="fa fa-arrow-right icon-rtl ms-2"></i>
                         </a>
                     </div>

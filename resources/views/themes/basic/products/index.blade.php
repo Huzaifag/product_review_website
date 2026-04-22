@@ -18,6 +18,7 @@
         @include('themes.basic.partials.search-params', [
             'search_params_classes' => 'col-lg-4 col-xxl-3',
             'search_categories' => $searchCategories,
+            'search_brands' => $searchBrands,
         ])
         <div class="col-lg-8 col-xxl-9">
             @include('themes.basic.partials.grid-header', [

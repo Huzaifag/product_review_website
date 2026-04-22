@@ -7,8 +7,8 @@
 <script src="{{ asset('vendor/libs/vironeer/toastr/js/vironeer-toastr.min.js') }}"></script>
 @livewireScripts
 @stack('scripts_libs')
+<script src="{{ asset('vendor/libs/aos/aos.min.js') }}"></script>
 <script src="{{ theme_asset_with_version('assets/js/app.js') }}"></script>
-<script src="{{ asset('themes/basic/product-card-toggle.js') }}"></script>
 @stack('scripts')
 @toastrRender
 {!! config('theme.settings.extra_codes.footer_code') !!}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BusinessController;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
@@ -13,9 +14,9 @@ class CategoryController extends Controller
     {
         $search = request('search');
 
-        $categories = Category::with(['subCategories' => function ($query) {
+        $categories = Category::with(['products','subCategories' => function ($query) {
             $query->with('subSubCategories');
-        }])->withCount(['businesses' => function ($query) {
+        }])->withCount(['products' => function ($query) {
             $query->active();
         }])
             ->when($search, function ($query) use ($search) {
@@ -44,9 +45,19 @@ class CategoryController extends Controller
             ->paginate(9)
             ->appends(['search' => $search]);
 
+        $search_brands = Brand::when($search, function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('slug', 'like', "%{$search}%")
+                ->orWhere('title', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%")
+                ->orWhere('keywords', 'like', "%{$search}%");
+        })->limit(10)->get();
+        
+
         return theme_view('categories.index', [
             'categories' => $categories,
             'search' => $search,
+            'search_brands' => $search_brands,
         ]);
     }
 

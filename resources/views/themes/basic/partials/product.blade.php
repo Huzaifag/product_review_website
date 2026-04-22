@@ -3,30 +3,25 @@
         $imagePath = $product->image ?: optional($product->images()->select('path')->first())->path;
         $imageSrc = $imagePath ? asset($imagePath) : asset(config('theme.settings.general.social_image'));
     @endphp
-    <div class="featured-lab-card d-block text-reset text-decoration-none">
+    <a href="{{ $product->getLink() }}" class="featured-lab-card d-block text-reset text-decoration-none">
         {{-- <i class="fa-solid fa-box-open featured-lab-corner-icon"></i> --}}
 
-        <a href="{{ $product->getLink() }}" class="featured-lab-link">
-            <div class="featured-lab-head">
-                <div class="featured-lab-thumb">
-                    <img loading="lazy" src="{{ $imageSrc }}" alt="{{ $product->name }}">
-                </div>
-                <div class="featured-lab-head-copy">
-                    <span class="featured-lab-kicker">
-                        <i class="bi bi-bag-check"></i>{{ d_trans('Featured Product') }}
-                    </span>
-                    <h5 class="featured-lab-title">
-                        {{ \Illuminate\Support\Str::limit($product->name, 42) }}</h5>
-                    <p class="featured-lab-description">
-                        {{ \Illuminate\Support\Str::limit($product->brand?->name . ($product->description ? ' • ' . $product->description : ''), 112) }}
-                    </p>
-                </div>
+        <div class="featured-lab-head">
+            <div class="featured-lab-thumb">
+                <img loading="lazy" src="{{ $imageSrc }}" alt="{{ $product->name }}">
             </div>
-        </a>
+            <div class="featured-lab-head-copy">
+                <span class="featured-lab-kicker">
+                    <i class="bi bi-bag-check"></i>{{ d_trans('Featured Product') }}
+                </span>
+                <h5 class="featured-lab-title">
+                    {{ \Illuminate\Support\Str::limit($product->name, 42) }}</h5>
+                <p class="featured-lab-description">
+                    {{ \Illuminate\Support\Str::limit($product->brand?->name . ($product->description ? ' • ' . $product->description : ''), 112) }}
+                </p>
+            </div>
+        </div>
 
-        <span class="featured-lab-hint" tabindex="0" role="button" aria-label="Expand product details">
-            <i class="bi bi-chevron-down"></i>
-        </span>
 
         <div class="featured-lab-expand">
             <div class="featured-lab-expand-inner">

@@ -1,5 +1,7 @@
+{{-- Desktop Filters --}}
 <div id="searchFilters" class="d-none d-lg-block {{ $search_params_classes ?? '' }}">
     <div class="row row-cols-1 g-3">
+
         <div class="col">
             <div class="item-box box">
                 @if (collect(request()->query())->except('page')->count() > 0)
@@ -7,6 +9,7 @@
                         <i class="bi bi-arrow-repeat me-2"></i>{{ d_trans('Reset All') }}
                     </a>
                 @endif
+
                 <p class="fw-medium">{{ d_trans('Search') }}</p>
                 <form class="search-form" method="GET">
                     <div class="form-search form-search-reverse mb-4">
@@ -17,234 +20,104 @@
                             class="form-control form-control-md" value="{{ request('search') ?? '' }}">
                     </div>
                 </form>
-                <p class="fw-medium">{{ d_trans('Location') }}</p>
+
+                <p class="fw-medium">{{ d_trans('Category') }}</p>
                 <div class="mb-3">
-                    <select name="country" class="selectpicker selectpicker-md search-select"
-                        title="{{ d_trans('Country') }}" data-size="10" data-live-search="true">
+                    <select name="category" class="selectpicker selectpicker-md search-select"
+                        title="{{ d_trans('Category') }}" data-size="10" data-live-search="true">
                         <option value="">{{ d_trans('All') }}</option>
-                        @foreach (countries() as $countryCode => $countryName)
-                            <option value="{{ $countryCode }}" @selected(request('country') == $countryCode)>
-                                {{ $countryName }}
-                            </option>
-                        @endforeach
+                        @if (isset($search_categories) && $search_categories->count() > 0)
+                            @foreach ($search_categories as $category)
+                                <option value="{{ $category->slug }}" @selected(request('category') == $category->slug)>
+                                    {{ $category->trans->name }}
+                                </option>
+                            @endforeach
+                        @endif
                     </select>
                 </div>
-                <form class="search-form" method="GET">
-                    <div class="form-search form-search-reverse mb-4">
-                        <button class="icon">
-                            <i class="bi bi-search"></i>
-                        </button>
-                        <input type="text" name="city_zip" placeholder="{{ d_trans('City or ZIP code') }}"
-                            class="form-control form-control-md" value="{{ request('city_zip') ?? '' }}">
-                    </div>
-                </form>
-                <p class="fw-medium">{{ d_trans('Rating') }}</p>
+
+                <p class="fw-medium">{{ d_trans('Brand') }}</p>
+                <div class="mb-4">
+                    <select name="brand" class="selectpicker selectpicker-md search-select"
+                        title="{{ d_trans('Brand') }}" data-size="10" data-live-search="true">
+                        <option value="">{{ d_trans('All') }}</option>
+                        @foreach ($search_brands as $brand)
+                                <option value="{{ $brand->slug }}" @selected(request('brand') == $brand->slug)>
+                                    {{ $brand->name }}
+                                </option>
+                            @endforeach
+                    </select>
+                </div>
+
+                <p class="fw-medium">{{ d_trans('Price Range') }}</p>
                 <div class="row row-cols-1 g-3">
                     <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input id="rating5" type="checkbox" name="stars"
-                                class="form-check-input search-param my-0" value="5" />
-                            <label
-                                class="form-check-label d-flex align-items-center justify-content-between flex-grow-1 gap-2"
-                                for="rating5">
-                                <span class="text-muted">{{ d_trans('Excellent') }}</span>
-                                <div class="ratings">
-                                    <img src="{{ asset(config('theme.settings.stars.stars_5')) }}"
-                                        alt="{{ d_trans('Excellent') }}">
-                                </div>
-                            </label>
+                        <div class="form-group">
+                            <label for="minPrice" class="form-label text-muted">{{ d_trans('Min Price') }}</label>
+                            <input type="number" name="min_price" placeholder="0" step="0.01"
+                                class="form-control form-control-md search-param" value="{{ request('min_price') ?? '' }}">
                         </div>
                     </div>
                     <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input id="rating4" type="checkbox" name="stars"
-                                class="form-check-input search-param my-0" value="4" />
-                            <label
-                                class="form-check-label d-flex align-items-center justify-content-between flex-grow-1 gap-2"
-                                for="rating4">
-                                <span class="text-muted">{{ d_trans('Great') }}</span>
-                                <div class="ratings">
-                                    <img src="{{ asset(config('theme.settings.stars.stars_4')) }}"
-                                        alt="{{ d_trans('Great') }}">
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input id="rating3" type="checkbox" name="stars"
-                                class="form-check-input search-param my-0" value="3" />
-                            <label
-                                class="form-check-label d-flex align-items-center justify-content-between flex-grow-1 gap-2"
-                                for="rating3">
-                                <span class="text-muted">{{ d_trans('Average') }}</span>
-                                <div class="ratings">
-                                    <img src="{{ asset(config('theme.settings.stars.stars_3')) }}"
-                                        alt="{{ d_trans('Average') }}">
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input id="rating2" type="checkbox" name="stars"
-                                class="form-check-input search-param my-0" value="2" />
-                            <label
-                                class="form-check-label d-flex align-items-center justify-content-between flex-grow-1 gap-2"
-                                for="rating2">
-                                <span class="text-muted">{{ d_trans('Fair') }}</span>
-                                <div class="ratings">
-                                    <img src="{{ asset(config('theme.settings.stars.stars_2')) }}"
-                                        alt="{{ d_trans('Fair') }}">
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input id="rating1" type="checkbox" name="stars"
-                                class="form-check-input search-param my-0" value="1" />
-                            <label
-                                class="form-check-label d-flex align-items-center justify-content-between flex-grow-1 gap-2"
-                                for="rating1">
-                                <span class="text-muted">{{ d_trans('Poor') }}</span>
-                                <div class="ratings">
-                                    <img src="{{ asset(config('theme.settings.stars.stars_1')) }}"
-                                        alt="{{ d_trans('Poor') }}">
-                                </div>
-                            </label>
+                        <div class="form-group">
+                            <label for="maxPrice" class="form-label text-muted">{{ d_trans('Max Price') }}</label>
+                            <input type="number" name="max_price" placeholder="0" step="0.01"
+                                class="form-control form-control-md search-param" value="{{ request('max_price') ?? '' }}">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="col">
             <div class="item-box box">
-                <p class="fw-medium">{{ d_trans('Verification') }}</p>
+                <p class="fw-medium">{{ d_trans('Certification') }}</p>
                 <div class="row row-cols-1 g-3">
                     <div class="col">
                         <div class="form-check d-flex align-items-center gap-2">
-                            <input type="checkbox" name="verified" value="1"
-                                class="form-check-input search-param my-0" id="verified1" />
+                            <input type="checkbox" name="organic_certified" value="1"
+                                class="form-check-input search-param my-0" id="certified1" />
                             <label class="form-check-label text-muted"
-                                for="verified1">{{ d_trans('Verified') }}</label>
+                                for="certified1">{{ d_trans('Organic Certified') }}</label>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-check d-flex align-items-center gap-2">
-                            <input type="checkbox" name="verified" value="0"
-                                class="form-check-input search-param my-0" id="verified2" />
+                            <input type="checkbox" name="organic_certified" value="0"
+                                class="form-check-input search-param my-0" id="certified2" />
                             <label class="form-check-label text-muted"
-                                for="verified2">{{ d_trans('Unverified') }}</label>
+                                for="certified2">{{ d_trans('Not Certified') }}</label>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="col">
             <div class="item-box box">
-                <p class="fw-medium">{{ d_trans('Status') }}</p>
+                <p class="fw-medium">{{ d_trans('Product Size') }}</p>
                 <div class="row row-cols-1 g-3">
                     <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input type="checkbox" name="trending" value="1"
-                                class="form-check-input search-param my-0" id="trending" />
-                            <label class="form-check-label text-muted"
-                                for="trending">{{ d_trans('Trending') }}</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input type="checkbox" name="best_rating" value="1"
-                                class="form-check-input search-param my-0" id="best_rating" />
-                            <label class="form-check-label text-muted"
-                                for="best_rating">{{ d_trans('Best Rating') }}</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input type="checkbox" name="featured" value="1"
-                                class="form-check-input search-param my-0" id="featured" />
-                            <label class="form-check-label text-muted"
-                                for="featured">{{ d_trans('Featured') }}</label>
-                        </div>
+                        <input type="text" name="product_size" placeholder="{{ d_trans('Enter product size') }}"
+                            class="form-control form-control-md search-param" value="{{ request('product_size') ?? '' }}">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col">
-            <div class="item-box box">
-                <p class="fw-medium">{{ d_trans('Review Time') }}</p>
-                <div class="row row-cols-1 g-3">
-                    <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input type="checkbox" name="review_time" value=""
-                                class="form-check-input search-param my-0" id="reviewTime1" />
-                            <label class="form-check-label text-muted"
-                                for="reviewTime1">{{ d_trans('Any time') }}</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input type="checkbox" name="review_time" value="this_month"
-                                class="form-check-input search-param my-0" id="reviewTime2" />
-                            <label class="form-check-label text-muted"
-                                for="reviewTime2">{{ d_trans('This month') }}</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input type="checkbox" name="review_time" value="last_month"
-                                class="form-check-input search-param my-0" id="reviewTime3" />
-                            <label class="form-check-label text-muted"
-                                for="reviewTime3">{{ d_trans('Last month') }}</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input type="checkbox" name="review_time" value="this_year"
-                                class="form-check-input search-param my-0" id="reviewTime4" />
-                            <label class="form-check-label text-muted"
-                                for="reviewTime4">{{ d_trans('This year') }}</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-check d-flex align-items-center gap-2">
-                            <input type="checkbox" name="review_time" value="last_year"
-                                class="form-check-input search-param my-0" id="reviewTime5" />
-                            <label class="form-check-label text-muted"
-                                for="reviewTime5">{{ d_trans('Last year') }}</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @if (isset($search_categories) && $search_categories->count() > 0)
-            <div class="col">
-                <div class="item-box box">
-                    <p class="fw-medium">{{ $search_categories_title ?? d_trans('Categories') }}</p>
-                    <ul class="list-group list-group-flush">
-                        @foreach ($search_categories as $search_category)
-                            <a href="{{ $search_category->getLink(request()->all()) }}"
-                                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 {{ !$loop->last ? 'mb-2' : '' }}">
-                                <span>{{ $search_category->trans->name }}</span>
-                                <i class="bi bi-tag"></i>
-                            </a>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        @endif
+
     </div>
 </div>
+
+{{-- Mobile Filters (Offcanvas) --}}
 <div id="searchFiltersMenu" class="d-block d-lg-none">
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">{{ d_trans('Filters') }}</h5>
+            <h5 class="offcanvas-title" id="offcanvasLabel">{{ d_trans('Filters') }}</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
             <div class="row row-cols-1 g-3">
+
                 <div class="col">
                     <div class="item-box box">
                         @if (collect(request()->query())->except('page')->count() > 0)
@@ -252,6 +125,7 @@
                                 <i class="bi bi-arrow-repeat me-2"></i>{{ d_trans('Reset All') }}
                             </a>
                         @endif
+
                         <p class="fw-medium">{{ d_trans('Search') }}</p>
                         <form class="search-form" method="GET">
                             <div class="form-search form-search-reverse mb-4">
@@ -262,232 +136,165 @@
                                     class="form-control form-control-md" value="{{ request('search') ?? '' }}">
                             </div>
                         </form>
-                        <p class="fw-medium">{{ d_trans('Location') }}</p>
+
+                        <p class="fw-medium">{{ d_trans('Category') }}</p>
                         <div class="mb-3">
-                            <select name="country" class="selectpicker selectpicker-md search-select"
-                                title="{{ d_trans('Country') }}" data-size="10" data-live-search="true">
+                            <select name="category" class="selectpicker selectpicker-md search-select"
+                                title="{{ d_trans('Category') }}" data-size="10" data-live-search="true">
                                 <option value="">{{ d_trans('All') }}</option>
-                                @foreach (countries() as $countryCode => $countryName)
-                                    <option value="{{ $countryCode }}" @selected(request('country') == $countryCode)>
-                                        {{ $countryName }}
+                                @if (isset($search_categories) && $search_categories->count() > 0)
+                                    @foreach ($search_categories as $category)
+                                        <option value="{{ $category->slug }}" @selected(request('category') == $category->slug)>
+                                            {{ $category->trans->name }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+
+                        <p class="fw-medium">{{ d_trans('Brand') }}</p>
+                        <div class="mb-4">
+                            <select name="brand" class="selectpicker selectpicker-md search-select"
+                                title="{{ d_trans('Brand') }}" data-size="10" data-live-search="true">
+                                <option value="">{{ d_trans('All') }}</option>
+                                @foreach ($search_brands as $brand)
+                                    <option value="{{ $brand->slug }}" @selected(request('brand') == $brand->slug)>
+                                        {{ $brand->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-                        <form class="search-form" method="GET">
-                            <div class="form-search form-search-reverse mb-4">
-                                <button class="icon">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                                <input type="text" name="city_zip"
-                                    placeholder="{{ d_trans('City or ZIP code') }}"
-                                    class="form-control form-control-md" value="{{ request('city_zip') ?? '' }}">
-                            </div>
-                        </form>
-                        <p class="fw-medium">{{ d_trans('Rating') }}</p>
+
+                        <p class="fw-medium">{{ d_trans('Price Range') }}</p>
                         <div class="row row-cols-1 g-3">
                             <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input id="rating55" type="checkbox" name="stars"
-                                        class="form-check-input search-param my-0" value="5" />
-                                    <label
-                                        class="form-check-label d-flex align-items-center justify-content-between flex-grow-1 gap-2"
-                                        for="rating55">
-                                        <span class="text-muted">{{ d_trans('Excellent') }}</span>
-                                        <div class="ratings">
-                                            <img src="{{ asset(config('theme.settings.stars.stars_5')) }}"
-                                                alt="{{ d_trans('Excellent') }}">
-                                        </div>
-                                    </label>
+                                <div class="form-group">
+                                    <label for="minPrice2" class="form-label text-muted">{{ d_trans('Min Price') }}</label>
+                                    <input type="number" id="minPrice2" name="min_price" placeholder="0" step="0.01"
+                                        class="form-control form-control-md search-param" value="{{ request('min_price') ?? '' }}">
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input id="rating44" type="checkbox" name="stars"
-                                        class="form-check-input search-param my-0" value="4" />
-                                    <label
-                                        class="form-check-label d-flex align-items-center justify-content-between flex-grow-1 gap-2"
-                                        for="rating44">
-                                        <span class="text-muted">{{ d_trans('Great') }}</span>
-                                        <div class="ratings">
-                                            <img src="{{ asset(config('theme.settings.stars.stars_4')) }}"
-                                                alt="{{ d_trans('Great') }}">
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input id="rating33" type="checkbox" name="stars"
-                                        class="form-check-input search-param my-0" value="3" />
-                                    <label
-                                        class="form-check-label d-flex align-items-center justify-content-between flex-grow-1 gap-2"
-                                        for="rating33">
-                                        <span class="text-muted">{{ d_trans('Average') }}</span>
-                                        <div class="ratings">
-                                            <img src="{{ asset(config('theme.settings.stars.stars_3')) }}"
-                                                alt="{{ d_trans('Average') }}">
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input id="rating22" type="checkbox" name="stars"
-                                        class="form-check-input search-param my-0" value="2" />
-                                    <label
-                                        class="form-check-label d-flex align-items-center justify-content-between flex-grow-1 gap-2"
-                                        for="rating22">
-                                        <span class="text-muted">{{ d_trans('Fair') }}</span>
-                                        <div class="ratings">
-                                            <img src="{{ asset(config('theme.settings.stars.stars_2')) }}"
-                                                alt="{{ d_trans('Fair') }}">
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input id="rating11" type="checkbox" name="stars"
-                                        class="form-check-input search-param my-0" value="1" />
-                                    <label
-                                        class="form-check-label d-flex align-items-center justify-content-between flex-grow-1 gap-2"
-                                        for="rating11">
-                                        <span class="text-muted">{{ d_trans('Poor') }}</span>
-                                        <div class="ratings">
-                                            <img src="{{ asset(config('theme.settings.stars.stars_1')) }}"
-                                                alt="{{ d_trans('Poor') }}">
-                                        </div>
-                                    </label>
+                                <div class="form-group">
+                                    <label for="maxPrice2" class="form-label text-muted">{{ d_trans('Max Price') }}</label>
+                                    <input type="number" id="maxPrice2" name="max_price" placeholder="0" step="0.01"
+                                        class="form-control form-control-md search-param" value="{{ request('max_price') ?? '' }}">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col">
                     <div class="item-box box">
-                        <p class="fw-medium">{{ d_trans('Verification') }}</p>
+                        <p class="fw-medium">{{ d_trans('Certification') }}</p>
                         <div class="row row-cols-1 g-3">
                             <div class="col">
                                 <div class="form-check d-flex align-items-center gap-2">
-                                    <input type="checkbox" name="verified" value="1"
-                                        class="form-check-input search-param my-0" id="verified1" />
+                                    <input type="checkbox" name="organic_certified" value="1"
+                                        class="form-check-input search-param my-0" id="certified1m" />
                                     <label class="form-check-label text-muted"
-                                        for="verified1">{{ d_trans('Verified') }}</label>
+                                        for="certified1m">{{ d_trans('Organic Certified') }}</label>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-check d-flex align-items-center gap-2">
-                                    <input type="checkbox" name="verified" value="0"
-                                        class="form-check-input search-param my-0" id="verified2" />
+                                    <input type="checkbox" name="organic_certified" value="0"
+                                        class="form-check-input search-param my-0" id="certified2m" />
                                     <label class="form-check-label text-muted"
-                                        for="verified2">{{ d_trans('Unverified') }}</label>
+                                        for="certified2m">{{ d_trans('Not Certified') }}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col">
                     <div class="item-box box">
-                        <p class="fw-medium">{{ d_trans('Status') }}</p>
+                        <p class="fw-medium">{{ d_trans('Product Size') }}</p>
                         <div class="row row-cols-1 g-3">
                             <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input type="checkbox" name="trending" value="1"
-                                        class="form-check-input search-param my-0" id="trending1" />
-                                    <label class="form-check-label text-muted"
-                                        for="trending1">{{ d_trans('Trending') }}</label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input type="checkbox" name="best_rating" value="1"
-                                        class="form-check-input search-param my-0" id="best_rating1" />
-                                    <label class="form-check-label text-muted"
-                                        for="best_rating1">{{ d_trans('Best Rating') }}</label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input type="checkbox" name="featured" value="1"
-                                        class="form-check-input search-param my-0" id="featured1" />
-                                    <label class="form-check-label text-muted"
-                                        for="featured1">{{ d_trans('Featured') }}</label>
-                                </div>
+                                <input type="text" name="product_size" placeholder="{{ d_trans('Enter product size') }}"
+                                    class="form-control form-control-md search-param" value="{{ request('product_size') ?? '' }}">
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="item-box box">
-                        <p class="fw-medium">{{ d_trans('Review Time') }}</p>
-                        <div class="row row-cols-1 g-3">
-                            <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input type="checkbox" name="review_time" value=""
-                                        class="form-check-input search-param my-0" id="reviewTime11" />
-                                    <label class="form-check-label text-muted"
-                                        for="reviewTime11">{{ d_trans('Any time') }}</label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input type="checkbox" name="review_time" value="this_month"
-                                        class="form-check-input search-param my-0" id="reviewTime22" />
-                                    <label class="form-check-label text-muted"
-                                        for="reviewTime22">{{ d_trans('This month') }}</label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input type="checkbox" name="review_time" value="last_month"
-                                        class="form-check-input search-param my-0" id="reviewTime33" />
-                                    <label class="form-check-label text-muted"
-                                        for="reviewTime33">{{ d_trans('Last month') }}</label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input type="checkbox" name="review_time" value="this_year"
-                                        class="form-check-input search-param my-0" id="reviewTime44" />
-                                    <label class="form-check-label text-muted"
-                                        for="reviewTime44">{{ d_trans('This year') }}</label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    <input type="checkbox" name="review_time" value="last_year"
-                                        class="form-check-input search-param my-0" id="reviewTime55" />
-                                    <label class="form-check-label text-muted"
-                                        for="reviewTime55">{{ d_trans('Last year') }}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @if (isset($search_categories) && $search_categories->count() > 0)
-                    <div class="col">
-                        <div class="item-box box">
-                            <p class="fw-medium">{{ $search_categories_title ?? d_trans('Categories') }}</p>
-                            <ul class="list-group list-group-flush">
-                                @foreach ($search_categories as $search_category)
-                                    <a href="{{ $search_category->getLink(request()->all()) }}"
-                                        class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 {{ !$loop->last ? 'mb-2' : '' }}">
-                                        <span>{{ $search_category->trans->name }}</span>
-                                        <i class="bi bi-tag"></i>
-                                    </a>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                @endif
+
             </div>
         </div>
     </div>
 </div>
+
 @push('styles_libs')
     <link rel="stylesheet" href="{{ asset('vendor/libs/bootstrap/select/bootstrap-select.min.css') }}">
 @endpush
 @push('scripts_libs')
     <script src="{{ asset('vendor/libs/bootstrap/select/bootstrap-select.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterInputs = document.querySelectorAll('.search-select');
+            let filterTimeout;
+
+            // Select dropdowns - submit immediately on change
+            filterInputs.forEach(select => {
+                select.addEventListener('change', function() {
+                    submitFilters();
+                });
+            });
+
+            // Number inputs and text inputs - debounce to avoid too many submissions
+            // const textInputs = document.querySelectorAll('input[type="number"], input[type="text"]');
+            // textInputs.forEach(input => {
+            //     // Only apply debounce to search/filter inputs, not other inputs
+            //     if (input.classList.contains('search-param')) {
+            //         input.addEventListener('blur', function() {
+            //             // Submit on blur (when user leaves the field)
+            //             submitFilters();
+            //         });
+            //         input.addEventListener('change', function() {
+            //             // Also submit on change
+            //             clearTimeout(filterTimeout);
+            //             filterTimeout = setTimeout(submitFilters, 1000);
+            //         });
+            //     }
+            // });
+
+            // Checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"].search-param');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', submitFilters);
+            });
+
+            function submitFilters() {
+                const formData = new FormData();
+                
+                // Collect all filter values
+                document.querySelectorAll('.search-param, .search-select').forEach(input => {
+                    if (input.type === 'checkbox') {
+                        if (input.checked) {
+                            formData.append(input.name, input.value);
+                        }
+                    } else if (input.value) {
+                        formData.append(input.name, input.value);
+                    }
+                });
+
+                // Get current URL and update with new params
+                const params = new URLSearchParams(formData);
+                const url = new URL(window.location);
+                
+                // Clear existing params except those we want to keep
+                url.search = '';
+                
+                // Add filtered params
+                for (let [key, value] of params) {
+                    url.searchParams.append(key, value);
+                }
+                
+                // Navigate to new URL
+                window.location.href = url.toString();
+            }
+        });
+    </script>
 @endpush

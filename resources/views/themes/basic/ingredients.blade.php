@@ -2,7 +2,8 @@
 
 @section('title', d_trans('Ingredient Guide'))
 @section('header_title', d_trans('Ingredient Guide'))
-@section('description', d_trans('Our A-Z reference covers every concerning cosmetic ingredient found in our lab tests — with plain English explanations of the risks.'))
+@section('description', d_trans('Our A-Z reference covers every concerning cosmetic ingredient found in our lab tests —
+    with plain English explanations of the risks.'))
 @section('keywords', d_trans('ingredient guide, cosmetics, product safety, ingredient database, health effects'))
 @section('breadcrumbs', Breadcrumbs::render('ingredients'))
 @section('breadcrumbs_schema', Breadcrumbs::view('breadcrumbs::json-ld', 'ingredients'))
@@ -67,21 +68,29 @@
                             <div class="stat-card h-100">
                                 <i class="fa-solid fa-flask text-brand-red fs-4 mb-3"></i>
                                 <div class="small-red-label" style="font-size: 10px; margin-bottom: 4px;">LAB TESTED</div>
-                                <div class="font-weight-bold" style="color: var(--text-dark); font-weight: 700; font-size: 15px;">735 Products Analysed</div>
+                                <div class="font-weight-bold"
+                                    style="color: var(--text-dark); font-weight: 700; font-size: 15px;">735 Products
+                                    Analysed</div>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="stat-card h-100">
                                 <i class="fa-solid fa-shield-halved text-brand-red fs-4 mb-3"></i>
-                                <div class="small-red-label" style="font-size: 10px; margin-bottom: 4px;">SUBSTANCES FOUND</div>
-                                <div class="font-weight-bold" style="color: var(--text-dark); font-weight: 700; font-size: 15px;">50+ Ingredients Flagged</div>
+                                <div class="small-red-label" style="font-size: 10px; margin-bottom: 4px;">SUBSTANCES FOUND
+                                </div>
+                                <div class="font-weight-bold"
+                                    style="color: var(--text-dark); font-weight: 700; font-size: 15px;">50+ Ingredients
+                                    Flagged</div>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="stat-card h-100">
                                 <i class="fa-solid fa-list text-brand-red fs-4 mb-3"></i>
-                                <div class="small-red-label" style="font-size: 10px; margin-bottom: 4px;">SEVERITY LEVELS</div>
-                                <div class="font-weight-bold" style="color: var(--text-dark); font-weight: 700; font-size: 15px;">Avoid / Concern / Caution</div>
+                                <div class="small-red-label" style="font-size: 10px; margin-bottom: 4px;">SEVERITY LEVELS
+                                </div>
+                                <div class="font-weight-bold"
+                                    style="color: var(--text-dark); font-weight: 700; font-size: 15px;">Avoid / Concern /
+                                    Caution</div>
                             </div>
                         </div>
                     </div>
@@ -91,9 +100,9 @@
     </div>
 
     <!-- BLOCK 2 — FILTER AND SEARCH BAR -->
-    <div class="bg-white p-4 border-top border-bottom shadow-sm" 
-         style="border-color: rgba(0,0,0,0.05) !important; margin-top: 40px; border-radius: 15px;">
-        
+    <div class="bg-white p-4 border-top border-bottom shadow-sm"
+        style="border-color: rgba(0,0,0,0.05) !important; margin-top: 40px; border-radius: 15px;">
+
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
             <!-- Filters -->
             <div class="d-flex flex-wrap gap-2">
@@ -121,9 +130,9 @@
 
     <!-- BLOCK 3 — INGREDIENT CARDS GRID -->
     <div style="padding: 80px 0 40px 0; margin-top: 40px;">
-        @if(isset($ingredients) && $ingredients->count())
+        @if (isset($ingredients) && $ingredients->count())
             <div class="row row-cols-1 row-cols-lg-3 g-4">
-                @foreach($ingredients as $ingredient)
+                @foreach ($ingredients as $ingredient)
                     <div class="col">
                         <div class="card-custom">
                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -143,18 +152,20 @@
                             </p>
 
                             <div class="mb-4">
-                                <a class="card-expand-link" data-bs-toggle="collapse" 
-                                   href="#expandCard{{ $ingredient->id }}" role="button" aria-expanded="false">
+                                <a class="card-expand-link" data-bs-toggle="collapse"
+                                    href="#expandCard{{ $ingredient->id }}" role="button" aria-expanded="false">
                                     More details <span class="icon-arrow">&#8595;</span>
                                 </a>
                                 <div class="collapse mt-3" id="expandCard{{ $ingredient->id }}">
-                                    <p class="small text-body-custom mb-2"><strong>Health Effects:</strong> {{ $ingredient->health_effects }}</p>
-                                    <p class="small text-body-custom mb-2"><strong>Regulatory Status:</strong> {{ $ingredient->regulatory_status }}</p>
+                                    <p class="small text-body-custom mb-2"><strong>Health Effects:</strong>
+                                        {{ $ingredient->health_effects }}</p>
+                                    <p class="small text-body-custom mb-2"><strong>Regulatory Status:</strong>
+                                        {{ $ingredient->regulatory_status }}</p>
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-between align-items-end mt-auto pt-3 border-top" 
-                                 style="border-color: rgba(0,0,0,0.05) !important;">
+                            <div class="d-flex justify-content-between align-items-end mt-auto pt-3 border-top"
+                                style="border-color: rgba(0,0,0,0.05) !important;">
                                 <div></div>
                                 <a href="#" class="text-brand-red text-decoration-none small fw-bold">
                                     View affected products &rarr;
@@ -187,7 +198,8 @@
             <!-- Avoid -->
             <div class="col-12 col-lg-4">
                 <div class="guide-card guide-card-avoid">
-                    <div class="guide-inner-badge" style="color: var(--badge-avoid-bg); background-color: #FFEBEE;">AVOID</div>
+                    <div class="guide-inner-badge" style="color: var(--badge-avoid-bg); background-color: #FFEBEE;">AVOID
+                    </div>
                     <h3 class="font-heading h4 mb-3">Do Not Use</h3>
                     <p class="text-body-custom mb-4" style="font-size: 15px; line-height: 1.6;">
                         This ingredient has serious safety concerns backed by scientific evidence...
@@ -199,7 +211,8 @@
             <!-- Concern -->
             <div class="col-12 col-lg-4">
                 <div class="guide-card guide-card-concern">
-                    <div class="guide-inner-badge" style="color: var(--badge-concern-bg); background-color: #FFF3E0;">CONCERN</div>
+                    <div class="guide-inner-badge" style="color: var(--badge-concern-bg); background-color: #FFF3E0;">
+                        CONCERN</div>
                     <h3 class="font-heading h4 mb-3">Use With Caution</h3>
                     <p class="text-body-custom mb-4" style="font-size: 15px; line-height: 1.6;">
                         Scientific evidence suggests potential harm but further research is ongoing...
@@ -211,7 +224,8 @@
             <!-- Caution -->
             <div class="col-12 col-lg-4">
                 <div class="guide-card guide-card-caution">
-                    <div class="guide-inner-badge" style="color: var(--badge-caution-bg); background-color: #FFFDE7;">CAUTION</div>
+                    <div class="guide-inner-badge" style="color: var(--badge-caution-bg); background-color: #FFFDE7;">
+                        CAUTION</div>
                     <h3 class="font-heading h4 mb-3">Be Aware</h3>
                     <p class="text-body-custom mb-4" style="font-size: 15px; line-height: 1.6;">
                         This ingredient is not considered harmful at typical concentrations...
@@ -223,7 +237,8 @@
     </div>
 
     <!-- BLOCK 6 — CTA BANNER -->
-    <div style="background-color: var(--bg-dark-brown); color: white; padding: 80px 0; overflow: hidden;">
+    <div
+        style="background-color: var(--bg-dark-brown); color: white; padding: 80px 40px; border-radius: 12px; overflow: hidden;">
         <div style="max-width: 1280px; margin: 0 auto; position: relative;">
             <div class="row align-items-center">
                 <div class="col-lg-6">
@@ -234,30 +249,16 @@
                     <p class="fs-5 mb-5" style="color: #E5D5C5; max-width: 480px; line-height: 1.6;">
                         Search our database of 735 tested products...
                     </p>
-                    <a href="#" class="pill-btn pill-btn-red">Search All Products &rarr;</a>
+                    <a href="{{ route('products.index') }}" class="pill-btn pill-btn-red">Search All Products &rarr;</a>
                 </div>
 
                 <!-- Right side (Decorative tags) -->
                 <div class="col-lg-6 d-none d-lg-block position-relative" style="height: 300px;">
-                    <div class="floating-tag" style="top: 20%; left: 10%; background: rgba(255,255,255,0.1); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2); color: white; box-shadow: none;">
-                        <span style="color: #FF8A8A;">&#10007;</span> Titanium Dioxide
-                    </div>
-                    <div class="floating-tag" style="top: 60%; left: 30%; background: rgba(255,255,255,0.1); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2); color: white; box-shadow: none;">
-                        <span style="color: #FFB74D;">&#9888;</span> Paraffinum Liquidum
-                    </div>
-                    <div class="floating-tag" style="top: 10%; right: 10%; background: rgba(255,255,255,0.1); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2); color: white; box-shadow: none;">
-                        <span style="color: #81C784;">&#10003;</span> Shea Butter
-                    </div>
-                    <div class="floating-tag" style="bottom: 10%; right: 20%; background: rgba(255,255,255,0.1); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2); color: white; box-shadow: none;">
-                        <span style="color: #FFD54F;">&#9653;</span> Microplastics
-                    </div>
-                    <div class="floating-tag" style="top: 40%; right: 30%; background: rgba(255,255,255,0.1); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2); color: white; box-shadow: none;">
-                        <span style="color: #FF8A8A;">&#10007;</span> MI
-                    </div>
-                    <div class="floating-tag" style="bottom: 30%; left: 10%; background: rgba(255,255,255,0.1); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2); color: white; box-shadow: none;">
-                        <span style="color: #FFB74D;">&#9888;</span> PEG Compounds
-                    </div>
+
+                    <img src="{{ asset('images/frontend/cta-image.webp') }}" alt="Safe beauty updates"
+                        class="img-fluid">
                 </div>
+
             </div>
         </div>
     </div>
@@ -265,12 +266,12 @@
     <script>
         // Optional: Arrow rotation on collapse
         document.querySelectorAll('.card-expand-link').forEach(link => {
-            link.addEventListener('click', function () {
+            link.addEventListener('click', function() {
                 const icon = this.querySelector('.icon-arrow');
                 if (icon) {
-                    icon.style.transform = this.getAttribute('aria-expanded') === 'true' 
-                        ? 'rotate(180deg)' 
-                        : 'rotate(0deg)';
+                    icon.style.transform = this.getAttribute('aria-expanded') === 'true' ?
+                        'rotate(180deg)' :
+                        'rotate(0deg)';
                 }
             });
         });

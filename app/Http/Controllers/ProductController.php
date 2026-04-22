@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Plan;
 use App\Models\Product;
@@ -21,6 +22,8 @@ class ProductController extends Controller
 
         $searchCategories = Category::inRandomOrder()
             ->limit(10)->get();
+        $searchBrands = Brand::inRandomOrder()
+            ->limit(10)->get();
 
         $popularSearches = Category::orderByDesc('views')
             ->limit(10)->get()->shuffle();
@@ -28,6 +31,7 @@ class ProductController extends Controller
         return theme_view('products.index', [
             'products' => $products,
             'searchCategories' => $searchCategories,
+            'searchBrands' => $searchBrands,
             'popularSearches' => $popularSearches,
         ]);
     }
@@ -42,33 +46,67 @@ class ProductController extends Controller
         }
 
         if ($subCategory) {
-            $products->where('sub_category_id', $subCategory->id);
+            $products = $products->where('sub_category_id', $subCategory->id);
         }
 
         if ($subSubCategory) {
-            $products->where('sub_category_id', $subSubCategory->sub_category_id);
+            $products = $products->where('sub_category_id', $subSubCategory->sub_category_id);
         }
 
         if (request()->filled('search')) {
             $searchTerm = '%' . request('search') . '%';
             $searchTermStart = request('search') . '%';
-            $products->where(function ($query) use ($searchTerm) {
+            $products = $products->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'like', $searchTerm)
-                    ->orWhere('brand_name', 'like', $searchTerm)
                     ->orWhere('description', 'like', $searchTerm)
-                    ->orWhere('ingredients_inci', 'like', $searchTerm);
+                    ->orWhere('ingredients_inci', 'like', $searchTerm)
+                    ->orWhereHas('brand', function ($query) use ($searchTerm) {
+                        $query->where('name', 'like', $searchTerm);
+                    })
+                    ->orWhereHas('brand', function ($query) use ($searchTerm) {
+                        $query->where('name', 'like', $searchTerm);
+                    });
+                    
             });
         }
 
+        if (request()->filled('category')) {
+            $products = $products->whereHas('category', function ($query) {
+                $query->where('slug', request('category'));
+            });
+        }
+
+        if (request()->filled('brand')) {
+            $products = $products->whereHas('brand', function ($query) {
+                $query->where('slug', request('brand'));
+            });
+        }
+
+        if (request()->filled('min_price')) {
+            $products = $products->where('price', '>=', request('min_price'));
+        }
+
+        if (request()->filled('max_price')) {
+            $products = $products->where('price', '<=', request('max_price'));
+        }
+
+        if (request()->filled('organic_certified')) {
+            $products = $products->where('organic_certified', request('organic_certified'));
+        }
+
+        if (request()->filled('product_size')) {
+            $products = $products->where('product_size', 'like', '%' . request('product_size') . '%');
+        }
+
         if (request()->filled('featured')) {
-            $products->where('is_featured', Product::FEATURED);
+            $products = $products->where('is_featured', Product::FEATURED);
         }
 
         if (request()->filled('review_time')) {
             $dateFilter = request('review_time');
             switch ($dateFilter) {
                 case 'this_month':
-                    $products->whereHas('userReviews', function ($query) {
+                    $products = $products->whereHas('userReviews', function ($query) {
                         $query->approved()->whereBetween('created_at', [
                             Carbon::now()->startOfMonth(),
                             Carbon::now()->endOfMonth(),
@@ -76,7 +114,7 @@ class ProductController extends Controller
                     });
                     break;
                 case 'last_month':
-                    $products->whereHas('userReviews', function ($query) {
+                    $products = $products->whereHas('userReviews', function ($query) {
                         $query->approved()->whereBetween('created_at', [
                             Carbon::now()->subMonth()->startOfMonth(),
                             Carbon::now()->subMonth()->endOfMonth(),
@@ -84,12 +122,12 @@ class ProductController extends Controller
                     });
                     break;
                 case 'this_year':
-                    $products->whereHas('userReviews', function ($query) {
+                    $products = $products->whereHas('userReviews', function ($query) {
                         $query->approved()->whereYear('created_at', Carbon::now()->year);
                     });
                     break;
                 case 'last_year':
-                    $products->whereHas('userReviews', function ($query) {
+                    $products = $products->whereHas('userReviews', function ($query) {
                         $query->approved()->whereYear('created_at', Carbon::now()->subYear()->year);
                     });
                     break;
@@ -99,22 +137,36 @@ class ProductController extends Controller
         }
 
         if (request()->filled('best_rating')) {
-            $products->withCount([
+            $products = $products->withCount([
                 'userReviews as approved_reviews_count' => function ($query) {
                     $query->approved();
                 }
             ])->orderByDesc('approved_reviews_count')->orderByDesc('products.view_count');
         } else {
             if (isset($searchTermStart)) {
-                $products->orderByRaw("CASE WHEN name LIKE ? THEN 1 ELSE 2 END", [$searchTermStart])->orderByDesc('products.view_count');
+                $products = $products->orderByRaw(
+                    "CASE WHEN name LIKE ? THEN 1 ELSE 2 END",
+                    [$searchTermStart]
+                )->orderByDesc('products.view_count');
             } else {
-                $products->orderByDesc('products.view_count');
+                $products = $products->orderByDesc('products.view_count');
             }
         }
 
         $products = $products->with(['category', 'subCategory.subSubCategories'])->paginate(30);
 
-        $products->appends(request()->only(['search', 'review_time', 'featured', 'best_rating']));
+        $products->appends(request()->only([
+            'search',
+            'category',
+            'brand',
+            'min_price',
+            'max_price',
+            'organic_certified',
+            'product_size',
+            'review_time',
+            'featured',
+            'best_rating',
+        ]));
 
         $products->getCollection()->transform(function ($product) {
             $product->cached_reviews = Cache::remember(
@@ -147,7 +199,6 @@ class ProductController extends Controller
 
         return $products;
     }
-
     public function show($slug)
     {
         $sessionId = session()->getId();

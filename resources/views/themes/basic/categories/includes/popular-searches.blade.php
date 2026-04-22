@@ -4,8 +4,8 @@
         <div class="tags justify-content-center row g-3">
             @foreach ($popularSearches as $popularSearch)
                 <div class="col-auto">
-                    <a href="{{ $popularSearch->getLink(request()->all()) }}">
-                        <div class="tag tag-primary"><i class="fa fa-search me-2"></i>{{ $popularSearch->trans->name }}
+                    <a href="/products?category={{ $popularSearch->slug }}">
+                         <div class="tag tag-primary"><i class="fa fa-search me-2"></i>{{ $popularSearch->trans->name }}
                         </div>
                     </a>
                 </div>
