@@ -109,6 +109,7 @@ Route::middleware('maintenance')->group(function () {
         });
         Route::name('user.')->prefix('user')->group(function () {
             Route::get('{username}', 'UserController@profile')->name('profile');
+            Route::get('{username}/reviews', 'UserController@reviews')->name('reviews');
             Route::middleware(['demo', 'auth'])->group(function () {
                 Route::name('settings.')->prefix('{username}/settings')->group(function () {
                     Route::get('/', 'UserController@settings')->name('index');

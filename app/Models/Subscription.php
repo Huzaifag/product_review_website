@@ -56,6 +56,7 @@ class Subscription extends Model
         'plan_id',
         'user_id',
         'expiry_at',
+        'started_at',
         'last_notification_at',
     ];
 
@@ -63,6 +64,7 @@ class Subscription extends Model
     {
         return [
             'expiry_at' => 'datetime',
+            'started_at' => 'datetime',
             'last_notification_at' => 'datetime',
         ];
     }

@@ -21,12 +21,19 @@ class UserController extends Controller
             ->whereDataCompleted()
             ->firstOrFail();
 
-        $reviews = $user->productReviews()
-            ->orderbyDesc('id')->paginate(20);
+        // Get plan usage data
+        $userProductViewCount = $user->userProductViewCounts()->with('plan')->latest()->first();
+        $plan = $userProductViewCount?->plan;
+        $productIds = $userProductViewCount?->getViewedProductIds() ?? [];
+        $productViewed = \App\Models\Product::whereIn('id', $productIds)->get();
+        $subscription = $user->subscription()->first();
 
         return theme_view('user.profile', [
             'user' => $user,
-            'reviews' => $reviews,
+            'plan' => $plan,
+            'subscription' => $subscription,
+            'userProductViewCount' => $userProductViewCount,
+            'productViewed' => $productViewed,
         ]);
     }
 
@@ -279,6 +286,21 @@ class UserController extends Controller
 
         toastr()->success(d_trans('Your documents has been submitted successfully'));
         return back();
+    }
+
+    public function reviews($username)
+    {
+        $user = User::where('username', $username)
+            ->whereDataCompleted()
+            ->firstOrFail();
+
+        $reviews = $user->productReviews()
+            ->orderbyDesc('id')->paginate(20);
+
+        return theme_view('user.reviews', [
+            'user' => $user,
+            'reviews' => $reviews,
+        ]);
     }
 
     public function getCurrentUser($username)

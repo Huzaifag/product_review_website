@@ -57,4 +57,9 @@ class UserProductViewCount extends Model
     {
         return $this->product_ids ?? [];
     }
+
+    public function viewedProducts()
+    {
+        return $this->hasMany(Product::class, 'id', 'product_ids');
+    }
 }

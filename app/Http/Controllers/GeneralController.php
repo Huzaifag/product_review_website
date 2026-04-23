@@ -218,7 +218,7 @@ class GeneralController extends Controller
         $plan = $userProductViewCount?->plan;
         $productIds = $userProductViewCount?->getViewedProductIds() ?? [];
         $productViewed = Product::whereIn('id', $productIds)->get();
-        $subscription = $user->subscription;
+        $subscription = $user->subscription()->first();
 
         if (!$plan) {
             toastr()->error(d_trans('You do not have an active plan'));

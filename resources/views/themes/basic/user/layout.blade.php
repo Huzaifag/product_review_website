@@ -28,11 +28,20 @@
                             @endif
                         </h1>
                         <div class="meta justify-content-center justify-content-lg-start mt-2">
+                            <div class="meta-item">
+                               {{ '@' . $user->username }}
+                            </div>
                             @if ($user->country)
                                 <a href="{{ route('businesses.index', ['country' => $user->country]) }}"
                                     class="meta-item">
                                     <i class="bi bi-geo-alt me-2"></i>{{ $user->getCountry() }}
                                 </a>
+                            @endif
+                            @if ($user->created_at)
+                                <div class="meta-item">
+                                    <i class="bi bi-calendar3 me-2"></i>{{ d_trans('Joined') }}
+                                    {{ $user->created_at->format('M Y') }}
+                                </div>
                             @endif
                             <div class="meta-item">
                                 <i
@@ -50,19 +59,18 @@
                 <div class="section-inner">
                     <div class="container container-custom-xs">
                         <div class="row row-cols-auto g-2">
-                            
                             <div class="col">
                                 <a href="{{ $user->getProfileLink() }}"
                                     class="custom-tab {{ request()->routeIs('user.profile') ? 'current' : '' }}">
-                                    <i class="bi bi-star"></i>
-                                    <span>{{ d_trans('Reviews') }}</span>
+                                    <i class="bi bi-graph-up"></i>
+                                    <span>{{ d_trans('Plan Usage') }}</span>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="{{ route('plans.usage') }}"
-                                    class="custom-tab {{ request()->routeIs('plans.usage') ? 'current' : '' }}">
-                                    <i class="bi bi-graph-up"></i>
-                                    <span>{{ d_trans('Plan Usage') }}</span>
+                                <a href="{{ route('user.reviews', strtolower($user->username)) }}"
+                                    class="custom-tab {{ request()->routeIs('user.reviews') ? 'current' : '' }}">
+                                    <i class="bi bi-star"></i>
+                                    <span>{{ d_trans('Reviews') }}</span>
                                 </a>
                             </div>
                             <div class="col">
