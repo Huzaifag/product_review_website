@@ -103,9 +103,13 @@ class PaymentController extends Controller
                 [
                     'plan_id' => $plan->id,
                     'expiry_at' => $plan->isLifetime() ? null : now()->addDays($plan->getIntervalDays()),
+                    'started_at' => now(),
                     'last_notification_at' => null,
                 ]
             );
+
+            //Send Email Notification to User
+            $subscription->sendSubscriptionEmailNotification();
 
             // updateOrCreate handles both branches — no if/else needed
             UserProductViewCount::updateOrCreate(

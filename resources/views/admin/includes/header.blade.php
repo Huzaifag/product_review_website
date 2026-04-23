@@ -58,10 +58,10 @@
                         {{ d_trans('Quick Access') }}
                     </button>
                     <ul class="dropdown-menu">
-                        <li>
+                        {{-- <li>
                             <a class="dropdown-item"
                                 href="{{ route('admin.settings.themes.index') }}">{{ d_trans('Themes') }}</a>
-                        </li>
+                        </li> --}}
                         <li>
                             <a class="dropdown-item"
                                 href="{{ route('admin.settings.languages.index') }}">{{ d_trans('Languages') }}</a>

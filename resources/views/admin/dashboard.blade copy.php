@@ -78,99 +78,108 @@
             </div>
         </div>
     @endif
-    <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xxl-4 mb-4">
+    <div class="row g-3 row-cols-1 row-cols-md-2 row-cols-xxl-4 mb-4 dashboard-premium-counters">
         <div class="col">
-            <div class="split-stat-card theme-brand-base">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('Total Products') }}</p>
-                    <h3 class="split-card-number">{{ $counters['products'] }}</h3>
-                </div>
-                <div class="split-card-icon">
+            <div class="vironeer-counter-card premium-counter-card premium-counter-tone-1">
+                <div class="vironeer-counter-card-bg"></div>
+                <div class="vironeer-counter-card-icon">
                     <i class="bi bi-briefcase"></i>
                 </div>
+                <div class="vironeer-counter-card-meta">
+                    <p class="vironeer-counter-card-title">{{ d_trans('Total Products') }}</p>
+                    <p class="vironeer-counter-card-number">{{ numberFormat($counters['products']) }}</p>
+                    <p class="premium-counter-footnote">{{ d_trans('Active inventory') }}</p>
+                </div>
             </div>
         </div>
-
         <div class="col">
-            <div class="split-stat-card theme-brand-copper">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('Total Categories') }}</p>
-                    <h3 class="split-card-number">{{ $counters['categories'] }}</h3>
-                </div>
-                <div class="split-card-icon">
+            <div class="vironeer-counter-card premium-counter-card premium-counter-tone-2">
+                <div class="vironeer-counter-card-bg"></div>
+                <div class="vironeer-counter-card-icon">
                     <i class="bi bi-star-fill"></i>
                 </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="split-stat-card theme-brand-clay">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('Total SubCategories') }}</p>
-                    <h3 class="split-card-number">{{ $counters['subcategories'] }}</h3>
-                </div>
-                <div class="split-card-icon">
-                    <i class="bi bi-star"></i>
+                <div class="vironeer-counter-card-meta">
+                    <p class="vironeer-counter-card-title">{{ d_trans('Total Categories') }}</p>
+                    <p class="vironeer-counter-card-number">{{ numberFormat($counters['categories']) }}</p>
+                    <p class="premium-counter-footnote">{{ d_trans('Main groupings') }}</p>
                 </div>
             </div>
         </div>
-
         <div class="col">
-            <div class="split-stat-card theme-brand-sienna">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('Brands') }}</p>
-                    <h3 class="split-card-number">{{ $counters['brands'] }}</h3>
+            <div class="vironeer-counter-card premium-counter-card premium-counter-tone-3">
+                <div class="vironeer-counter-card-bg"></div>
+                <div class="vironeer-counter-card-icon">
+                    <i class="bi bi-diagram-3"></i>
                 </div>
-                <div class="split-card-icon">
+                <div class="vironeer-counter-card-meta">
+                    <p class="vironeer-counter-card-title">{{ d_trans('Total SubCategories') }}</p>
+                    <p class="vironeer-counter-card-number">{{ numberFormat($counters['subcategories']) }}</p>
+                    <p class="premium-counter-footnote">{{ d_trans('Nested collections') }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="vironeer-counter-card premium-counter-card premium-counter-tone-4">
+                <div class="vironeer-counter-card-bg"></div>
+                <div class="vironeer-counter-card-icon">
                     <i class="bi bi-flag"></i>
                 </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="split-stat-card theme-brand-gold">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('User Reviews') }}</p>
-                    <h3 class="split-card-number">{{ $counters['reviews'] }}</h3>
-                </div>
-                <div class="split-card-icon">
-                    <i class="bi bi-chat-right-quote"></i>
+                <div class="vironeer-counter-card-meta">
+                    <p class="vironeer-counter-card-title">{{ d_trans('Brands') }}</p>
+                    <p class="vironeer-counter-card-number">{{ numberFormat($counters['brands']) }}</p>
+                    <p class="premium-counter-footnote">{{ d_trans('Published brands') }}</p>
                 </div>
             </div>
         </div>
-
         <div class="col">
-            <div class="split-stat-card theme-brand-sand">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('Users') }}</p>
-                    <h3 class="split-card-number">{{ $counters['users'] }}</h3>
+            <div class="vironeer-counter-card premium-counter-card premium-counter-tone-5">
+                <div class="vironeer-counter-card-bg"></div>
+                <div class="vironeer-counter-card-icon">
+                    <i class="bi bi-chat-quote"></i>
                 </div>
-                <div class="split-card-icon">
+                <div class="vironeer-counter-card-meta">
+                    <p class="vironeer-counter-card-title">{{ d_trans('User Reviews') }}</p>
+                    <p class="vironeer-counter-card-number">{{ numberFormat($counters['reviews']) }}</p>
+                    <p class="premium-counter-footnote">{{ d_trans('Customer opinions') }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="vironeer-counter-card premium-counter-card premium-counter-tone-6">
+                <div class="vironeer-counter-card-bg"></div>
+                <div class="vironeer-counter-card-icon">
                     <i class="bi bi-people"></i>
                 </div>
+                <div class="vironeer-counter-card-meta">
+                    <p class="vironeer-counter-card-title">{{ d_trans('Users') }}</p>
+                    <p class="vironeer-counter-card-number">{{ numberFormat($counters['users']) }}</p>
+                    <p class="premium-counter-footnote">{{ d_trans('Registered accounts') }}</p>
+                </div>
             </div>
         </div>
-
         <div class="col">
-            <div class="split-stat-card theme-brand-brick">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('KYC Verifications') }}</p>
-                    <h3 class="split-card-number">{{ $counters['kyc_verifications'] }}</h3>
-                </div>
-                <div class="split-card-icon">
+            <div class="vironeer-counter-card premium-counter-card premium-counter-tone-7">
+                <div class="vironeer-counter-card-bg"></div>
+                <div class="vironeer-counter-card-icon">
                     <i class="bi bi-person-check"></i>
                 </div>
+                <div class="vironeer-counter-card-meta">
+                    <p class="vironeer-counter-card-title">{{ d_trans('KYC Verifications') }}</p>
+                    <p class="vironeer-counter-card-number">{{ numberFormat($counters['kyc_verifications']) }}</p>
+                    <p class="premium-counter-footnote">{{ d_trans('Approved profiles') }}</p>
+                </div>
             </div>
         </div>
-
         <div class="col">
-            <div class="split-stat-card theme-brand-mahogany">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('KYC Pending') }}</p>
-                    <h3 class="split-card-number">{{ $counters['pending_kyc_verifications'] }}</h3>
-                </div>
-                <div class="split-card-icon">
+            <div class="vironeer-counter-card premium-counter-card premium-counter-tone-8">
+                <div class="vironeer-counter-card-bg"></div>
+                <div class="vironeer-counter-card-icon">
                     <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="vironeer-counter-card-meta">
+                    <p class="vironeer-counter-card-title">{{ d_trans('KYC Pending') }}</p>
+                    <p class="vironeer-counter-card-number">{{ numberFormat($counters['pending_kyc_verifications']) }}</p>
+                    <p class="premium-counter-footnote">{{ d_trans('Waiting for review') }}</p>
                 </div>
             </div>
         </div>
@@ -179,8 +188,7 @@
         <div class="col-12 col-lg-7 col-xxl-8">
             <div class="box h-100">
                 <div class="box-header">
-                    <p class="box-header-title large mb-0">
-                        {{ d_trans('New users registered each day during this month') }}</p>
+                    <p class="box-header-title large mb-0">{{ d_trans('New users registered each day during this month') }}</p>
                     <div class="box-header-action">
                         <div class="drop-down" data-dropdown>
                             <button class="drop-down-title btn btn-reset btn-sm">
@@ -273,8 +281,10 @@
                             @foreach ($products as $product)
                                 <div class="item d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center">
-                                        <a href="{{ route('admin.products.show', $product->id) }}" class="item-img me-3">
-                                            <img src="{{ asset($product->getImageLink()) }}" alt="{{ $product->name }}">
+                                        <a href="{{ route('admin.products.show', $product->id) }}"
+                                            class="item-img me-3">
+                                            <img src="{{ asset($product->getImageLink()) }}"
+                                                alt="{{ $product->name }}">
                                         </a>
                                         <div>
                                             <a href="{{ route('admin.products.show', $product->id) }}"
@@ -327,8 +337,7 @@
         <div class="col-12">
             <div class="box h-100">
                 <div class="box-header">
-                    <p class="box-header-title large mb-0">
-                        {{ d_trans('User reviews submitted each day during this month') }}</p>
+                    <p class="box-header-title large mb-0">{{ d_trans('User reviews submitted each day during this month') }}</p>
                 </div>
                 <div class="box-body">
                     <div class="dashboard-chart">
@@ -347,125 +356,133 @@
     @push('styles_libs')
         <link rel="stylesheet" href="{{ asset('vendor/libs/vironeer/counter-cards.min.css') }}">
         <style>
-            /* --- Split Layout Stat Cards --- */
-
-            .split-stat-card {
+            .dashboard-premium-counters .premium-counter-card {
                 position: relative;
-                display: flex;
-                align-items: center;
-                border-radius: 8px;
-                padding: 24px 20px;
-                color: #ffffff;
                 overflow: hidden;
-                min-height: 110px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                border-radius: 18px;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                box-shadow: 0 16px 30px -14px rgba(5, 10, 25, 0.45);
+                min-height: 160px;
+                transition: transform 0.25s ease, box-shadow 0.25s ease;
+                isolation: isolate;
             }
 
-            .split-stat-card:hover {
+            .dashboard-premium-counters .premium-counter-card:hover {
                 transform: translateY(-4px);
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 24px 34px -18px rgba(5, 10, 25, 0.6);
             }
 
-            /* Left Content */
-            .split-card-content {
-                position: relative;
-                z-index: 2;
-                flex: 1;
-            }
-
-            .split-card-title {
-                font-size: 13px;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                margin: 0 0 8px 0;
-                opacity: 0.95;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            }
-
-            .split-card-number {
-                font-size: 28px;
-                font-weight: 700;
-                margin: 0;
-                line-height: 1;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            }
-
-            /* Right Curved Shape */
-            .split-card-icon {
+            .dashboard-premium-counters .premium-counter-card .vironeer-counter-card-bg {
                 position: absolute;
-                right: 0;
-                top: 0;
-                height: 100%;
-                width: 35%;
-                /* Adjusts how wide the curve section is */
-                background-color: var(--shape-color);
-                border-top-left-radius: 120px;
-                /* Creates the curve */
-                border-bottom-left-radius: 120px;
-                /* Creates the curve */
+                inset: auto -42px -42px auto;
+                width: 170px;
+                height: 170px;
+                border-radius: 999px;
+                background: linear-gradient(145deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.03));
+                opacity: 0.55;
+                z-index: -1;
+            }
+
+
+            .dashboard-premium-counters .premium-counter-card .vironeer-counter-card-icon {
+                position: absolute;
+                inset: auto 32px 28px auto;
+                width: auto;
+                height: auto;
                 display: flex;
-                justify-content: center;
                 align-items: center;
-                font-size: 32px;
+                justify-content: center;
+                background: none;
+                box-shadow: none;
+                border: none !important;
+                z-index: 0;
+            }
+
+            .dashboard-premium-counters .premium-counter-card .vironeer-counter-card-icon i {
+                font-size: 2.8rem;
+                color: rgba(255, 255, 255, 0.4);
+            }
+
+            .dashboard-premium-counters .premium-counter-card .vironeer-counter-card-meta {
+                position: relative;
                 z-index: 1;
-                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
-            /* Optional hover effect on the shape */
-            .split-stat-card:hover .split-card-icon {
-                width: 38%;
+            .dashboard-premium-counters .premium-counter-card .vironeer-counter-card-title {
+                opacity: 0.95;
+                font-size: 0.84rem;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 5px;
             }
 
-            /* --- 8 Unique Color Themes --- */
-
-            /* 1. Base Brand Color */
-            .theme-brand-base {
-                background: linear-gradient(120deg, #ba511d 0%, #d4724a 100%);
-                --shape-color: #8a3a12;
+            .dashboard-premium-counters .premium-counter-card .vironeer-counter-card-number {
+                font-size: 1.95rem;
+                font-weight: 700;
+                line-height: 1.1;
+                margin-bottom: 6px;
             }
 
-            /* 2. Soft Blush Copper */
-            .theme-brand-copper {
-                background: linear-gradient(120deg, #c96340 0%, #dea080 100%);
-                --shape-color: #9a4228;
+            .dashboard-premium-counters .premium-counter-badge {
+                position: absolute;
+                top: 12px;
+                right: 14px;
+                border-radius: 999px;
+                padding: 3px 10px;
+                font-size: 0.68rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                font-weight: 600;
+                color: rgba(255, 255, 255, 0.95);
+                background: rgba(0, 0, 0, 0.18);
             }
 
-            /* 3. Warm Peach Clay */
-            .theme-brand-clay {
-                background: linear-gradient(120deg, #d4845a 0%, #e8b595 100%);
-                --shape-color: #ba511d;
+            .dashboard-premium-counters .premium-counter-footnote {
+                margin-bottom: 0;
+                font-size: 0.78rem;
+                color: rgba(255, 255, 255, 0.85);
             }
 
-            /* 4. Dusty Rose Sienna */
-            .theme-brand-sienna {
-                background: linear-gradient(120deg, #c05535 0%, #d98870 100%);
-                --shape-color: #8f3820;
+            .dashboard-premium-counters .premium-counter-tone-1 {
+                background: linear-gradient(135deg, #273d7f 0%, #385fca 60%, #53b0f7 100%);
             }
 
-            /* 5. Soft Amber Gold */
-            .theme-brand-gold {
-                background: linear-gradient(120deg, #c97a2a 0%, #e0aa6a 100%);
-                --shape-color: #9a5518;
+            .dashboard-premium-counters .premium-counter-tone-2 {
+                background: linear-gradient(135deg, #21455e 0%, #2f7a9f 60%, #3eb9cf 100%);
             }
 
-            /* 6. Linen Sand */
-            .theme-brand-sand {
-                background: linear-gradient(120deg, #d4a07a 0%, #e8c9aa 100%);
-                --shape-color: #b07045;
+            .dashboard-premium-counters .premium-counter-tone-3 {
+                background: linear-gradient(135deg, #462774 0%, #6e3cb8 60%, #9e61dc 100%);
             }
 
-            /* 7. Soft Brick */
-            .theme-brand-brick {
-                background: linear-gradient(120deg, #b84535 0%, #d08070 100%);
-                --shape-color: #8a2e20;
+            .dashboard-premium-counters .premium-counter-tone-4 {
+                background: linear-gradient(135deg, #4d3158 0%, #8b4376 60%, #dd6088 100%);
             }
 
-            /* 8. Warm Mist Mahogany */
-            .theme-brand-mahogany {
-                background: linear-gradient(120deg, #9a4020 0%, #c07a5a 100%);
-                --shape-color: #6e2a12;
+            .dashboard-premium-counters .premium-counter-tone-5 {
+                background: linear-gradient(135deg, #29425a 0%, #326881 60%, #4eb8bb 100%);
+            }
+
+            .dashboard-premium-counters .premium-counter-tone-6 {
+                background: linear-gradient(135deg, #3e3054 0%, #5d3f84 60%, #8f5ab6 100%);
+            }
+
+            .dashboard-premium-counters .premium-counter-tone-7 {
+                background: linear-gradient(135deg, #1f514e 0%, #2e7c67 60%, #52b583 100%);
+            }
+
+            .dashboard-premium-counters .premium-counter-tone-8 {
+                background: linear-gradient(135deg, #5a2f37 0%, #a84b4f 60%, #e08457 100%);
+            }
+
+            @media (max-width: 575.98px) {
+                .dashboard-premium-counters .premium-counter-card {
+                    min-height: 146px;
+                }
+
+                .dashboard-premium-counters .premium-counter-card .vironeer-counter-card-number {
+                    font-size: 1.7rem;
+                }
             }
         </style>
     @endpush

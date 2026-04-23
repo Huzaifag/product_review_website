@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 
 class Subscription extends Model
 {
@@ -86,5 +87,35 @@ class Subscription extends Model
             $q->whereNull('expiry_at')
                 ->orWhere('expiry_at', '>', Carbon::now());
         });
+    }
+
+    public function sendSubscriptionEmailNotification()
+    {
+        // send mail to user when he buys subscription
+
+        if (!config('settings.smtp.status')) {
+            Log::warning('SMTP is disabled. Cannot send subscription email notification.');
+            return;
+        }
+
+        try {
+            $email = $this->user->email;
+            $subject = 'Subscription Activated: ' . $this->plan->name;
+            $msg = '<p>Dear ' . $this->user->name . ',</p>
+                    <p>Thank you for subscribing to our ' . $this->plan->name . ' plan!</p>
+                    <p>Your subscription is now active and you can start enjoying the benefits of your plan.</p>
+                    <p>If you have any questions or need assistance, please feel free to contact our support team.</p>
+                    <p>Best regards,<br>' . config('app.name') . ' Team</p>';
+
+            \Mail::send([], [], function ($message) use ($msg, $email, $subject) {
+                $message->to($email)
+                    ->subject($subject)
+                    ->html($msg);
+            });
+
+
+        } catch (\Exception $e) {
+            Log::error('Failed to send subscription email notification: ' . $e->getMessage());
+        }
     }
 }

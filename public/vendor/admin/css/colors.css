@@ -2,6 +2,7 @@
   --primary_color: 184, 134, 11;
   --secondary_color: 28, 28, 28;
   --background_color: 249, 250, 251;
-  --sidebar_background_color: 28, 28, 28;
+  /* Make side bar background red */
+  --sidebar_background_color: 255, 0, 0;
   --navbar_background_color: 255, 255, 255;
 }
