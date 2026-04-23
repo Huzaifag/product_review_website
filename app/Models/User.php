@@ -329,4 +329,17 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(UserProductViewCount::class);
     }
+
+    // Plan and Subscription related methods
+        public function subscription()
+        {
+            return $this->hasOne(Subscription::class);
+        }
+
+        public function currentPlan()
+        {
+            return $this->subscription ? $this->subscription->plan : null;
+        }
+
+        
 }

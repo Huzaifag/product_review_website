@@ -20,7 +20,7 @@ class TransactionController extends Controller
 
         $statuses = Transaction::getAvailableStatues();
 
-        $transactions = Transaction::whereNot('status', Transaction::STATUS_UNPAID);
+        $transactions = Transaction::with(['user' , 'plan'])->whereNot('status', Transaction::STATUS_UNPAID);
 
         if (request()->filled('search')) {
             $searchTerm = '%' . request('search') . '%';

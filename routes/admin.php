@@ -2,8 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::
-        namespace('Auth')->group(function () {
+Route::namespace('Auth')->group(function () {
             Route::get('/', function () {
                 return redirect()->route('admin.login');
             })->name('index');
@@ -57,7 +56,11 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
     Route::resource('products', 'ProductController')->middleware('demo');
     Route::resource('brands', 'BrandController')->middleware('demo');
     Route::resource('plans', 'PlanController')->except(['show']);
+    Route::resource('transactions', 'TransactionController')->middleware('demo');
     Route::resource('payment-methods', 'PaymentGatewayController')->middleware('demo');
+
+    //Transactions
+    
     // payment-methods.sortable
     Route::post('payment-methods/sortable', 'PaymentGatewayController@sortable')->name('payment-methods.sortable')->middleware('demo');
     Route::resource('ingredients-library', 'IngredientLibraryController')->middleware('demo');
@@ -168,19 +171,6 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
             Route::post('{advertisement}', 'AdvertisementController@update')->name('update');
         });
 
-        Route::middleware(['license:2', 'subscription.disable'])->group(function () {
-            Route::post('plans/sortable', 'PlanController@sortable')->name('plans.sortable');
-
-            Route::resource('subscriptions', 'SubscriptionController')->except(['edit', 'update']);
-            Route::name('transactions.')->prefix('transactions')->group(function () {
-                Route::get('/', 'TransactionController@index')->name('index');
-                Route::get('{transaction}', 'TransactionController@show')->name('show');
-                Route::get('{transaction}/payment-proof/view', 'TransactionController@paymentProof')->name('payment-proof');
-                Route::post('{transaction}/paid', 'TransactionController@paid')->name('paid');
-                Route::post('{transaction}/cancel', 'TransactionController@cancel')->name('cancel');
-                Route::delete('{transaction}', 'TransactionController@destroy')->name('destroy')->middleware('demo');
-            });
-        });
 
         Route::name('newsletter.')->prefix('newsletter')->group(function () {
             Route::get('settings', 'NewsletterController@settings')->name('settings');

@@ -53,8 +53,8 @@ class Subscription extends Model
     }
 
     protected $fillable = [
-        'business_owner_id',
         'plan_id',
+        'user_id',
         'expiry_at',
         'last_notification_at',
     ];
@@ -69,7 +69,7 @@ class Subscription extends Model
 
     public function owner()
     {
-        return $this->belongsTo(BusinessOwner::class, 'business_owner_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function plan()

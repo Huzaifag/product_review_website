@@ -218,7 +218,7 @@ class GeneralController extends Controller
         $plan = $userProductViewCount?->plan;
         $productIds = $userProductViewCount?->getViewedProductIds() ?? [];
         $productViewed = Product::whereIn('id', $productIds)->get();
-
+        $subscription = $user->subscription;
 
         if (!$plan) {
             toastr()->error(d_trans('You do not have an active plan'));
@@ -226,6 +226,7 @@ class GeneralController extends Controller
         }
         return theme_view('plans.usage', [
             'plan' => $plan,
+            'subscription' => $subscription,
             'userProductViewCount' => $userProductViewCount,
             'productViewed' => $productViewed,
             'user' => $user,

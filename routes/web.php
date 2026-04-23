@@ -130,8 +130,13 @@ Route::middleware('maintenance')->group(function () {
             Route::post('contact-us', 'GeneralController@contactSend')->name('contact');
         });
         Route::get('plans', 'GeneralController@showPlans')->name('plans');
-         Route::get('plans/usage', 'GeneralController@planUsage')->name('plans.usage')->middleware('auth');
+        Route::get('plans/usage', 'GeneralController@planUsage')->name('plans.usage')->middleware('auth');
         Route::get('plans/{slug}', 'GeneralController@planDetails')->name('plans.details');
+        Route::middleware('auth')->prefix('payment')->name('payment.')->group(function () {
+            Route::get('checkout/{slug}', 'PaymentController@checkout')->name('checkout');
+            Route::get('success', 'PaymentController@success')->name('success');
+            Route::get('cancel', 'PaymentController@cancel')->name('cancel');
+        });
        
         Route::get('{slug}', 'GeneralController@page')->name('page');
     });

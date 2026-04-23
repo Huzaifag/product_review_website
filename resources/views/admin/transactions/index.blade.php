@@ -97,7 +97,8 @@
                 <table class="table">
                     <thead>
                         <th><i class="fa-solid fa-hashtag"></i></th>
-                        <th>{{ d_trans('Business Owner') }}</th>
+                        <th>{{ d_trans('Customer') }}</th>
+                        <th>{{ d_trans('Plan') }}</th>
                         <th class="text-center">{{ d_trans('SubTotal') }}</th>
                         <th class="text-center">{{ d_trans('Tax') }}</th>
                         <th class="text-center">{{ d_trans('Fees') }}</th>
@@ -108,19 +109,20 @@
                     </thead>
                     <tbody>
                         @forelse ($transactions as $trx)
-                            @php
-                                $owner = $trx->owner;
-                            @endphp
                             <tr>
+                                <td class="text-dark">
+                                    <i class="fa-solid fa-hashtag me-1"></i>{{ $trx->id }}
+                                </td>
                                 <td>
-                                    <a href="{{ route('admin.transactions.show', $trx->id) }}">
-                                        <i class="fa-solid fa-hashtag me-1"></i>{{ $trx->id }}
+                                    <a href="{{ $trx->user_id ? route('admin.members.users.edit', $trx->user_id) : '#' }}"
+                                        class="text-dark">
+                                        <i class="fa-regular fa-user me-2"></i>
+                                        {{ $trx->user?->getName() ?? $trx->payer_email ?? d_trans('Unknown') }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ route('admin.members.business-owners.edit', $owner->id) }}"
-                                        class="text-dark">
-                                        <i class="fa-regular fa-user me-2"></i>{{ $owner->getName() }}
+                                    <a href="{{ route('admin.plans.edit', $trx->plan_id) }}" class="text-dark">
+                                        <i class="fa-solid fa-cubes me-2"></i>{{ $trx->plan->name }}
                                     </a>
                                 </td>
                                 <td class="text-center text-dark">{{ getAmount($trx->amount) }}</td>
@@ -131,17 +133,11 @@
                                 <td class="text-center text-dark"><strong>{{ getAmount($trx->total) }}</strong></td>
                                 <td class="text-center">
                                     @if ($trx->isPending())
-                                        <div class="badge bg-warning">
-                                            {{ $trx->getStatusName() }}
-                                        </div>
-                                    @elseif($trx->isPaid())
-                                        <div class="badge bg-success">
-                                            {{ $trx->getStatusName() }}
-                                        </div>
-                                    @elseif($trx->isCancelled())
-                                        <div class="badge bg-danger">
-                                            {{ $trx->getStatusName() }}
-                                        </div>
+                                        <div class="badge bg-warning">{{ $trx->getStatusName() }}</div>
+                                    @elseif ($trx->isPaid())
+                                        <div class="badge bg-success">{{ $trx->getStatusName() }}</div>
+                                    @elseif ($trx->isCancelled())
+                                        <div class="badge bg-danger">{{ $trx->getStatusName() }}</div>
                                     @endif
                                 </td>
                                 <td class="text-center">{{ dateFormat($trx->created_at) }}</td>
@@ -154,18 +150,18 @@
                                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                                             <li>
                                                 <a class="dropdown-item"
-                                                    href="{{ route('admin.transactions.show', $trx->id) }}"><i
-                                                        class="fa-solid fa-desktop me-2"></i>{{ d_trans('Details') }}</a>
+                                                    href="{{ route('admin.transactions.show', $trx->id) }}">
+                                                    <i class="fa-solid fa-desktop me-2"></i>{{ d_trans('Details') }}
+                                                </a>
                                             </li>
-                                            <li>
-                                                <hr class="dropdown-divider" />
-                                            </li>
+                                            <li><hr class="dropdown-divider" /></li>
                                             <li>
                                                 <form action="{{ route('admin.transactions.destroy', $trx->id) }}"
                                                     method="POST">
                                                     @csrf @method('DELETE')
-                                                    <button class="dropdown-item action-confirm text-danger"><i
-                                                            class="far fa-trash-alt me-2"></i>{{ d_trans('Delete') }}</button>
+                                                    <button class="dropdown-item action-confirm text-danger">
+                                                        <i class="far fa-trash-alt me-2"></i>{{ d_trans('Delete') }}
+                                                    </button>
                                                 </form>
                                             </li>
                                         </ul>
@@ -173,7 +169,7 @@
                                 </td>
                             </tr>
                         @empty
-                            @include('admin.partials.empty-table', ['colspan' => 9])
+                            @include('admin.partials.empty-table', ['colspan' => 10])
                         @endforelse
                     </tbody>
                 </table>

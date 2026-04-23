@@ -71,6 +71,12 @@
                         <span><i class="fa-solid fa-list"></i>{{ d_trans('Plans') }}</span>
                     </p>
                 </a>
+                <a href="{{ route('admin.transactions.index') }}"
+                    class="dashboard-sidebar-link {{ currentLink('transactions', 2) }}">
+                    <p class="dashboard-sidebar-link-title">
+                        <span><i class="fa-solid fa-exchange-alt"></i>{{ d_trans('Transactions') }}</span>
+                    </p>
+                </a>
                 <a href="{{ route('admin.ingredients-library.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('ingredients-library', 2) }}">
                     <p class="dashboard-sidebar-link-title">

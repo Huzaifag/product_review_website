@@ -7,14 +7,52 @@ use App\Http\Controllers\Controller;
 use App\Jobs\User\SendBusinessReviewRejectedNotification;
 use App\Models\BusinessReview;
 use App\Models\BusinessReviewReport;
+use App\Models\PaymentGateway;
 use App\Models\UserReview;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $reviews = UserReview::with('user', 'product')->latest()->paginate(20);
+        
+        $query = UserReview::with(['user', 'product'])->latest();
+
+        // Search (by review text, user name, product name)
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('body', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('firstname', 'like', "%{$search}%")
+                            ->orWhere('lastname', 'like', "%{$search}%")
+                            ->orWhere('username', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('product', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // Optional: filter by rating
+        if ($request->filled('rating')) {
+            $query->where('rating', $request->rating);
+        }
+
+        // Optional: filter by status        
+        if ($request->filled('status')) {
+            if ($request->status === 'approved') {
+                $query->where('is_approved', true);
+            } elseif ($request->status === 'rejected') {
+                $query->where('is_approved', false);
+            }
+        }
+
+        $reviews = $query->paginate(20)->withQueryString();
+
         return view('admin.reviews.index', compact('reviews'));
     }
 
@@ -29,15 +67,16 @@ class ReviewController extends Controller
         $review->is_approved = true;
         $review->save();
         toastr()->success(d_trans('Review approved successfully'));
-       return redirect()->route('admin.reviews.show' , $review->id);
+        return redirect()->route('admin.reviews.show', $review->id);
     }
 
     // Reject a review
     public function reject(UserReview $review)
-    {        $review->is_approved = false;
+    {
+        $review->is_approved = false;
         $review->save();
         toastr()->success(d_trans('Review rejected successfully'));
-        return redirect()->route('admin.reviews.show' , $review->id);
+        return redirect()->route('admin.reviews.show', $review->id);
     }
 
     public function pendingReviews()

@@ -327,6 +327,20 @@
                         {{ d_trans('Manage subscription') }}
                     </a>
                 </div>
+            @elseif (authUser())
+                <div class="sidebar-action-card">
+                    <p>{{ d_trans('Ready to continue? Complete your payment securely with Stripe.') }}</p>
+                    <a href="{{ route('payment.checkout', $plan->slug) }}" class="cta-btn-white">
+                        {{ d_trans('Checkout with Stripe') }}
+                    </a>
+                </div>
+            @else
+                <div class="sidebar-action-card">
+                    <p>{{ d_trans('Sign in to continue and pay securely with Stripe.') }}</p>
+                    <a href="{{ route('login') }}" class="cta-btn-white">
+                        {{ d_trans('Sign in to checkout') }}
+                    </a>
+                </div>
             @endif
 
             {{-- Plan meta --}}

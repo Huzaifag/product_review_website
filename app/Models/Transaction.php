@@ -84,7 +84,7 @@ class Transaction extends Model
         'payer_email',
         'payment_proof',
         'status',
-        'business_owner_id',
+        'user_id',
         'plan_id',
         'payment_gateway_id',
         'cancellation_reason',
@@ -121,9 +121,9 @@ class Transaction extends Model
 
         $tax = null;
 
-        $businessOwner = $this->owner;
+        $user = $this->user;
 
-        $tax = Tax::whereJsonContains('countries', @$businessOwner->address->country)->first();
+        $tax = Tax::whereJsonContains('countries', @$user->address->country)->first();
 
         if ($tax) {
             $taxRate = $tax->rate;
@@ -153,9 +153,9 @@ class Transaction extends Model
         $this->update();
     }
 
-    public function owner()
+    public function user()
     {
-        return $this->belongsTo(BusinessOwner::class, 'business_owner_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function plan()
