@@ -230,9 +230,9 @@ class ProductController extends Controller
 
         $uploadedImages = $this->uploadProductImages($request);
 
-        if (!empty($uploadedImages) && empty($product->image)) {
+       
             $data['image'] = $uploadedImages[0];
-        }
+        
 
         $product->update($data);
 
