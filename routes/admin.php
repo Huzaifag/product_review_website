@@ -56,6 +56,8 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
     Route::resource('products', 'ProductController')->middleware('demo');
     Route::resource('brands', 'BrandController')->middleware('demo');
     Route::resource('plans', 'PlanController')->except(['show']);
+    //admin.plans.sortable 
+    Route::post('plans/sortable', 'PlanController@sortable')->name('plans.sortable')->middleware('demo');
     Route::resource('transactions', 'TransactionController')->middleware('demo');
     Route::resource('payment-methods', 'PaymentGatewayController')->middleware('demo');
 

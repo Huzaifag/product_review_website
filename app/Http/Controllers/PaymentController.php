@@ -7,7 +7,9 @@ use App\Models\PaymentGateway;
 use App\Models\Subscription;
 use App\Models\Transaction;
 use App\Models\UserProductViewCount;
+use DB;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
@@ -54,15 +56,17 @@ class PaymentController extends Controller
         return redirect($session->url);
     }
 
-    public function success(Request $request)
+    public function success(Request $request): RedirectResponse
     {
         $sessionId = $request->get('session_id');
+
         if (!$sessionId) {
             toastr()->error(d_trans('Invalid payment session'));
             return redirect()->route('plans');
         }
 
         $stripeGateway = PaymentGateway::where('alias', 'stripe')->active()->first();
+
         if (!$stripeGateway || empty($stripeGateway->credentials?->secret_key)) {
             toastr()->error(d_trans('Stripe payment gateway is not configured'));
             return redirect()->route('plans');
@@ -73,57 +77,72 @@ class PaymentController extends Controller
             $session = Session::retrieve($sessionId);
 
             if ($session->payment_status !== 'paid') {
-                toastr()->error(d_trans('Payment was not completed'));
+                toastr()->error(d_trans('Invalid payment session'));
                 return redirect()->route('plans');
             }
 
-            $plan = Plan::active()->where('slug', $session->metadata->plan_slug ?? null)->firstOrFail();
+            $plan = Plan::active()
+                ->where('slug', $session->metadata->plan_slug ?? null)
+                ->firstOrFail();
 
             $amount = ($session->amount_total ?? 0) / 100;
             $userId = auth()->id();
+            $user = auth()->user();
 
-            Transaction::updateOrCreate(
-                ['payment_id' => $session->id],
-                [
-                    'user_id' => $userId,
-                    'plan_id' => $plan->id,
-                    'payment_gateway_id' => $stripeGateway->id,
-                    'amount' => $amount,
-                    'fees' => 0,
-                    'tax' => null,
-                    'total' => $amount,
-                    'payer_id' => (string) ($session->customer ?? ''),
-                    'payer_email' => auth()->user()?->email,
-                    'status' => Transaction::STATUS_PAID,
-                ]
-            );
+            $userProductViewCount = UserProductViewCount::where('user_id', $userId)->first();
 
-            $subscription = Subscription::updateOrCreate(
-                ['user_id' => $userId],
-                [
-                    'plan_id' => $plan->id,
-                    'expiry_at' => $plan->isLifetime() ? null : now()->addDays($plan->getIntervalDays()),
-                    'started_at' => now(),
-                    'last_notification_at' => null,
-                ]
-            );
+            DB::transaction(function () use ($session, $plan, $amount, $userId, $user, $stripeGateway , $userProductViewCount) {
+                $transaction = Transaction::updateOrCreate(
+                    ['payment_id' => $session->id],
+                    [
+                        'user_id' => $userId,
+                        'plan_id' => $plan->id,
+                        'payment_gateway_id' => $stripeGateway->id,
+                        'amount' => $amount,
+                        'fees' => 0,
+                        'tax' => null,
+                        'total' => $amount,
+                        'payer_id' => (string) ($session->customer ?? ''),
+                        'payer_email' => $user?->email,
+                        'status' => Transaction::STATUS_PAID,
+                    ]
+                );
 
-            //Send Email Notification to User
-            $subscription->sendSubscriptionEmailNotification();
+                $subscription = Subscription::updateOrCreate(
+                    ['user_id' => $userId],
+                    [
+                        'plan_id' => $plan->id,
+                        'expiry_at' => $plan->isLifetime() ? null : now()->addDays($plan->getIntervalDays()),
+                        'started_at' => now(),
+                        'last_notification_at' => null,
+                    ]
+                );
 
-            // updateOrCreate handles both branches — no if/else needed
-            UserProductViewCount::updateOrCreate(
-                ['user_id' => $userId],
-                [
-                    'plan_id' => $plan->id,
-                    'subscription_id' => $subscription->id,
-                    'products_viewed' => 0,
-                    'product_ids' => [],
-                ]
-            );
+                
+
+                if ($userProductViewCount) {
+                    $userProductViewCount->plan_id = $plan->id;
+                    $userProductViewCount->subscription_id = $subscription->id;
+                    $userProductViewCount->products_viewed = 0;
+                    $userProductViewCount->product_ids = [];
+                    $userProductViewCount->save();
+                } else {
+                    UserProductViewCount::create([
+                        'user_id' => $userId,
+                        'plan_id' => $plan->id,
+                        'subscription_id' => $subscription->id,
+                        'session_id' => session()->getId(),
+                        'ip_address' =>  $ip = request()->header('CF-Connecting-IP') ?: request()->ip(),
+                    ]);
+                }
+
+                // Notifications run after all DB writes succeed
+                $subscription->sendSubscriptionEmailNotification();
+                self::adminSubscriptionNotify($user, $plan, $subscription, $transaction);
+            });
 
             toastr()->success(d_trans('Payment completed successfully'));
-            return redirect()->route('plans');
+            return redirect()->route('user.profile', strtolower($user->username));
 
         } catch (ModelNotFoundException) {
             toastr()->error(d_trans('Selected plan could not be found'));
@@ -144,5 +163,17 @@ class PaymentController extends Controller
         }
 
         return redirect()->route('plans');
+    }
+
+
+    public static function adminSubscriptionNotify($user, $plan, $subscription, $transaction)
+    {
+        $title = d_trans(':username subscribed to :plan Plan', [
+            'username' => $user->getName(),
+            'plan' => $plan->name,
+        ]);
+        $image = $user->getAvatar();
+        $link = route('admin.transactions.show', $transaction->id);
+        return adminNotify($title, $image, $link);
     }
 }

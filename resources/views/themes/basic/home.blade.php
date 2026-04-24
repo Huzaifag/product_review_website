@@ -156,7 +156,7 @@
                             {{ d_trans('No ingredient concerns found') }}
                         </p>
                     </div>
-                    <a href="{{ route('businesses.index') }}" class="oeko-float-link">
+                    <a href="{{ route('products.index') }}" class="oeko-float-link">
                         {{ d_trans('Read Test') }} →
                     </a>
                 </div>
