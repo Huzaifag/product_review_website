@@ -4,10 +4,23 @@
 @section('header_title', d_trans('Products'))
 @section('content')
     <div class="d-flex justify-content-end gap-2 mb-3">
+        <div id="bulkDeleteToolbar" class="d-none">
+            <button type="button" id="bulkDeleteBtn" class="btn btn-danger">
+                <i class="fa-solid fa-trash me-1"></i>
+                <span id="bulkDeleteCount">0</span> {{ d_trans('Selected') }}
+                &mdash; {{ d_trans('Delete') }}
+            </button>
+        </div>
         <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
             <i class="fa-solid fa-plus me-1"></i>{{ d_trans('Add Product') }}
         </a>
     </div>
+
+    {{-- Hidden bulk delete form --}}
+    <form id="bulkDeleteForm" action="{{ route('admin.products.bulk-destroy') }}" method="POST" class="d-none">
+        @csrf
+        @method('DELETE')
+    </form>
 
 
 
@@ -70,8 +83,8 @@
                             value="{{ request('search') }}">
                     </div>
                     <div class="col-12 col-lg-2">
-                        <select name="category" class="selectpicker" title="{{ d_trans('Category') }}">
-                            <option value="">{{ d_trans('All') }}</option>
+                        <select name="category" class="form-select select2" data-placeholder="{{ d_trans('Category') }}">
+                            <option value="">{{ d_trans('Category') }}</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}" @selected(request('category') == "$category->id")>
                                     {{ $category->trans->name ?? $category->name }}
@@ -80,8 +93,9 @@
                         </select>
                     </div>
                     <div class="col-12 col-lg-2">
-                        <select name="sub_category" class="selectpicker" title="{{ d_trans('Sub Category') }}">
-                            <option value="">{{ d_trans('All') }}</option>
+                        <select name="sub_category" class="form-select select2"
+                            data-placeholder="{{ d_trans('Sub Category') }}">
+                            <option value="">{{ d_trans('Sub Category') }}</option>
                             @foreach ($subCategories as $subCategory)
                                 <option value="{{ $subCategory->id }}" @selected(request('sub_category') == "$subCategory->id")>
                                     {{ $subCategory->trans->name ?? $subCategory->name }}
@@ -127,7 +141,11 @@
             <div class="table-responsive">
                 <table class="table">
                     <thead>
+                        <th style="width: 40px;">
+                            <input type="checkbox" id="selectAll" class="form-check-input" title="Select All">
+                        </th>
                         <th><i class="fa-solid fa-hashtag"></i></th>
+                        <th class="text-center">{{ d_trans('Image') }}</th>
                         <th>{{ d_trans('Name') }}</th>
                         <th class="text-center">{{ d_trans('Brand') }}</th>
                         <th class="text-center">{{ d_trans('Category') }}</th>
@@ -141,8 +159,25 @@
                         @forelse ($products as $product)
                             <tr>
                                 <td>
+                                    <input type="checkbox" class="form-check-input product-checkbox"
+                                        value="{{ $product->id }}">
+                                </td>
+                                <td>
                                     <a href="{{ route('admin.products.show', $product->id) }}">
                                         <i class="fa-solid fa-hashtag me-1"></i>{{ $product->id }}
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ route('admin.products.show', $product->id) }}">
+                                        @if ($product->image)
+                                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}"
+                                                class="rounded" width="40" height="40" style="object-fit: cover;">
+                                        @else
+                                            <div class="bg-light rounded d-inline-flex align-items-center justify-content-center border"
+                                                style="width: 40px; height: 40px;">
+                                                <i class="fa-solid fa-image text-muted"></i>
+                                            </div>
+                                        @endif
                                     </a>
                                 </td>
                                 <td>
@@ -208,7 +243,7 @@
                                 </td>
                             </tr>
                         @empty
-                            @include('admin.partials.empty-table', ['colspan' => 9])
+                            @include('admin.partials.empty-table', ['colspan' => 11])
                         @endforelse
                     </tbody>
                 </table>
@@ -219,7 +254,36 @@
     @push('styles_libs')
         <link rel="stylesheet" href="{{ asset('vendor/libs/vironeer/counter-cards.min.css') }}">
         <link rel="stylesheet" href="{{ asset('vendor/libs/bootstrap/select/bootstrap-select.min.css') }}">
+        <link href="{{ asset('vendor/admin/css/select2.min.css') }}" rel="stylesheet" />
         <style>
+            .select2-container {
+                width: 100% !important;
+            }
+
+            .select2-container--default .select2-selection--single {
+                height: 38px !important;
+                border: 1px solid #ced4da !important;
+                border-radius: 0.375rem !important;
+                padding: 0 !important;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                line-height: 36px !important;
+                padding-left: 0.75rem !important;
+                color: #212529 !important;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 36px !important;
+            }
+
+            .select2-container--default.select2-container--focus .select2-selection--single,
+            .select2-container--default.select2-container--open .select2-selection--single {
+                border-color: #86b7fe !important;
+                outline: 0 !important;
+                box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+            }
+
             /* --- Split Layout Stat Cards --- */
 
             .split-stat-card {
@@ -345,25 +409,102 @@
 
     @push('scripts_libs')
         <script src="{{ asset('vendor/libs/bootstrap/select/bootstrap-select.min.js') }}"></script>
+        <script src="{{ asset('vendor/admin/js/select2.min.js') }}"></script>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            $(document).ready(function () {
+                $('.select2').select2({
+                    width: '100%'
+                }).on('change', function () {
+                    $('#productFiltersForm').submit();
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
                 const filterForm = document.getElementById('productFiltersForm');
                 if (!filterForm) {
                     return;
                 }
 
-                filterForm.querySelectorAll('select').forEach(function(select) {
-                    select.addEventListener('change', function() {
+                filterForm.querySelectorAll('select').forEach(function (select) {
+                    select.addEventListener('change', function () {
                         filterForm.submit();
                     });
                 });
 
-                filterForm.querySelector('input[name="search"]').addEventListener('keydown', function(event) {
+                filterForm.querySelector('input[name="search"]').addEventListener('keydown', function (event) {
                     if (event.key === 'Enter') {
                         event.preventDefault();
                         filterForm.submit();
                     }
                 });
+            });
+        </script>
+    @endpush
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // --- Bulk Delete ---
+                const selectAll  = document.getElementById('selectAll');
+                const toolbar    = document.getElementById('bulkDeleteToolbar');
+                const countBadge = document.getElementById('bulkDeleteCount');
+                const bulkBtn    = document.getElementById('bulkDeleteBtn');
+                const bulkForm   = document.getElementById('bulkDeleteForm');
+
+                function getChecked() {
+                    return Array.from(document.querySelectorAll('.product-checkbox:checked'));
+                }
+
+                function updateToolbar() {
+                    const checked = getChecked();
+                    if (checked.length > 0) {
+                        toolbar.classList.remove('d-none');
+                        countBadge.textContent = checked.length;
+                    } else {
+                        toolbar.classList.add('d-none');
+                    }
+                    if (selectAll) {
+                        const all = document.querySelectorAll('.product-checkbox');
+                        selectAll.checked = all.length > 0 && checked.length === all.length;
+                        selectAll.indeterminate = checked.length > 0 && checked.length < all.length;
+                    }
+                }
+
+                if (selectAll) {
+                    selectAll.addEventListener('change', function () {
+                        document.querySelectorAll('.product-checkbox').forEach(function (cb) {
+                            cb.checked = selectAll.checked;
+                        });
+                        updateToolbar();
+                    });
+                }
+
+                document.querySelectorAll('.product-checkbox').forEach(function (cb) {
+                    cb.addEventListener('change', updateToolbar);
+                });
+
+                if (bulkBtn) {
+                    bulkBtn.addEventListener('click', function () {
+                        const checked = getChecked();
+                        if (!checked.length) return;
+
+                        if (!confirm('{{ d_trans('Are you sure you want to delete the selected products? This action cannot be undone.') }}')) {
+                            return;
+                        }
+
+                        bulkForm.querySelectorAll('input[name="ids[]"]').forEach(function (el) { el.remove(); });
+
+                        checked.forEach(function (cb) {
+                            const input = document.createElement('input');
+                            input.type  = 'hidden';
+                            input.name  = 'ids[]';
+                            input.value = cb.value;
+                            bulkForm.appendChild(input);
+                        });
+
+                        bulkForm.submit();
+                    });
+                }
             });
         </script>
     @endpush

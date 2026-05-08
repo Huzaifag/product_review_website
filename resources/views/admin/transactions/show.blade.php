@@ -4,6 +4,7 @@
 @section('header_title', d_trans('Transaction #:transaction_id', ['transaction_id' => $trx->id]))
 @section('back', route('admin.transactions.index'))
 @section('content')
+
     @if (!$trx->isCancelled())
         <div class="card mb-3">
             <div class="card-body p-4">
@@ -19,14 +20,15 @@
                             </form>
                         </div>
                     @endif
-                    <div class="col">
+                    {{-- <div class="col">
                         <button id="trxCancelButton" type="button" class="btn btn-outline-danger btn-md w-100">
                             <i class="fa-solid fa-xmark me-1"></i>
                             <span>{{ d_trans('Cancel') }}</span>
                         </button>
-                    </div>
+                    </div> --}}
                     <div id="trxCancelForm" class="col-12" style="display: none;">
-                        <form action="{{ route('admin.transactions.cancel', $trx->id) }}" method="POST">
+                        {{-- {{ route('admin.transactions.cancel', $trx->id) }} --}}
+                        {{-- <form action="{{ route('admin.transactions.cancel', $trx->id) }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">{{ d_trans('Cancellation Reason') }}</label>
@@ -39,7 +41,7 @@
                             <button class="btn btn-danger btn-lg px-5 action-confirm">
                                 <span>{{ d_trans('Submit') }}</span>
                             </button>
-                        </form>
+                        </form> --}}
                     </div>
                 </div>
             </div>
@@ -61,11 +63,12 @@
             <li class="list-group-item  p-4">
                 <div class="row g-2 align-items-center">
                     <div class="col">
-                        <strong>{{ d_trans('Business Owner') }}</strong>
+                        <strong>{{ d_trans('Subscriber') }}</strong>
                     </div>
                     <div class="col-auto">
-                        <a href="{{ route('admin.members.business-owners.edit', $trx->owner->id) }}" class="text-dark">
-                            <i class="fa fa-user me-2"></i>{{ $trx->owner->getName() }}
+                       X 
+                         <a href="{{ route('admin.transactions.cancel', $trx->id) }}" class="text-dark">
+                            <i class="fa fa-user me-2"></i>{{ $trx->user->username }} 
                         </a>
                     </div>
                 </div>

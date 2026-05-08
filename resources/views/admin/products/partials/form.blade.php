@@ -46,12 +46,12 @@
 
     <div class="col-lg-6">
         <label class="form-label">{{ d_trans('Name') }}</label>
-        <input type="text" name="name" class="form-control form-control-md"
+        <input id="slugTitle" type="text" name="name" class="form-control form-control-md"
             value="{{ old('name', $product->name ?? '') }}" required>
     </div>
     <div class="col-lg-6">
         <label class="form-label">{{ d_trans('Slug') }}</label>
-        <input type="text" name="slug" class="form-control form-control-md"
+        <input id="slugInput" type="text" name="slug" class="form-control form-control-md"
             value="{{ old('slug', $product->slug ?? '') }}">
     </div>
 
@@ -146,11 +146,13 @@
 
     <div class="col-12">
         <label class="form-label">{{ d_trans('Description') }}</label>
-        <textarea name="description" class="form-control form-control-md" rows="4">{{ old('description', $product->description ?? '') }}</textarea>
+        <textarea name="description" class="form-control form-control-md"
+            rows="4">{{ old('description', $product->description ?? '') }}</textarea>
     </div>
     <div class="col-12">
         <label class="form-label">{{ d_trans('Ingredients INCI') }}</label>
-        <textarea name="ingredients_inci" class="form-control form-control-md" rows="4">{{ old('ingredients_inci', $product->ingredients_inci ?? '') }}</textarea>
+        <textarea name="ingredients_inci" class="form-control form-control-md"
+            rows="4">{{ old('ingredients_inci', $product->ingredients_inci ?? '') }}</textarea>
     </div>
 
     <div class="col-md-3">
@@ -169,15 +171,15 @@
     </div>
     <div class="col-md-3">
         <div class="form-check form-switch mt-2">
-            <input class="form-check-input" type="checkbox" role="switch" id="is_featured" name="is_featured"
-                value="1" @checked(old('is_featured', $product->is_featured ?? false))>
+            <input class="form-check-input" type="checkbox" role="switch" id="is_featured" name="is_featured" value="1"
+                @checked(old('is_featured', $product->is_featured ?? false))>
             <label class="form-check-label" for="is_featured">{{ d_trans('Featured') }}</label>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-check form-switch mt-2">
-            <input class="form-check-input" type="checkbox" role="switch" id="is_active" name="is_active"
-                value="1" @checked(old('is_active', $product->is_active ?? true))>
+            <input class="form-check-input" type="checkbox" role="switch" id="is_active" name="is_active" value="1"
+                @checked(old('is_active', $product->is_active ?? true))>
             <label class="form-check-label" for="is_active">{{ d_trans('Active') }}</label>
         </div>
     </div>
@@ -238,7 +240,7 @@
     @endpush
     @push('scripts')
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 // Brand Select2
                 $('.select2-brand').select2({
                     placeholder: "{{ d_trans('Select Brand') }}",
@@ -260,7 +262,7 @@
                     width: '100%'
                 });
             });
-            (function() {
+            (function () {
                 const input = document.getElementById('productImagesInput');
                 const info = document.getElementById('selectedImagesInfo');
                 const clearBtn = document.getElementById('clearSelectedImagesBtn');
@@ -292,7 +294,7 @@
                     clearBtn.classList.remove('d-none');
                 }
 
-                input.addEventListener('change', function() {
+                input.addEventListener('change', function () {
                     const existingKeys = new Set(Array.from(dataTransfer.files).map(fileKey));
 
                     Array.from(input.files).forEach(file => {
@@ -308,7 +310,7 @@
                 });
 
                 if (clearBtn) {
-                    clearBtn.addEventListener('click', function() {
+                    clearBtn.addEventListener('click', function () {
                         while (dataTransfer.items.length > 0) {
                             dataTransfer.items.remove(0);
                         }
@@ -319,7 +321,7 @@
                     });
                 }
             })
-            ();
+                ();
         </script>
     @endpush
 @endonce

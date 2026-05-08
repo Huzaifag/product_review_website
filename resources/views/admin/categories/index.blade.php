@@ -51,7 +51,7 @@
                                             <img src="{{ $category->getImageLink() }}" alt="{{ $category->trans->name }}">
                                         </a>
                                         <div>
-                                            <a href="{{ route('admin.categories.edit', $category->id) }}"
+                                            <a href="{{ route('admin.categories.sub-categories.index', ['category' => $category->id]) }}"
                                                 class="item-title d-block fw-normal mb-0">{{ $category->trans->name }}</a>
                                         </div>
                                     </div>

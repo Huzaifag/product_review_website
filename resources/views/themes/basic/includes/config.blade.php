@@ -21,11 +21,11 @@
             'noneSelectedText' => d_trans('Nothing selected'),
             'noneResultsText' => d_trans('No results match'),
             'countSelectedText' => d_trans('{0} of {1} selected'),
-            'noneBusinessTitle' => d_trans("Can't find a business?"),
+            'noneBusinessTitle' => d_trans("Product Not Found"),
             'noneBusinessDescription' => d_trans(
-                'It may not be listed yet. Add it now and be the first to leave a review.',
+                'We could not find the product you\'re looking for. Try searching again or explore other products.',
             ),
-            'noneBusinessButtonText' => d_trans('Add Business'),
+            'noneBusinessButtonText' => d_trans('Add Product'),
         ],
     ]) !!};
 </script>

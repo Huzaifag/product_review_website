@@ -13,6 +13,7 @@ use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Str;
 
 class ProductController extends Controller
 {
@@ -103,7 +104,7 @@ class ProductController extends Controller
             foreach ($validator->errors()->all() as $error) {
                 toastr()->error($error);
             }
-            
+
             $categories = Category::select('id', 'name')->get();
             $subCategories = SubCategory::select('id', 'name')->get();
             $brands = Brand::select('id', 'name')->get();
@@ -135,6 +136,12 @@ class ProductController extends Controller
             $data['image'] = $uploadedImages[0];
         }
 
+
+        // Generate slug from name if not provided
+        if (empty($data['slug'] ?? null)) {
+            $data['slug'] = Str::slug($data['name']);
+        }
+
         $product = Product::create($data);
 
         // brands , categories, subcategories
@@ -162,7 +169,7 @@ class ProductController extends Controller
         return view('admin.products.show', [
             'product' => $product,
             'categories' => $categories,
-            'subCategories' => $subCategories,
+            'subcategories' => $subCategories,
             'brands' => $brands,
             'ingredientLibraries' => $ingredientLibraries,
             'grades' => $this->availableGrades(),
@@ -201,44 +208,50 @@ class ProductController extends Controller
             foreach ($validator->errors()->all() as $error) {
                 toastr()->error($error);
             }
-            
-            $categories = Category::select('id', 'name')->get();
-            $subcategories = SubCategory::select('id', 'name')->get();
-            $brands = Brand::select('id', 'name')->get();
-            $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
 
-            return view('admin.products.edit', [
-                'product' => $product,
-                'categories' => $categories,
-                'subcategories' => $subcategories,
-                'brands' => $brands,
-                'ingredientLibraries' => $ingredientLibraries,
-                'grades' => $this->availableGrades(),
-            ])->withInput();
+            return redirect()->back()
+                ->withInput()
+                ->with([
+                    'categories' => Category::select('id', 'name')->get(),
+                    'subcategories' => SubCategory::select('id', 'name')->get(),
+                    'brands' => Brand::select('id', 'name')->get(),
+                    'ingredientLibraries' => IngredientLibrary::select('id', 'name')->orderBy('name')->get(),
+                    'grades' => $this->availableGrades(),
+                ]);
         }
 
         $data = $validator->validated();
-        $data['organic_certified'] = $request->boolean('organic_certified');
-        $data['lab_verified'] = $request->boolean('lab_verified');
-        $data['is_featured'] = $request->boolean('is_featured');
-        $data['is_active'] = $request->boolean('is_active');
+
+        // Booleans
+        foreach (['organic_certified', 'lab_verified', 'is_featured', 'is_active'] as $bool) {
+            $data[$bool] = $request->boolean($bool);
+        }
+
         $data['view_count'] = $data['view_count'] ?? $product->view_count;
 
+        // Empty slug → drop it (keep existing)
         if (empty($data['slug'] ?? null)) {
             unset($data['slug']);
         }
 
+        // Image: use uploaded, fallback to existing (skip placeholder)
         $uploadedImages = $this->uploadProductImages($request);
+        $data['image'] = $uploadedImages[0]
+            ?? (str_contains($product->image, 'placeholder') ? null : $product->image)
+            ?? $product->image;
 
-       
-            $data['image'] = $uploadedImages[0];
-        
+        // Generate slug from name if not provided
+        if (empty($data['slug'] ?? null)) {
+            $data['slug'] = Str::slug($data['name']);
+        }
+
 
         $product->update($data);
 
         $this->storeProductImages($product, $uploadedImages);
 
         toastr()->success(d_trans('Updated Successfully'));
+
         return back();
     }
 
@@ -254,6 +267,27 @@ class ProductController extends Controller
         FileHandler::delete($product->image);
 
         $product->delete();
+
+        toastr()->success(d_trans('Deleted Successfully'));
+        return redirect()->route('admin.products.index');
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        $request->validate([
+            'ids'   => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:products,id'],
+        ]);
+
+        $products = Product::with('images')->whereIn('id', $request->ids)->get();
+
+        foreach ($products as $product) {
+            foreach ($product->images as $image) {
+                FileHandler::delete($image->path);
+            }
+            FileHandler::delete($product->image);
+            $product->delete();
+        }
 
         toastr()->success(d_trans('Deleted Successfully'));
         return redirect()->route('admin.products.index');
@@ -292,9 +326,9 @@ class ProductController extends Controller
             foreach ($validator->errors()->all() as $error) {
                 toastr()->error($error);
             }
-            
+
             $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
-            
+
             return back()->withInput()->with([
                 'ingredientLibraries' => $ingredientLibraries,
                 'grades' => $this->availableGrades(),

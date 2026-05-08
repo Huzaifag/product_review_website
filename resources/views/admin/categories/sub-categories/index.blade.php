@@ -44,7 +44,8 @@
                             <th><i class="fa-solid fa-hashtag"></i></th>
                             <th>{{ d_trans('Name') }}</th>
                             <th>{{ d_trans('Main Category') }}</th>
-                            <th class="text-center">{{ d_trans('Sub Sub Categories') }}</th>
+                            <!-- <th class="text-center">{{ d_trans('Sub Sub Categories') }}</th> -->
+                            <th class="text-center">{{ d_trans('Products') }}</th>
                             <th class="text-center">{{ d_trans('Views') }}</th>
                             <th class="text-center">{{ d_trans('Published date') }}</th>
                             <th></th>
@@ -70,8 +71,12 @@
                                         <i class="fa-solid fa-tags me-2"></i>{{ $subCategory->category->trans->name }}
                                     </a>
                                 </td>
-                                <td class="text-center">
+                                {{-- <td class="text-center">
                                     <span class="badge bg-dark">{{ $subCategory->sub_sub_categories_count }}</span>
+                                </td> --}}
+
+                                <td class="text-center">
+                                    <span class="badge bg-dark">{{ $subCategory->products_count }}</span>
                                 </td>
                                 <td class="text-center">
                                     <span class="badge bg-dark">{{ $subCategory->views }}</span>
@@ -86,15 +91,13 @@
                                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end"
                                             aria-labelledby="dropdownMenuButton">
                                             <li>
-                                                <a class="dropdown-item" href="{{ $subCategory->getLink() }}"
-                                                    target="_blank"><i
+                                                <a class="dropdown-item" href="{{ $subCategory->getLink() }}" target="_blank"><i
                                                         class="fa-solid fa-arrow-up-right-from-square"></i>{{ d_trans('Preview') }}</a>
                                             </li>
                                             <li>
                                                 <a class="dropdown-item"
                                                     href="{{ route('admin.categories.sub-categories.edit', $subCategory->id) }}">
-                                                    <i
-                                                        class="fa-regular fa-pen-to-square"></i>{{ d_trans('Edit Details') }}
+                                                    <i class="fa-regular fa-pen-to-square"></i>{{ d_trans('Edit Details') }}
                                                 </a>
                                             </li>
                                             <li>

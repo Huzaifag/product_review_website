@@ -69,6 +69,11 @@ class SubCategory extends Model
     }
 
 
-   
+    //Products Relation
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
 
 }

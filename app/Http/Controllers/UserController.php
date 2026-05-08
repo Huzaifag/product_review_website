@@ -26,12 +26,19 @@ class UserController extends Controller
         $plan = $userProductViewCount?->plan;
         $productIds = $userProductViewCount?->getViewedProductIds() ?? [];
         $productViewed = \App\Models\Product::whereIn('id', $productIds)->get();
-        $subscription = $user->subscription()->first();
+        $subscriptions = \App\Models\Subscription::with('plan')
+            ->where('user_id', $user->id)
+            ->latest('started_at')
+            ->get();
+        $subscription = $subscriptions->first();
+        $plans = \App\Models\Plan::active()->get();
 
         return theme_view('user.profile', [
             'user' => $user,
             'plan' => $plan,
             'subscription' => $subscription,
+            'subscriptions' => $subscriptions,
+            'plans' => $plans,
             'userProductViewCount' => $userProductViewCount,
             'productViewed' => $productViewed,
         ]);

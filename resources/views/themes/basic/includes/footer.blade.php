@@ -60,7 +60,7 @@
                     <p class="footer-copyright mb-0">
                         &copy; <span data-year></span>
                         {{ m_trans(config('settings.general.site_name')) }}
-                        &mdash; {{ d_trans('All rights reserved') }}.
+                        &mdash; {{ d_trans('All rights reserved. Developed by team Bitlogicx') }}.
                     </p>
                 </div>
                 <div class="col-12 col-md-auto">

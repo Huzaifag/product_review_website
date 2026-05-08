@@ -31,11 +31,11 @@
                             <th><i class="fa-solid fa-hashtag"></i></th>
                             <th>{{ d_trans('Logo') }}</th>
                             <th>{{ d_trans('Name') }}</th>
-                            <th class="text-center">{{ d_trans('Website') }}</th>
-                            <th class="text-center">{{ d_trans('Description') }}</th>
+                            {{-- <th class="text-center">{{ d_trans('Website') }}</th> --}}
+                            <th class="text-center">{{ d_trans('Products') }}</th>
                             <th class="text-center">{{ d_trans('Status') }}</th>
-                            <th class="text-center">{{ d_trans('Published date') }}</th>
-                            <th></th>
+                            <th>{{ d_trans('Date') }}</th>
+                            <th>{{ d_trans('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,7 +51,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $brand->name }}</td>
-                                <td class="text-center">
+                                {{-- <td class="text-center">
                                     @if ($brand->website_url)
                                         <a href="{{ $brand->website_url }}" target="_blank" class="text-decoration-underline">
                                             {{ d_trans('Visit Website') }}
@@ -59,8 +59,8 @@
                                     @else
                                         <span class="text-muted">-</span>
                                     @endif
-                                </td>
-                                <td class="text-center">{{ $brand->description }}</td>
+                                </td> --}}
+                                <td class="text-center">{{ $brand->products_count }}</td>
                                 <td class="text-center">
                                     @if ($brand->active())
                                         <span class="badge bg-success">{{ d_trans('Active') }}</span>

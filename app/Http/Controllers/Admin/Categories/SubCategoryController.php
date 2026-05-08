@@ -34,6 +34,9 @@ class SubCategoryController extends Controller
             $subCategories->where('category_id', request('category'));
         }
 
+        //count number of products in each sub category
+        $subCategories->withCount('products');
+
         $subCategories = $subCategories->with('category')
             ->withCount('subSubCategories')
             ->paginate(20)
@@ -66,13 +69,13 @@ class SubCategoryController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'category'    => ['required', 'integer', 'exists:categories,id'],
-            'name'        => ['required', 'string', 'max:255'],
-            'slug'        => ['required', 'string', 'alpha_dash', 'max:255'],
-            'image'       => ['nullable', 'image', 'mimes:png,jpg,jpeg', 'max:2048'],
-            'title'       => ['nullable', 'string', 'max:255'],
+            'category' => ['required', 'integer', 'exists:categories,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'alpha_dash', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
+            'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:500'],
-            'keywords'    => ['nullable', 'string', 'max:255'],
+            'keywords' => ['nullable', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -86,7 +89,7 @@ class SubCategoryController extends Controller
         $exists = SubCategory::where('category_id', $request->category)
             ->where(function ($q) use ($request) {
                 $q->where('name', $request->name)
-                  ->orWhere('slug', $request->slug);
+                    ->orWhere('slug', $request->slug);
             })
             ->exists();
 
@@ -109,12 +112,12 @@ class SubCategoryController extends Controller
 
         $subCategory = SubCategory::create([
             'category_id' => $request->category,
-            'name'        => $request->name,
-            'slug'        => $request->slug,
-            'image'       => $image,
-            'title'       => $request->title,
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'image' => $image,
+            'title' => $request->title,
             'description' => $request->description,
-            'keywords'    => $request->keywords,
+            'keywords' => $request->keywords,
         ]);
 
         toastr()->success(d_trans('Created Successfully'));
@@ -127,21 +130,21 @@ class SubCategoryController extends Controller
 
         return view('admin.categories.sub-categories.edit', [
             'subCategory' => $subCategory,
-            'categories'  => $categories,
+            'categories' => $categories,
         ]);
     }
 
     public function update(Request $request, SubCategory $subCategory)
     {
-        
+
         $validator = Validator::make($request->all(), [
-            'category'    => ['required', 'integer', 'exists:categories,id'],
-            'name'        => ['required', 'string', 'max:255'],
-            'slug'        => ['required', 'string', 'alpha_dash', 'max:255'],
-            'image'       => ['nullable', 'image', 'mimes:png,jpg,jpeg', 'max:2048'],
-            'title'       => ['nullable', 'string', 'max:255'],
+            'category' => ['required', 'integer', 'exists:categories,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'alpha_dash', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
+            'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:500'],
-            'keywords'    => ['nullable', 'string', 'max:255'],
+            'keywords' => ['nullable', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -155,7 +158,7 @@ class SubCategoryController extends Controller
         $exists = SubCategory::where('category_id', $request->category)
             ->where(function ($q) use ($request) {
                 $q->where('name', $request->name)
-                  ->orWhere('slug', $request->slug);
+                    ->orWhere('slug', $request->slug);
             })
             ->where('id', '!=', $subCategory->id)
             ->exists();
@@ -180,11 +183,11 @@ class SubCategoryController extends Controller
 
         $subCategory->update([
             'category_id' => $request->category,
-            'name'        => $request->name,
-            'slug'        => $request->slug,
-            'title'       => $request->title,
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'title' => $request->title,
             'description' => $request->description,
-            'keywords'    => $request->keywords,
+            'keywords' => $request->keywords,
         ]);
 
         toastr()->success(d_trans('Updated Successfully'));
@@ -193,7 +196,7 @@ class SubCategoryController extends Controller
 
     public function destroy(SubCategory $subCategory)
     {
-       // Optional: Delete image if you want
+        // Optional: Delete image if you want
         if ($subCategory->image) {
             FileHandler::delete($subCategory->image);
         }

@@ -13,7 +13,8 @@
     </div>
     <div class="card">
         <div class="card-body p-4">
-            <form id="submittedForm" action="{{ route('admin.brands.update', $brand->id) }}" method="POST" enctype="multipart/form-data">
+            <form id="submittedForm" action="{{ route('admin.brands.update', $brand->id) }}" method="POST"
+                enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row g-3">
@@ -29,21 +30,24 @@
                     </div>
                     <div class="col-12">
                         <label class="form-label">{{ d_trans('Name') }}</label>
-                        <input type="text" name="name" class="form-control form-control-md" value="{{ $brand->name }}" required />
+                        <input id="slugTitle" type="text" name="name" class="form-control form-control-md"
+                            value="{{ $brand->name }}" required />
                         @error('name')
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-12">
                         <label class="form-label">{{ d_trans('Slug') }}</label>
-                        <input type="text" name="slug" class="form-control form-control-md" value="{{ $brand->slug }}" required />
+                        <input id="slugInput" type="text" name="slug" class="form-control form-control-md"
+                            value="{{ $brand->slug }}" />
                         @error('slug')
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-12">
                         <label class="form-label">{{ d_trans('Website URL') }}</label>
-                        <input type="url" name="website_url" class="form-control form-control-md" value="{{ $brand->website_url }}" placeholder="https://example.com" />
+                        <input type="url" name="website_url" class="form-control form-control-md"
+                            value="{{ $brand->website_url }}" placeholder="https://example.com" />
                         @error('website_url')
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror

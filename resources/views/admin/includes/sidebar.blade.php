@@ -265,12 +265,12 @@
                         <span><i class="fa-solid fa-gear"></i>{{ d_trans('Settings') }}</span>
                     </p>
                 </a>
-                <a href="{{ route('admin.system.index') }}"
+                {{-- <a href="{{ route('admin.system.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('system', 2) }}">
                     <p class="dashboard-sidebar-link-title">
                         <span><i class="fa-solid fa-server"></i>{{ d_trans('System') }}</span>
                     </p>
-                </a>
+                </a> --}}
             </div>
         </div>
     </div>

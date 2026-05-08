@@ -66,7 +66,7 @@ class ProductController extends Controller
                     ->orWhereHas('brand', function ($query) use ($searchTerm) {
                         $query->where('name', 'like', $searchTerm);
                     });
-                    
+
             });
         }
 
@@ -229,16 +229,42 @@ class ProductController extends Controller
 
         $userProductViewCount = $this->retrieveOrCreateUserProductViewCount($product->id);
 
-        $plan = $userProductViewCount->plan;
+        // Get combined limit from all active subscriptions
+        $subscriptions = collect();
+        $totalLimit = 0;
+        $isUnlimited = false;
+        
+        if (auth()->check()) {
+            $subscriptions = Subscription::with('plan')
+                ->where('user_id', auth()->id())
+                ->where(function ($query) {
+                    $query->where('expiry_at', '>', now())
+                        ->orWhereNull('expiry_at');
+                })
+                ->get();
+            
+            foreach ($subscriptions as $sub) {
+                if ($sub->plan && is_null($sub->plan->products_limit)) {
+                    $isUnlimited = true;
+                    break;
+                }
+                if ($sub->plan && $sub->plan->products_limit) {
+                    $totalLimit += (int)$sub->plan->products_limit;
+                }
+            }
+        }
 
-
-        $canSeeDetails = $this->canSeeProductDetails($plan->products_limit, $userProductViewCount, $product->id);
+        $combinedLimit = $isUnlimited ? null : $totalLimit;
+        $canSeeDetails = $this->canSeeProductDetails($combinedLimit, $userProductViewCount, $product->id);
 
 
         return theme_view('products.show', [
             'product' => $product,
             'similarProducts' => $similarProducts,
             'canSeeDetails' => $canSeeDetails,
+            'subscriptions' => $subscriptions,
+            'combinedLimit' => $combinedLimit,
+            'userProductViewCount' => $userProductViewCount,
         ]);
     }
 
@@ -332,6 +358,7 @@ class ProductController extends Controller
 
         $subscription = null;
         if ($userId) {
+            // Get only active (non-expired) subscriptions, excluding lifetime plans
             $subscription = Subscription::active()
                 ->where('user_id', $userId)
                 ->whereHas('plan', function ($query) {
@@ -356,6 +383,19 @@ class ProductController extends Controller
                 'session_id' => $sessionId,
             ]
         );
+
+        // If subscription has expired, reset it to default lifetime plan
+        if ($userProductViewCount->subscription_id && $userProductViewCount->subscription) {
+            if ($userProductViewCount->subscription->isExpired()) {
+                $userProductViewCount->update([
+                    'plan_id' => $defaultPlan?->id,
+                    'subscription_id' => null,
+                    'product_ids' => [],
+                    'products_viewed' => 0,
+                ]);
+                return $userProductViewCount;
+            }
+        }
 
         $productsLimit = $subscription?->plan?->products_limit ?? $defaultPlan?->products_limit;
 

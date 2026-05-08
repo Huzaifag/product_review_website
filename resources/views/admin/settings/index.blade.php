@@ -180,7 +180,7 @@
             </div>
 
             <!-- Themes -->
-            <div class="col page-search-element">
+            {{-- <div class="col page-search-element">
                 <a href="{{ route('admin.settings.themes.index') }}" class="premium-card">
                     <div class="card-glow"></div>
                     <div class="premium-card-body">
@@ -194,7 +194,7 @@
                     </div>
                     <i class="bi bi-chevron-right arrow-hint"></i>
                 </a>
-            </div>
+            </div> --}}
 
             <!-- Pages -->
             <div class="col page-search-element">
@@ -248,7 +248,7 @@
             </div>
 
             <!-- Extensions -->
-            <div class="col page-search-element">
+            {{-- <div class="col page-search-element">
                 <a href="{{ route('admin.settings.extensions.index') }}" class="premium-card">
                     <div class="card-glow"></div>
                     <div class="premium-card-body">
@@ -262,7 +262,7 @@
                     </div>
                     <i class="bi bi-chevron-right arrow-hint"></i>
                 </a>
-            </div>
+            </div> --}}
 
             @if (licenseType(2) && config('settings.subscription.status'))
                 <!-- Tax Settings -->

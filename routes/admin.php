@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::namespace('Auth')->group(function () {
+Route::
+        namespace('Auth')->group(function () {
             Route::get('/', function () {
                 return redirect()->route('admin.login');
             })->name('index');
@@ -53,16 +54,19 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
         Route::delete('{business}', 'BusinessController@destroy')->name('destroy');
     });
 
+    Route::delete('products/bulk-destroy', 'ProductController@bulkDestroy')->name('products.bulk-destroy')->middleware('demo');
     Route::resource('products', 'ProductController')->middleware('demo');
     Route::resource('brands', 'BrandController')->middleware('demo');
     Route::resource('plans', 'PlanController')->except(['show']);
     //admin.plans.sortable 
     Route::post('plans/sortable', 'PlanController@sortable')->name('plans.sortable')->middleware('demo');
     Route::resource('transactions', 'TransactionController')->middleware('demo');
+    //cancel transaction
+    Route::post('transactions/{transaction}/cancel', 'TransactionController@cancel')->name('transactions.cancel')->middleware('demo');
     Route::resource('payment-methods', 'PaymentGatewayController')->middleware('demo');
 
     //Transactions
-    
+
     // payment-methods.sortable
     Route::post('payment-methods/sortable', 'PaymentGatewayController@sortable')->name('payment-methods.sortable')->middleware('demo');
     Route::resource('ingredients-library', 'IngredientLibraryController')->middleware('demo');

@@ -28,8 +28,8 @@
                     <div class="col-12">
                         <label class="form-label">{{ d_trans('Name') }} <span class="text-danger">*</span></label>
                         <input id="slugTitle" type="text" name="name" class="form-control form-control-md"
-                            value="{{ old('name') }}" required autofocus />
-                        {{-- error message  --}}
+                            value="{{ old('name') }}" autofocus />
+                        {{-- error message --}}
                         @error('name')
                             <div class="text-danger mt-1">
                                 {{ $message }}
@@ -40,7 +40,7 @@
                     <!-- Slug -->
                     <div class="col-12">
                         <label class="form-label">{{ d_trans('Slug') }} <span class="text-danger">*</span></label>
-                        <input type="text" name="slug" class="form-control form-control-md"
+                        <input id="slugInput" type="text" name="slug" class="form-control form-control-md"
                             value="{{ old('slug') }}" required />
                         @error('slug')
                             <div class="text-danger mt-1">

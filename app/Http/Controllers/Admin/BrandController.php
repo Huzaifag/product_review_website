@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use Exception;
 use Illuminate\Http\Request;
+use Str;
 use Validator;
 
 class BrandController extends Controller
@@ -27,6 +28,9 @@ class BrandController extends Controller
                     ->orWhere('website_url', 'like', $searchTerm);
             });
         }
+
+        //Product count for each brand
+        $brands->withCount('products');
 
         $brands = $brands->orderBy('name')->paginate(20);
         $brands->appends(request()->only(['search']));
@@ -63,9 +67,9 @@ class BrandController extends Controller
         }
 
         $data = $request->only(['name', 'slug', 'description', 'status', 'website_url']);
-       
 
-        
+
+
         if ($request->hasFile('logo')) {
             try {
                 $data['logo'] = FileHandler::upload($request->file('logo'), [
@@ -75,6 +79,12 @@ class BrandController extends Controller
                 toastr()->error($e->getMessage());
                 return back()->withInput();
             }
+        }
+
+
+        // Generate slug from name if not provided
+        if (empty($data['slug'] ?? null)) {
+            $data['slug'] = Str::slug($data['name']);
         }
 
         Brand::create($data);
@@ -134,6 +144,11 @@ class BrandController extends Controller
                 toastr()->error($e->getMessage());
                 return back()->withInput();
             }
+        }
+
+        // Generate slug from name if not provided
+        if (empty($data['slug'] ?? null)) {
+            $data['slug'] = Str::slug($data['name']);
         }
 
         $brand->update($data);

@@ -91,7 +91,7 @@ class PaymentController extends Controller
 
             $userProductViewCount = UserProductViewCount::where('user_id', $userId)->first();
 
-            DB::transaction(function () use ($session, $plan, $amount, $userId, $user, $stripeGateway , $userProductViewCount) {
+            DB::transaction(function () use ($session, $plan, $amount, $userId, $user, $stripeGateway, $userProductViewCount) {
                 $transaction = Transaction::updateOrCreate(
                     ['payment_id' => $session->id],
                     [
@@ -108,18 +108,16 @@ class PaymentController extends Controller
                     ]
                 );
 
-                $subscription = Subscription::updateOrCreate(
-                    ['user_id' => $userId],
-                    [
-                        'plan_id' => $plan->id,
-                        'expiry_at' => $plan->isLifetime() ? null : now()->addDays($plan->getIntervalDays()),
-                        'started_at' => now(),
-                        'last_notification_at' => null,
-                    ]
-                );
+                // ✅ Always CREATE new subscription — old ones stay intact
+                $subscription = Subscription::create([
+                    'user_id' => $userId,
+                    'plan_id' => $plan->id,
+                    'expiry_at' => $plan->isLifetime() ? null : now()->addDays($plan->getIntervalDays()),
+                    'started_at' => now(),
+                    'last_notification_at' => null,
+                ]);
 
-                
-
+                // ✅ UserProductViewCount → link to NEW subscription, reset counts
                 if ($userProductViewCount) {
                     $userProductViewCount->plan_id = $plan->id;
                     $userProductViewCount->subscription_id = $subscription->id;
@@ -132,11 +130,10 @@ class PaymentController extends Controller
                         'plan_id' => $plan->id,
                         'subscription_id' => $subscription->id,
                         'session_id' => session()->getId(),
-                        'ip_address' =>  $ip = request()->header('CF-Connecting-IP') ?: request()->ip(),
+                        'ip_address' => request()->header('CF-Connecting-IP') ?: request()->ip(),
                     ]);
                 }
 
-                // Notifications run after all DB writes succeed
                 $subscription->sendSubscriptionEmailNotification();
                 self::adminSubscriptionNotify($user, $plan, $subscription, $transaction);
             });
@@ -165,7 +162,7 @@ class PaymentController extends Controller
         return redirect()->route('plans');
     }
 
-
+B
     public static function adminSubscriptionNotify($user, $plan, $subscription, $transaction)
     {
         $title = d_trans(':username subscribed to :plan Plan', [
