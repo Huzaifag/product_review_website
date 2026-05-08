@@ -7,10 +7,10 @@ use App\Models\Category;
 use App\Models\Plan;
 use App\Models\Product;
 use App\Models\Subscription;
-use App\Models\UserReview;
 use App\Models\UserProductViewCount;
-use Illuminate\Http\Request;
+use App\Models\UserReview;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
@@ -36,7 +36,6 @@ class ProductController extends Controller
         ]);
     }
 
-
     public static function getResultByParams($category = null, $subCategory = null, $subSubCategory = null)
     {
         $products = Product::active();
@@ -54,8 +53,8 @@ class ProductController extends Controller
         }
 
         if (request()->filled('search')) {
-            $searchTerm = '%' . request('search') . '%';
-            $searchTermStart = request('search') . '%';
+            $searchTerm = '%'.request('search').'%';
+            $searchTermStart = request('search').'%';
             $products = $products->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'like', $searchTerm)
                     ->orWhere('description', 'like', $searchTerm)
@@ -95,7 +94,7 @@ class ProductController extends Controller
         }
 
         if (request()->filled('product_size')) {
-            $products = $products->where('product_size', 'like', '%' . request('product_size') . '%');
+            $products = $products->where('product_size', 'like', '%'.request('product_size').'%');
         }
 
         if (request()->filled('featured')) {
@@ -140,12 +139,12 @@ class ProductController extends Controller
             $products = $products->withCount([
                 'userReviews as approved_reviews_count' => function ($query) {
                     $query->approved();
-                }
+                },
             ])->orderByDesc('approved_reviews_count')->orderByDesc('products.view_count');
         } else {
             if (isset($searchTermStart)) {
                 $products = $products->orderByRaw(
-                    "CASE WHEN name LIKE ? THEN 1 ELSE 2 END",
+                    'CASE WHEN name LIKE ? THEN 1 ELSE 2 END',
                     [$searchTermStart]
                 )->orderByDesc('products.view_count');
             } else {
@@ -172,7 +171,7 @@ class ProductController extends Controller
             $product->cached_reviews = Cache::remember(
                 "product:{$product->id}:reviews",
                 now()->addDay(),
-                fn() => $product->userReviews()->approved()
+                fn () => $product->userReviews()->approved()
                     ->with(['user', 'product'])->orderbyDesc('id')->limit(6)->get()
             );
 
@@ -183,8 +182,9 @@ class ProductController extends Controller
             return Cache::remember("product:{$product->id}:first_categories", now()->addDay(), function () use ($product) {
                 $subCategory = $product->subCategory;
 
-                if (!$subCategory) {
+                if (! $subCategory) {
                     $product->first_categories = null;
+
                     return $product;
                 }
 
@@ -199,10 +199,10 @@ class ProductController extends Controller
 
         return $products;
     }
+
     public function show($slug)
     {
         $sessionId = session()->getId();
-
 
         $product = Product::active()
             ->where(function ($query) use ($slug) {
@@ -226,14 +226,13 @@ class ProductController extends Controller
             ->limit(3)
             ->get();
 
-
         $userProductViewCount = $this->retrieveOrCreateUserProductViewCount($product->id);
 
         // Get combined limit from all active subscriptions
         $subscriptions = collect();
         $totalLimit = 0;
         $isUnlimited = false;
-        
+
         if (auth()->check()) {
             $subscriptions = Subscription::with('plan')
                 ->where('user_id', auth()->id())
@@ -242,21 +241,20 @@ class ProductController extends Controller
                         ->orWhereNull('expiry_at');
                 })
                 ->get();
-            
+
             foreach ($subscriptions as $sub) {
                 if ($sub->plan && is_null($sub->plan->products_limit)) {
                     $isUnlimited = true;
                     break;
                 }
                 if ($sub->plan && $sub->plan->products_limit) {
-                    $totalLimit += (int)$sub->plan->products_limit;
+                    $totalLimit += (int) $sub->plan->products_limit;
                 }
             }
         }
 
         $combinedLimit = $isUnlimited ? null : $totalLimit;
         $canSeeDetails = $this->canSeeProductDetails($combinedLimit, $userProductViewCount, $product->id);
-
 
         return theme_view('products.show', [
             'product' => $product,
@@ -268,12 +266,33 @@ class ProductController extends Controller
         ]);
     }
 
+    //Product Comparion
+    public function comparison($id)
+    {
+        $product = Product::active()->where('id', $id)->first();
+        if (! $product) {
+            abort(404);
+        }
+        $similarProducts = Product::active()
+            ->where('id', '!=', $product->id)
+            ->where('category_id', $product->category_id)
+            ->where('sub_category_id', $product->sub_category_id)
+            ->where('product_size', $product->product_size)
+            ->with('labTestingResult')
+            ->inRandomOrder()
+            ->limit(3)
+            ->get();
+
+        return theme_view('products.comparison', compact('product', 'similarProducts'));
+    }
+
     public function reviewStore(Request $request, $slug)
     {
 
         $user = authUser();
-        if (!$user) {
+        if (! $user) {
             toastr()->info(d_trans('Please sign in to your account in order to leave a review'));
+
             return redirect()->route('login');
         }
 
@@ -294,6 +313,7 @@ class ProductController extends Controller
             foreach ($validator->errors()->all() as $error) {
                 toastr()->error($error);
             }
+
             return back()->withInput();
         }
 
@@ -303,10 +323,11 @@ class ProductController extends Controller
 
         if ($alreadyReviewed) {
             toastr()->error(d_trans('You already submitted a review for this product'));
+
             return back()->withInput();
         }
 
-        $review = new UserReview();
+        $review = new UserReview;
         $review->product_id = $product->id;
         $review->user_id = $user->id;
         $review->title = $request->title;
@@ -319,22 +340,25 @@ class ProductController extends Controller
         self::adminReviewNotify($user, $review, $product);
 
         toastr()->success(d_trans('Your review has been submitted successfully wait for admin approval'));
+
         return back();
     }
 
     public function reviewHelpful($review)
     {
         $user = authUser();
-        if (!$user) {
+        if (! $user) {
             toastr()->info(d_trans('Please sign in to your account in order to mark a review as helpful'));
+
             return redirect()->route('login');
         }
 
         $review = UserReview::approved()->where('id', $review)->firstOrFail();
 
-        $cacheKey = 'user_review_helpful:' . $user->id . ':' . $review->id;
+        $cacheKey = 'user_review_helpful:'.$user->id.':'.$review->id;
         if (Cache::has($cacheKey)) {
             toastr()->info(d_trans('You already marked this review as helpful'));
+
             return back();
         }
 
@@ -345,6 +369,7 @@ class ProductController extends Controller
         Cache::put($cacheKey, true, now()->addDays(30));
 
         toastr()->success(d_trans('Thanks for your feedback'));
+
         return back();
     }
 
@@ -393,6 +418,7 @@ class ProductController extends Controller
                     'product_ids' => [],
                     'products_viewed' => 0,
                 ]);
+
                 return $userProductViewCount;
             }
         }
@@ -406,7 +432,7 @@ class ProductController extends Controller
         $alreadyViewed = in_array($productId, $productIds);
         $canAddNewView = is_null($productsLimit) || $alreadyViewed || count($productIds) < (int) $productsLimit;
 
-        if (!$alreadyViewed && $canAddNewView) {
+        if (! $alreadyViewed && $canAddNewView) {
             $productIds[] = $productId;
             $userProductViewCount->product_ids = $productIds;
             $userProductViewCount->products_viewed = count($productIds);
@@ -441,8 +467,8 @@ class ProductController extends Controller
             return response()->json([]);
         }
 
-        $searchLike = '%' . $searchTerm . '%';
-        $searchStart = $searchTerm . '%';
+        $searchLike = '%'.$searchTerm.'%';
+        $searchStart = $searchTerm.'%';
 
         $products = Product::active()
             ->with(['category', 'brand'])
@@ -451,12 +477,10 @@ class ProductController extends Controller
                     ->orWhere('description', 'like', $searchLike)
                     ->orWhere('ingredients_inci', 'like', $searchLike);
             })
-            ->orderByRaw("CASE WHEN name LIKE ? THEN 0 ELSE 1 END", [$searchStart])
+            ->orderByRaw('CASE WHEN name LIKE ? THEN 0 ELSE 1 END', [$searchStart])
             ->orderByDesc('view_count')
             ->limit(10)
             ->get();
-
-
 
         return response()->json($products->map(function (Product $product) {
             return [
@@ -486,7 +510,6 @@ class ProductController extends Controller
         ]);
     }
 
-
     public static function adminReviewNotify($user, $review, $product)
     {
         $title = d_trans(':username added a review for :product', [
@@ -495,6 +518,7 @@ class ProductController extends Controller
         ]);
         $image = $user->getAvatar();
         $link = route('admin.reviews.show', $review->id);
+
         return adminNotify($title, $image, $link);
     }
 }

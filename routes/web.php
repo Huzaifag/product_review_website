@@ -2,28 +2,29 @@
 
 use Illuminate\Support\Facades\Route;
 
-
-// optime-clear 
+// optime-clear
 
 Route::get('/optimize-clear', function () {
     Artisan::call('optimize:clear');
+
     return 'Application cache cleared';
 })->name('optimize.clear');
 
 // Run Migrations
 Route::get('/migrate', function () {
     Artisan::call('migrate', ['--force' => true]);
+
     return 'Migrations run successfully';
 })->name('migrate');
-
 
 // Link Storage
 Route::get('/storage-link', function () {
     try {
         Artisan::call('storage:link');
+
         return 'Storage linked successfully';
     } catch (Exception $e) {
-        return 'Error: ' . $e->getMessage();
+        return 'Error: '.$e->getMessage();
     }
 })->name('storage.link');
 
@@ -104,6 +105,7 @@ Route::middleware('maintenance')->group(function () {
                 ->name('reviews.helpful')->middleware('auth');
             Route::post('{slug}/review', 'ProductController@reviewStore')->name('reviews.store')->middleware('auth');
             Route::get('{slug}', 'ProductController@show')->name('show');
+            Route::get('comparison/{id}', 'ProductController@comparison')->name('comparison');
             Route::get('/', 'ProductController@index')->name('index');
             Route::post('ajax-search', 'ProductController@ajaxSearch')->name('ajax-search');
         });
@@ -138,7 +140,7 @@ Route::middleware('maintenance')->group(function () {
             Route::get('success', 'PaymentController@success')->name('success');
             Route::get('cancel', 'PaymentController@cancel')->name('cancel');
         });
-       
+
         Route::get('{slug}', 'GeneralController@page')->name('page');
     });
 });

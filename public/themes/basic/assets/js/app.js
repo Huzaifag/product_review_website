@@ -1,7 +1,7 @@
-(function($) {
+(function ($) {
     "use strict";
 
-    document.querySelectorAll("[data-year]").forEach(function(el) {
+    document.querySelectorAll("[data-year]").forEach(function (el) {
         el.textContent = new Date().getFullYear();
     });
 
@@ -36,7 +36,7 @@
 
     let actionConfirm = $('.action-confirm');
     if (actionConfirm.length) {
-        actionConfirm.on('click', function(e) {
+        actionConfirm.on('click', function (e) {
             if (!confirm(config.translates.actionConfirm)) {
                 e.preventDefault();
             }
@@ -65,16 +65,16 @@
 
     const dropdown = document.querySelectorAll('[data-dropdown]');
     if (dropdown) {
-        dropdown.forEach(function(el) {
+        dropdown.forEach(function (el) {
             let dropdownMenu = el.querySelector(".drop-down-menu");
 
             function dropdownOP() {
                 dropdownMenu.style.top = "40px";
             }
-            window.addEventListener("click", function(e) {
+            window.addEventListener("click", function (e) {
                 if (el.contains(e.target)) {
                     el.classList.toggle('active');
-                    setTimeout(function() {
+                    setTimeout(function () {
                         el.classList.toggle('animated');
                     }, 0);
                 } else {
@@ -88,7 +88,7 @@
 
     var toggle = document.querySelectorAll('[data-toggle]');
     if (toggle) {
-        toggle.forEach(function(el, id) {
+        toggle.forEach(function (el, id) {
             el.querySelector(".toggle-title").addEventListener("click", () => {
                 for (var i = 0; i < toggle.length; i++) {
                     if (i !== id) {
@@ -101,7 +101,7 @@
                     el.classList.remove("animated");
                 } else {
                     el.classList.add("active");
-                    setTimeout(function() {
+                    setTimeout(function () {
                         el.classList.add("animated");
                     }, 0);
                 }
@@ -230,7 +230,7 @@
 
     let acceptCookie = $('#acceptCookie'),
         cookieNotice = $('.cookies');
-    acceptCookie.on('click', function(e) {
+    acceptCookie.on('click', function (e) {
         e.preventDefault();
         $.ajax({
             headers: {
@@ -244,11 +244,11 @@
 
     let attachImageButton = $('.attach-img-button'),
         attachImageInput = $('.attach-img-input');
-    attachImageButton.on('click', function() {
+    attachImageButton.on('click', function () {
         $(this).siblings('.attach-img-input').click();
     });
 
-    attachImageInput.on('change', function(event) {
+    attachImageInput.on('change', function (event) {
         const ImageExtension = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
         if ($.inArray($(this).val().split('.').pop().toLowerCase(), ImageExtension) != -1) {
             const file = event.target.files[0];
@@ -256,7 +256,7 @@
                 const reader = new FileReader();
                 const $preview = $(this).closest('.attach-img').find('.attach-img-preview');
 
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     $preview.attr('src', e.target.result);
                     $preview.removeClass('d-none');
                 };
@@ -344,7 +344,7 @@
         homeSearchInput = homeSearch.find('input'),
         homeSearchResults = homeSearch.find('.search-results .search-results-inner div');
 
-    homeSearchInput.on('input', function() {
+    homeSearchInput.on('input', function () {
         let value = $(this).val();
         if (value !== '') {
             let homeSearchForm = homeSearch.find('form'),
@@ -363,7 +363,7 @@
                 data: {
                     search: value,
                 },
-                success: function(response) {
+                success: function (response) {
                     homeSearchResults.empty();
                     if (!$.isEmptyObject(response.error)) {
                         toastr.error(response.error);
@@ -373,7 +373,6 @@
                                 let noResults = '<div class="text-center p-5">' +
                                     '<h4>' + config.translates.noneBusinessTitle + '</h4>' +
                                     '<p class="small">' + config.translates.noneBusinessDescription + '</p>' +
-                                    '<button class="btn btn-outline-primary px-4" data-bs-toggle="modal" data-bs-target="#addBusinessModal"><i class="fa fa-plus me-2"></i>' + config.translates.noneBusinessButtonText + '</button>' +
                                     '</div>';
                                 homeSearchResults.append(noResults);
                             } else {
@@ -382,29 +381,29 @@
                                 homeSearchResults.append(noResults);
                             }
                         } else {
-                            $.each(response, function(index, item) {
+                            $.each(response, function (index, item) {
                                 let isVerified = item.lab_verified ?
                                     '<div class="item-verified">' +
                                     '<i class="bi bi-patch-check-fill" data-bs-toggle="tooltip" data-bs-title="' + config.translates.verified + '"></i>' +
                                     '</div>' : ''; +
 
-                                homeSearchResults.append('<a href="' + item.link + '" class="search-item position-relative d-block">' +
-                                    '<div class="item-sm d-flex align-items-center gap-3">' +
-                                    '<div class="item-img flex-shrink-0">' +
-                                    '<img loading="lazy" src="' + item.image + '" alt="' + item.name + '">' + isVerified +
-                                    '</div>' +
-                                    '<div class="item-info">' +
-                                    '<h6 class="item-title mb-0">' + item.name + '</h6>' +
-                                    ' <p class="item-link small text-muted mb-0">' + item.brand + '</p>' +
-                                    (item.grade ? ' <p class="item-link small text-muted mb-0">' + item.category + ' • ' + item.grade + '</p>' : ' <p class="item-link small text-muted mb-0">' + item.category + '</p>') +
-                                    ' </div>' +
-                                    '</div>' +
-                                    ' </a>');
+                                        homeSearchResults.append('<a href="' + item.link + '" class="search-item position-relative d-block">' +
+                                            '<div class="item-sm d-flex align-items-center gap-3">' +
+                                            '<div class="item-img flex-shrink-0">' +
+                                            '<img loading="lazy" src="' + item.image + '" alt="' + item.name + '">' + isVerified +
+                                            '</div>' +
+                                            '<div class="item-info">' +
+                                            '<h6 class="item-title mb-0">' + item.name + '</h6>' +
+                                            ' <p class="item-link small text-muted mb-0">' + item.brand + '</p>' +
+                                            (item.grade ? ' <p class="item-link small text-muted mb-0">' + item.category + ' • ' + item.grade + '</p>' : ' <p class="item-link small text-muted mb-0">' + item.category + '</p>') +
+                                            ' </div>' +
+                                            '</div>' +
+                                            ' </a>');
                             });
                         }
                     }
                 },
-                error: function(request, status, error) {
+                error: function (request, status, error) {
                     toastr.error(error);
                 }
             });
@@ -603,7 +602,7 @@
     }
 
 
-    $.each(searchParam, function(index, element) {
+    $.each(searchParam, function (index, element) {
         let url = new URL($(location).attr("href")),
             params = new URLSearchParams(url.search);
 
@@ -618,20 +617,20 @@
         searchSelect = $('.search-select'),
         autoSearchInput = $('.auto-search-input');
 
-    searchForm.on('submit', function(e) {
+    searchForm.on('submit', function (e) {
         e.preventDefault();
         let input = $(this).find('input'),
             url = addInputParamsToUrl(input.attr('name'), input.val());
         window.location.href = url;
     });
 
-    autoSearchInput.on('change', function() {
+    autoSearchInput.on('change', function () {
         let url = addInputParamsToUrl($(this).attr('name'), $(this).val());
         window.location.href = url;
     });
 
 
-    searchSelect.on('change', function() {
+    searchSelect.on('change', function () {
         let name = $(this).attr('name'),
             value = $(this).val();
         let url = addInputParamsToUrl(name, value);
@@ -641,7 +640,7 @@
     });
 
 
-    $(document).on('change', '.search-param[type="checkbox"], .search-param[type="radio"]', function() {
+    $(document).on('change', '.search-param[type="checkbox"], .search-param[type="radio"]', function () {
         let url = new URL($(location).attr('href')),
             param = $(this).attr('name'),
             value = $(this).val(),
@@ -652,7 +651,7 @@
         if (!multiple) {
             let paramExists = $(`[name='${param}']`).not(this);
 
-            $.each(paramExists, function(index, element) {
+            $.each(paramExists, function (index, element) {
                 let params = new URLSearchParams(url.search),
                     param = $(element).attr('name'),
                     value = $(element).val();
@@ -721,13 +720,13 @@
     }
 
     let auoSelect = $('.period-select');
-    auoSelect.on('change', function() {
+    auoSelect.on('change', function () {
         location.href = $(this).val();
     });
 
     let kycDocument = $('#kycDocument');
 
-    kycDocument.on('change', function() {
+    kycDocument.on('change', function () {
         let kycDocumentVal = $(this).val();
 
         let nationalId = $('#nationalId'),
@@ -752,7 +751,7 @@
         aiWriterButton = $('.ai-writer-button');
 
     if (aiReviewWriter.length) {
-        aiWriterButton.on('click', function() {
+        aiWriterButton.on('click', function () {
             let clickedButton = $(this),
                 inputID = $(this).data('input'),
                 targetedInput = $('#' + inputID);
@@ -771,12 +770,12 @@
 
 
         let aiCancelButton = $('.ai-cancel-button');
-        aiCancelButton.on('click', function() {
+        aiCancelButton.on('click', function () {
             resetTargetedInput($('#' + $(this).data('input')));
         });
 
         let aiGenerateButton = $('.ai-generate-button');
-        aiGenerateButton.on('click', function(e) {
+        aiGenerateButton.on('click', function (e) {
 
             let clickedButton = $(this),
                 clickedButtonAction = clickedButton.data('action'),
@@ -796,7 +795,7 @@
                         input: inputID,
                         prompt: targetedInput.val(),
                     },
-                    beforeSend: function() {
+                    beforeSend: function () {
                         clickedButton.prop('disabled', true);
                         targetedInput.prop('disabled', true);
                         clickedButton.empty();
@@ -804,7 +803,7 @@
                             '<div class="spinner-border spinner-grow-sm" role="status"><span class="visually-hidden"></span></div>'
                         );
                     },
-                    success: function(response) {
+                    success: function (response) {
                         if (!$.isEmptyObject(response.error)) {
                             resetTargetedInput(targetedInput);
                             toastr.error(response.error);
@@ -815,7 +814,7 @@
 
                         }
                     },
-                    error: function(request, status, error) {
+                    error: function (request, status, error) {
                         resetTargetedInput(targetedInput);
                         toastr.error(error);
                     }

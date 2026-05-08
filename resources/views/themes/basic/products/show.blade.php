@@ -10,73 +10,199 @@
 @section('content')
     @push('styles')
         <style>
+            @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
             :root {
-                --cream: #f5f0e8;
-                --cream-dark: #ede8df;
-                --green-dark: #2c3d2e;
-                --green-mid: #3a5140;
-                --tan: #c4a882;
-                --text-dark: #1e2820;
-                --text-mid: #4a5240;
-                --text-light: #7a826e;
-                --border: #ddd8ce;
-                --grade-good: #16a34a;
-                --grade-good-bg: #dcfce7;
-                --grade-poor: #dc2626;
-                --grade-poor-bg: #fee2e2;
-                --grade-ok: #d97706;
-                --grade-ok-bg: #fef3c7;
+                --cr: #f6f1e8;
+                --cr2: #ede7d9;
+                --cr3: #e4dccb;
+                --gd: #18281a;
+                --ta: #b8935a;
+                --td: #111714;
+                --tm: #374035;
+                --tl: #6b7566;
+                --bd: #d6d0c4;
+                --bd2: #c8c1b4;
+                --gg: #15803d;
+                --ggb: #dcfce7;
+                --gg2: #bbf7d0;
+                --gr: #dc2626;
+                --grb: #fee2e2;
+                --gr2: #fecaca;
+                --go: #b45309;
+                --gob: #fef3c7;
+                --go2: #fde68a;
+                --s1: 0 1px 3px rgba(0, 0, 0, .06), 0 1px 2px rgba(0, 0, 0, .04);
+                --s2: 0 4px 16px rgba(0, 0, 0, .08), 0 2px 6px rgba(0, 0, 0, .05);
+                --s3: 0 12px 40px rgba(0, 0, 0, .12), 0 4px 12px rgba(0, 0, 0, .07);
             }
 
             *,
             *::before,
             *::after {
                 box-sizing: border-box;
+                margin: 0;
+                padding: 0;
             }
 
-            .card-shell {
-                background: var(--cream);
-                border-radius: 16px;
+            .shell {
+                font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+                background: var(--cr);
+                border-radius: 20px;
                 overflow: hidden;
-                width: 100%;
-                box-shadow: 0 8px 40px rgba(0, 0, 0, .12);
+                box-shadow: var(--s3), 0 0 0 1px rgba(0, 0, 0, .06);
             }
 
-            /* ── Two-column product body ── */
-            .product-body {
+            /* HEADER */
+            .prod-header {
+                background: var(--gd);
+                background-image: radial-gradient(ellipse at 80% 50%, rgba(184, 147, 90, .12) 0%, transparent 60%);
+                padding: 20px 26px;
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 16px;
+                border-bottom: 1px solid rgba(255, 255, 255, .06);
+            }
+
+            .prod-header-left {
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+                min-width: 0;
+            }
+
+            .prod-eyebrow {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                font-size: .68rem;
+                letter-spacing: .16em;
+                text-transform: uppercase;
+                color: var(--ta);
+                font-weight: 700;
+            }
+
+            .prod-eyebrow::before {
+                content: '';
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: var(--ta);
+                flex-shrink: 0;
+            }
+
+            .prod-name {
+                font-size: 1.55rem;
+                font-weight: 800;
+                color: #fff;
+                line-height: 1.18;
+                letter-spacing: -.025em;
+            }
+
+            .prod-meta-strip {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                flex-wrap: wrap;
+                font-size: .8rem;
+                color: rgba(255, 255, 255, .45);
+                font-weight: 500;
+            }
+
+            .prod-meta-sep {
+                color: rgba(255, 255, 255, .2);
+            }
+
+            .grade-pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                padding: 5px 14px;
+                border-radius: 999px;
+                font-size: .78rem;
+                font-weight: 700;
+                letter-spacing: .01em;
+                flex-shrink: 0;
+                margin-top: 4px;
+            }
+
+            .grade-pill::before {
+                content: '';
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: currentColor;
+                opacity: .65;
+                flex-shrink: 0;
+            }
+
+            .gp-good {
+                background: var(--ggb);
+                color: var(--gg);
+                box-shadow: 0 0 0 1px var(--gg2);
+            }
+
+            .gp-poor {
+                background: var(--grb);
+                color: var(--gr);
+                box-shadow: 0 0 0 1px var(--gr2);
+            }
+
+            .gp-ok {
+                background: var(--gob);
+                color: var(--go);
+                box-shadow: 0 0 0 1px var(--go2);
+            }
+
+            .gp-na {
+                background: #f1f5f9;
+                color: #64748b;
+                box-shadow: 0 0 0 1px #cbd5e1;
+            }
+
+            /* BODY */
+            .prod-body {
                 display: grid;
-                grid-template-columns: 420px 1fr;
-                min-height: 0;
+                grid-template-columns: 300px 1fr;
             }
 
             /* LEFT */
-            .img-col {
-                background: var(--cream-dark);
-                padding: 16px;
+            .left-col {
+                background: var(--cr2);
+                border-right: 1px solid var(--bd);
                 display: flex;
                 flex-direction: column;
-                gap: 10px;
-                border-right: 1px solid var(--border);
+            }
+
+            .img-wrap {
+                padding: 16px;
+                background: #fff;
+                border-bottom: 1px solid var(--bd);
             }
 
             .img-main {
                 width: 100%;
                 aspect-ratio: 1/1;
-                border-radius: 10px;
+                border-radius: 12px;
                 overflow: hidden;
-                background: #e8e0d0;
-                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--cr);
+                border: 1px solid var(--bd);
             }
 
             .img-main img {
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                object-fit: contain;
             }
 
-            .img-thumbs {
+            .thumbs-row {
                 display: flex;
                 gap: 8px;
+                margin-top: 10px;
             }
 
             .img-thumb {
@@ -86,9 +212,8 @@
                 overflow: hidden;
                 border: 2px solid transparent;
                 cursor: pointer;
-                padding: 0;
-                transition: border-color .2s, transform .2s;
-                background: #c8bfad;
+                transition: border-color .15s, transform .2s, box-shadow .2s;
+                background: var(--cr2);
             }
 
             .img-thumb img {
@@ -98,278 +223,289 @@
             }
 
             .img-thumb.active {
-                border-color: var(--green-dark);
+                border-color: var(--gd);
                 transform: translateY(-2px);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, .12);
             }
 
-            .img-view-all-btn {
+            .img-thumb-more {
                 flex: 1;
                 aspect-ratio: 1/1;
-                border: 2px dashed var(--border);
+                border: 2px dashed var(--bd2);
                 border-radius: 8px;
-                background: rgba(44, 61, 46, .07);
+                background: rgba(44, 61, 46, .05);
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 1.6rem;
-                color: var(--text-mid);
-                transition: all .2s;
+                font-size: .82rem;
+                font-weight: 700;
+                color: var(--tl);
+                transition: all .15s;
+                font-family: inherit;
             }
 
-            .img-view-all-btn:hover {
-                border-color: var(--green-dark);
-                background: rgba(44, 61, 46, .12);
+            .img-thumb-more:hover {
+                border-color: var(--gd);
+                background: rgba(44, 61, 46, .1);
+                color: var(--gd);
             }
 
-            /* Left info boxes */
-            .left-box {
-                border: 1px solid var(--border);
-                border-radius: 10px;
-                background: #f8f2e8;
-                padding: 10px 12px;
+            /* Left sections */
+            .left-section {
+                padding: 16px;
+                border-bottom: 1px solid var(--bd);
             }
 
-            .left-box-title {
-                font-size: .7rem;
+            .left-section:last-child {
+                border-bottom: none;
+            }
+
+            .section-label {
+                font-size: .64rem;
                 font-weight: 700;
                 text-transform: uppercase;
-                letter-spacing: .07em;
-                color: var(--text-light);
-                margin-bottom: 8px;
+                letter-spacing: .1em;
+                color: var(--tl);
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
             }
 
+            .section-label::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: var(--bd);
+            }
+
+            /* Entity cards */
+            .entity-list {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .entity-card {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                background: #fff;
+                border: 1px solid var(--bd);
+                border-radius: 12px;
+                padding: 12px 14px;
+                text-decoration: none;
+                transition: box-shadow .15s, border-color .15s, transform .15s;
+                box-shadow: var(--s1);
+            }
+
+            .entity-card:hover {
+                border-color: var(--bd2);
+                box-shadow: var(--s2);
+                transform: translateY(-1px);
+            }
+
+            .entity-logo {
+                width: 44px;
+                height: 44px;
+                border-radius: 8px;
+                object-fit: contain;
+                flex-shrink: 0;
+                background: var(--cr);
+                padding: 5px;
+                border: 1px solid var(--bd);
+            }
+
+            .entity-info {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+                min-width: 0;
+                flex: 1;
+            }
+
+            .entity-type {
+                font-size: .6rem;
+                text-transform: uppercase;
+                letter-spacing: .1em;
+                color: var(--tl);
+                font-weight: 600;
+            }
+
+            .entity-name {
+                font-size: .9rem;
+                font-weight: 700;
+                color: var(--td);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .entity-arrow {
+                color: var(--bd2);
+                font-size: 1.1rem;
+                flex-shrink: 0;
+                transition: color .15s, transform .15s;
+            }
+
+            .entity-card:hover .entity-arrow {
+                color: var(--gd);
+                transform: translateX(2px);
+            }
+
+            /* Concerns */
             .concern-list {
                 display: flex;
                 flex-direction: column;
-                gap: 6px;
+                gap: 8px;
                 max-height: 220px;
                 overflow-y: auto;
             }
 
             .concern-item {
                 background: #fff;
-                border: 1px solid var(--border);
-                border-radius: 8px;
-                padding: 8px 10px;
+                border: 1px solid var(--bd);
+                border-radius: 10px;
+                padding: 10px 12px;
+                border-left: 3px solid var(--gr);
+                box-shadow: var(--s1);
             }
 
-            .concern-item h6 {
-                font-size: .76rem;
-                margin: 0 0 3px;
-                color: var(--text-dark);
+            .concern-item.lv-medium {
+                border-left-color: var(--go);
+            }
+
+            .concern-item.lv-low {
+                border-left-color: var(--gg);
+            }
+
+            .concern-name {
+                font-size: .82rem;
+                font-weight: 700;
+                color: var(--td);
                 display: flex;
                 align-items: center;
-                gap: 5px;
+                gap: 6px;
                 flex-wrap: wrap;
+                margin-bottom: 4px;
             }
 
-            .concern-item p {
-                margin: 0;
-                font-size: .71rem;
-                color: var(--text-mid);
-                line-height: 1.45;
+            .concern-desc {
+                font-size: .75rem;
+                color: var(--tm);
+                line-height: 1.5;
             }
 
             .concern-meta {
-                margin-top: 4px;
                 font-size: .66rem;
-                color: var(--text-light);
+                color: var(--tl);
+                margin-top: 5px;
+                display: flex;
+                gap: 8px;
+            }
+
+            .sev-badge {
+                padding: 2px 7px;
+                border-radius: 999px;
+                font-size: .62rem;
+                font-weight: 700;
+            }
+
+            .sev-high {
+                background: var(--grb);
+                color: var(--gr);
+            }
+
+            .sev-medium {
+                background: var(--gob);
+                color: var(--go);
+            }
+
+            .sev-low {
+                background: var(--ggb);
+                color: var(--gg);
             }
 
             /* RIGHT */
-            .detail-col {
-                padding: 20px 22px;
+            .right-col {
                 display: flex;
                 flex-direction: column;
-                gap: 14px;
-                overflow-y: auto;
-                min-height: 100vh;
             }
 
-            .eyebrow {
-                font-size: .62rem;
-                letter-spacing: .12em;
-                text-transform: uppercase;
-                color: var(--text-light);
-                margin: 0;
-            }
-
-            .product-title {
-                font-size: 1.75rem;
-                font-weight: 800;
-                color: var(--text-dark);
-                line-height: 1.1;
-                margin: 0;
-            }
-
-            .product-meta {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 6px;
-                font-size: .72rem;
-                color: var(--text-light);
-                align-items: center;
-            }
-
-            .meta-sep {
-                color: var(--border);
-            }
-
-            .product-desc {
-                font-size: .8rem;
-                line-height: 1.65;
-                color: var(--text-mid);
-                margin: 0;
-            }
-
-            /* Quick stats row */
-            .quick-stats {
+            /* Stat bar */
+            .stat-bar {
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
-                gap: 8px;
-            }
-
-            .stat-box {
-                border: 1px solid var(--border);
-                border-radius: 9px;
-                padding: 9px 10px;
-                background: #f9f4eb;
-            }
-
-            .stat-label {
-                font-size: .6rem;
-                text-transform: uppercase;
-                letter-spacing: .07em;
-                color: var(--text-light);
-                margin-bottom: 3px;
-            }
-
-            .stat-value {
-                font-size: .82rem;
-                font-weight: 700;
-                color: var(--text-dark);
-                line-height: 1.2;
-            }
-
-            /* Grade badge */
-            .grade-badge {
-                display: inline-block;
-                padding: 2px 8px;
-                border-radius: 999px;
-                font-size: .72rem;
-                font-weight: 700;
-            }
-
-            .grade-good {
-                background: var(--grade-good-bg);
-                color: var(--grade-good);
-            }
-
-            .grade-poor {
-                background: var(--grade-poor-bg);
-                color: var(--grade-poor);
-            }
-
-            .grade-ok {
-                background: var(--grade-ok-bg);
-                color: var(--grade-ok);
-            }
-
-            .grade-na {
-                background: #f1f5f9;
-                color: #94a3b8;
-            }
-
-            .bool-yes {
-                color: var(--grade-good);
-                font-weight: 700;
-                font-size: .78rem;
-            }
-
-            .bool-no {
-                color: var(--grade-poor);
-                font-weight: 700;
-                font-size: .78rem;
-            }
-
-            .bool-ok {
-                color: var(--text-light);
-                font-size: .78rem;
-            }
-
-            /* Mini brand/cat cards */
-            .entity-row {
-                display: flex;
-                gap: 8px;
-            }
-
-            .entity-card {
-                flex: 1;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                border: 1px solid var(--border);
-                border-radius: 9px;
-                padding: 8px 10px;
-                background: #f9f4eb;
-                text-decoration: none;
-            }
-
-            .entity-card img {
-                width: 32px;
-                height: 32px;
-                object-fit: contain;
-                border-radius: 5px;
-                flex-shrink: 0;
+                border-bottom: 1px solid var(--bd);
                 background: #fff;
             }
 
-            .entity-info {}
-
-            .entity-type {
-                font-size: .58rem;
-                text-transform: uppercase;
-                letter-spacing: .07em;
-                color: var(--text-light);
+            .stat-cell {
+                padding: 16px 20px;
+                border-right: 1px solid var(--bd);
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
             }
 
-            .entity-name {
-                font-size: .76rem;
+            .stat-cell:last-child {
+                border-right: none;
+            }
+
+            .stat-lbl {
+                font-size: .62rem;
+                text-transform: uppercase;
+                letter-spacing: .09em;
+                color: var(--tl);
                 font-weight: 600;
-                color: var(--text-dark);
+            }
+
+            .stat-val {
+                font-size: .96rem;
+                font-weight: 700;
+                color: var(--td);
+                line-height: 1.3;
+            }
+
+            /* Description */
+            .desc-strip {
+                padding: 16px 22px;
+                border-bottom: 1px solid var(--bd);
+                font-size: .9rem;
+                line-height: 1.7;
+                color: var(--tm);
             }
 
             /* Tabs */
             .tab-bar {
                 display: flex;
-                border-bottom: 2px solid var(--border);
-                gap: 0;
-                margin: 0 -22px;
+                border-bottom: 1px solid var(--bd);
                 padding: 0 22px;
+                background: var(--cr2);
             }
 
             .tab-btn {
-                padding: 8px 14px;
-                font-size: .75rem;
+                padding: 13px 16px;
+                font-size: .82rem;
                 font-weight: 600;
-                color: var(--text-light);
+                color: var(--tl);
                 background: none;
                 border: none;
                 border-bottom: 2px solid transparent;
-                margin-bottom: -2px;
+                margin-bottom: -1px;
                 cursor: pointer;
-                transition: color .2s, border-color .2s;
-                letter-spacing: .01em;
+                transition: color .15s, border-color .15s;
+                font-family: inherit;
             }
 
             .tab-btn.active {
-                color: var(--green-dark);
-                border-bottom-color: var(--green-dark);
+                color: var(--gd);
+                border-bottom-color: var(--gd);
             }
 
             .tab-btn:hover:not(.active) {
-                color: var(--text-mid);
+                color: var(--tm);
             }
 
             .tab-panel {
@@ -380,65 +516,132 @@
                 display: block;
             }
 
-            /* Lab snapshot */
+            /* Lab rows */
             .lab-rows {
-                display: flex;
-                flex-direction: column;
-                gap: 0;
+                padding: 4px 22px 8px;
             }
 
             .lab-row {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 7px 0;
-                border-bottom: 1px dashed rgba(122, 130, 110, .25);
-                gap: 10px;
+                padding: 11px 0;
+                border-bottom: 1px solid rgba(122, 130, 110, .15);
+                gap: 12px;
             }
 
             .lab-row:last-child {
                 border-bottom: none;
             }
 
-            .lab-row-label {
-                font-size: .71rem;
-                color: var(--text-light);
-                letter-spacing: .02em;
+            .lab-lbl {
+                font-size: .82rem;
+                color: var(--tl);
+                font-weight: 500;
             }
 
-            .lab-row-value {
-                font-size: .76rem;
-                font-weight: 600;
-                color: var(--text-dark);
+            .lab-val {
+                font-size: .84rem;
+                font-weight: 700;
+                color: var(--td);
                 text-align: right;
             }
 
-            /* Details grid (complete test) */
-            .details-2col {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 0;
+            .bool-y {
+                color: var(--gg);
+                font-weight: 700;
             }
 
-            .drow {
-                display: contents;
+            .bool-n {
+                color: var(--gr);
+                font-weight: 700;
             }
 
-            .drow>div {
-                padding: 6px 4px;
-                border-bottom: 1px dashed rgba(122, 130, 110, .2);
-                font-size: .72rem;
+            .bool-na {
+                color: var(--tl);
             }
 
-            .drow>div:first-child {
-                color: var(--text-light);
-                padding-right: 12px;
+            /* Summary */
+            .summary-box {
+                margin: 4px 22px 16px;
+                background: rgba(24, 40, 26, .04);
+                border: 1px solid var(--bd);
+                border-radius: 10px;
+                padding: 14px 16px;
             }
 
-            .drow>div:last-child {
-                color: var(--text-dark);
-                font-weight: 600;
-                text-align: right;
+            .summary-box p {
+                font-size: .84rem;
+                color: var(--tm);
+                line-height: 1.65;
+            }
+
+            /* Comparison */
+            .cmp-strip {
+                padding: 18px 22px;
+                background: linear-gradient(135deg, #fff 0%, var(--cr) 100%);
+                border-top: 1px solid var(--bd);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+            }
+
+            .cmp-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                font-size: .63rem;
+                font-weight: 700;
+                letter-spacing: .1em;
+                text-transform: uppercase;
+                color: #9b1a1a;
+                background: #fff0f0;
+                border: 1px solid #fca5a5;
+                padding: 4px 10px;
+                border-radius: 999px;
+                margin-bottom: 7px;
+            }
+
+            .cmp-title {
+                font-size: 1rem;
+                font-weight: 800;
+                color: var(--td);
+                margin-bottom: 4px;
+                letter-spacing: -.01em;
+            }
+
+            .cmp-sub {
+                font-size: .8rem;
+                color: var(--tl);
+                max-width: 400px;
+                line-height: 1.5;
+            }
+
+            .cmp-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                flex-shrink: 0;
+                font-size: .84rem;
+                font-weight: 700;
+                color: #9b1a1a;
+                text-decoration: none;
+                padding: 11px 22px;
+                border: 2px solid #9b1a1a;
+                border-radius: 8px;
+                background: #fff;
+                transition: all .15s;
+                white-space: nowrap;
+                font-family: inherit;
+                box-shadow: var(--s1);
+            }
+
+            .cmp-btn:hover {
+                background: #9b1a1a;
+                color: #fff;
+                box-shadow: 0 6px 20px rgba(155, 26, 26, .3);
+                transform: translateY(-1px);
             }
 
             /* Modal */
@@ -446,263 +649,282 @@
                 display: none;
                 position: fixed;
                 inset: 0;
-                background: rgba(0, 0, 0, .7);
-                z-index: 2000;
+                background: rgba(0, 0, 0, .75);
+                z-index: 9999;
                 align-items: center;
                 justify-content: center;
+                padding: 20px;
             }
 
-            .modal-overlay.active {
+            .modal-overlay.open {
                 display: flex;
             }
 
-            .modal-content {
+            .modal-box {
                 background: #fff;
-                border-radius: 14px;
+                border-radius: 16px;
                 padding: 20px;
-                /* max-width: 88vw;
-                max-height: 88vh; */
+                max-width: 86vw;
+                max-height: 86vh;
                 overflow-y: auto;
                 position: relative;
+                box-shadow: var(--s3);
+                font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
             }
 
             .modal-close {
                 position: absolute;
-                top: 10px;
-                right: 10px;
+                top: 12px;
+                right: 12px;
                 width: 30px;
                 height: 30px;
-                background: var(--cream-dark);
-                border: none;
+                background: var(--cr2);
+                border: 1px solid var(--bd);
                 border-radius: 50%;
                 cursor: pointer;
-                font-size: 1.1rem;
-                color: var(--text-dark);
+                font-size: 1rem;
+                color: var(--td);
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                transition: background .15s;
             }
 
-            .modal-images-grid {
+            .modal-close:hover {
+                background: var(--cr3);
+            }
+
+            .modal-title {
+                font-size: .9rem;
+                font-weight: 700;
+                color: var(--td);
+                margin-bottom: 14px;
+            }
+
+            .modal-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-                gap: 10px;
-                margin-top: 14px;
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 8px;
             }
 
-            .modal-image {
+            .modal-img {
                 aspect-ratio: 1/1;
-                border-radius: 10px;
+                border-radius: 8px;
                 overflow: hidden;
-                cursor: pointer;
                 border: 2px solid transparent;
-                transition: all .2s;
+                cursor: pointer;
+                transition: all .15s;
             }
 
-            .modal-image:hover {
-                border-color: var(--green-dark);
+            .modal-img:hover {
+                border-color: var(--gd);
                 transform: scale(1.04);
             }
 
-            .modal-image img {
+            .modal-img img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
             }
 
-            /* Lab badge (severity) */
-            .lab-badge {
-                display: inline-block;
-                padding: 1px 6px;
-                border-radius: 999px;
-                font-size: .58rem;
-                font-weight: 700;
-                letter-spacing: .02em;
-                background: rgba(44, 61, 46, .1);
-                color: var(--green-dark);
+            .modal-2col {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0 24px;
             }
 
-            .lab-badge.high {
-                background: var(--grade-poor-bg);
-                color: var(--grade-poor);
-            }
-
-            .lab-badge.medium {
-                background: var(--grade-ok-bg);
-                color: var(--grade-ok);
-            }
-
-            .lab-badge.low {
-                background: var(--grade-good-bg);
-                color: var(--grade-good);
-            }
-
-            /* Comparison table */
-            .comparison-section {
-                padding: 20px 20px 24px;
-                border-top: 1px solid var(--border);
-            }
-
-            .comparison-section h3 {
-                font-size: 1.1rem;
-                font-weight: 700;
-                color: var(--text-dark);
-                margin: 0 0 14px;
-            }
-
-            .comparison-wrap {
-                overflow-x: auto;
-                border: 1px solid var(--border);
-                border-radius: 10px;
-                background: #fff;
-            }
-
-            .comp-table {
-                width: 100%;
-                border-collapse: collapse;
-                font-size: .79rem;
-                min-width: 700px;
-            }
-
-            .comp-table th,
-            .comp-table td {
-                padding: 10px 12px;
-                border-bottom: 1px solid var(--border);
-                vertical-align: middle;
-            }
-
-            .comp-table thead tr {
-                background: #f8f2e8;
-            }
-
-            .comp-table th:first-child,
-            .comp-table td:first-child {
-                font-weight: 600;
-                color: var(--text-dark);
-                border-right: 2px solid var(--border);
-                min-width: 160px;
-                background: #f8f2e8;
-            }
-
-            .comp-table th {
-                text-align: center;
-                font-weight: 600;
-            }
-
-            .comp-table td {
-                text-align: center;
-            }
-
-            .comp-table .current-col {
-                background: #f0f7f0;
-            }
-
-            .comp-table tbody tr:last-child td {
-                border-bottom: none;
-            }
-
-            .comp-prod-img {
-                width: 56px;
-                height: 80px;
-                object-fit: contain;
+            .btn-show-more {
                 display: block;
-                margin: 0 auto 6px;
+                width: 100%;
+                padding: 12px;
+                text-align: center;
+                background: var(--cr2);
+                border: 1px dashed var(--bd);
+                border-radius: 8px;
+                color: var(--td);
+                font-weight: 600;
+                font-size: .85rem;
+                margin-top: 4px;
+                cursor: pointer;
+                transition: background .15s, border-color .15s;
+                font-family: inherit;
             }
 
-            .comp-prod-name {
-                font-weight: 700;
-                font-size: .82rem;
-                color: var(--text-dark);
+            .btn-show-more:hover {
+                background: var(--cr3);
+                border-color: var(--gd);
             }
 
-            .comp-prod-brand {
-                font-size: .68rem;
-                color: var(--text-mid);
-                margin-top: 2px;
-            }
-
-            @media (max-width: 768px) {
-                .product-body {
+            @media (max-width:900px) {
+                .modal-2col {
                     grid-template-columns: 1fr;
                 }
 
-                .detail-col {
-                    max-height: none;
+                .prod-body {
+                    grid-template-columns: 1fr;
                 }
 
-                .quick-stats {
+                .left-col {
+                    border-right: none;
+                    border-bottom: 1px solid var(--bd);
+                }
+
+                .stat-bar {
                     grid-template-columns: repeat(2, 1fr);
                 }
 
-                .entity-row {
-                    flex-wrap: wrap;
+                .stat-cell:nth-child(2) {
+                    border-right: none;
+                }
+            }
+
+            @media (max-width:560px) {
+                .prod-header {
+                    flex-direction: column;
+                    align-items: flex-start;
                 }
 
-                .details-2col {
-                    grid-template-columns: 1fr;
+                .cmp-strip {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                .prod-name {
+                    font-size: 1.25rem;
                 }
             }
         </style>
     @endpush
+
     @php
         $productImageUrls = collect([$product->image])
             ->merge($product->images->pluck('path'))
             ->filter()
-            ->map(function ($path) {
-                return \Illuminate\Support\Str::startsWith($path, ['http://', 'https://']) ? $path : asset($path);
-            })
+            ->map(fn($p) => \Illuminate\Support\Str::startsWith($p, ['http://', 'https://']) ? $p : asset($p))
             ->unique()
             ->values();
-
         if ($productImageUrls->isEmpty()) {
             $productImageUrls = collect([$product->getImageLink()]);
         }
 
         $lab = $product->labTestingResult;
         $concerns = $product->ingredientConcerns ?? collect();
+
+        $g = $product->overall_grade ?? $lab?->overall_grade;
+        $gpClass = $g
+            ? (in_array($g, ['very_good', 'good'])
+                ? 'gp-good'
+                : (in_array($g, ['poor', 'bad'])
+                    ? 'gp-poor'
+                    : 'gp-ok'))
+            : 'gp-na';
+        $gpLabel = $g ? str_replace('_', ' ', ucfirst($g)) : 'N/A';
     @endphp
+
     @if ($canSeeDetails)
-        <div class="card-shell">
-            <div class="product-body">
+        <div class="shell">
 
-                {{-- ══ LEFT: Images + supplementary info ══ --}}
-                <div class="img-col">
-                    <div class="img-main">
-                        <img id="mainProductImage" src="{{ $productImageUrls->first() }}" alt="{{ $product->name }}">
+            {{-- HEADER --}}
+            <div class="prod-header">
+                <div class="prod-header-left">
+                    <span class="prod-eyebrow">{{ d_trans('Lab-Tested Product') }}</span>
+                    <h1 class="prod-name">{{ $product->name }}</h1>
+                    <div class="prod-meta-strip">
+                        <span>{{ $product->brand?->name ?: d_trans('Unknown Brand') }}</span>
+                        <span class="prod-meta-sep">·</span>
+                        <span>{{ $product->category->trans->name ?? d_trans('Uncategorized') }}</span>
+                        @if ($product->subCategory)
+                            <span class="prod-meta-sep">·</span>
+                            <span>{{ $product->subCategory->trans->name }}</span>
+                        @endif
                     </div>
+                </div>
+                <span class="grade-pill {{ $gpClass }}">{{ $gpLabel }}</span>
+            </div>
 
-                    <div class="img-thumbs">
-                        @foreach ($productImageUrls->take(3) as $index => $imageUrl)
-                            <button type="button" class="img-thumb {{ $index === 0 ? 'active' : '' }}"
-                                onclick="selectPreview(this, '{{ $imageUrl }}')">
-                                <img src="{{ $imageUrl }}" alt="{{ $product->name }}">
-                            </button>
-                        @endforeach
-                        @if ($productImageUrls->count() > 3)
-                            <button type="button" class="img-view-all-btn" onclick="openImageModal()">+</button>
+            {{-- BODY --}}
+            <div class="prod-body">
+
+                {{-- LEFT --}}
+                <div class="left-col">
+                    <div class="img-wrap">
+                        <div class="img-main">
+                            <img id="mainProductImage" src="{{ $productImageUrls->first() }}" alt="{{ $product->name }}">
+                        </div>
+                        @if ($productImageUrls->count() > 1)
+                            <div class="thumbs-row">
+                                @foreach ($productImageUrls->take(3) as $i => $url)
+                                    <button class="img-thumb {{ $i === 0 ? 'active' : '' }}"
+                                        onclick="selectPreview(this,'{{ $url }}')">
+                                        <img src="{{ $url }}" alt="">
+                                    </button>
+                                @endforeach
+                                @if ($productImageUrls->count() > 3)
+                                    <button class="img-thumb-more" onclick="openImageModal()">
+                                        +{{ $productImageUrls->count() - 3 }} more
+                                    </button>
+                                @endif
+                            </div>
                         @endif
                     </div>
 
+                    {{-- Brand & Category --}}
+                    <div class="left-section">
+                        <div class="section-label">{{ d_trans('Brand & Category') }}</div>
+                        <div class="entity-list">
+                            <a class="entity-card" href="#">
+                                <img class="entity-logo" src="{{ asset($product->brand?->logo) }}"
+                                    alt="{{ $product->brand?->name }}">
+                                <div class="entity-info">
+                                    <div class="entity-type">{{ d_trans('Brand') }}</div>
+                                    <div class="entity-name">{{ $product->brand?->name ?: 'N/A' }}</div>
+                                </div>
+                                <span class="entity-arrow">›</span>
+                            </a>
+                            <a class="entity-card" href="#">
+                                <img class="entity-logo" src="{{ asset($product->category->image) }}"
+                                    alt="{{ $product->category->trans->name }}">
+                                <div class="entity-info">
+                                    <div class="entity-type">{{ d_trans('Category') }}</div>
+                                    <div class="entity-name">{{ $product->category->trans->name ?: 'N/A' }}</div>
+                                </div>
+                                <span class="entity-arrow">›</span>
+                            </a>
+                            @if ($product->subCategory)
+                                <a class="entity-card" href="#">
+                                    <img class="entity-logo" src="{{ asset($product->subCategory->image) }}"
+                                        alt="{{ $product->subCategory->trans->name }}">
+                                    <div class="entity-info">
+                                        <div class="entity-type">{{ d_trans('Sub-Category') }}</div>
+                                        <div class="entity-name">{{ $product->subCategory->trans->name }}</div>
+                                    </div>
+                                    <span class="entity-arrow">›</span>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Concerns --}}
                     @if ($concerns->count() > 0)
-                        <div class="left-box">
-                            <div class="left-box-title">⚠ {{ d_trans('Ingredient Concerns') }}</div>
+                        <div class="left-section">
+                            <div class="section-label">⚠ {{ d_trans('Ingredient Concerns') }}</div>
                             <div class="concern-list">
                                 @foreach ($concerns as $concern)
-                                    <div class="concern-item">
-                                        <h6>
+                                    <div class="concern-item lv-{{ strtolower($concern->severity) }}">
+                                        <div class="concern-name">
                                             {{ $concern->ingredient_name }}
                                             <span
-                                                class="lab-badge {{ strtolower($concern->severity) }}">{{ ucfirst($concern->severity) }}</span>
-                                        </h6>
-                                        <p>{{ $concern->description ?: d_trans('No description provided.') }}</p>
+                                                class="sev-badge sev-{{ strtolower($concern->severity) }}">{{ ucfirst($concern->severity) }}</span>
+                                        </div>
+                                        <div class="concern-desc">
+                                            {{ $concern->description ?: d_trans('No description provided.') }}</div>
                                         @if ($concern->inci_name || $concern->concentration)
                                             <div class="concern-meta">
                                                 @if ($concern->inci_name)
-                                                    <div>INCI: {{ $concern->inci_name }}</div>
+                                                    <span>INCI: {{ $concern->inci_name }}</span>
                                                 @endif
                                                 @if ($concern->concentration)
-                                                    <div>{{ d_trans('Concentration') }}:
-                                                        {{ number_format((float) $concern->concentration, 4) }}%</div>
+                                                    <span>{{ number_format((float) $concern->concentration, 4) }}%</span>
                                                 @endif
                                             </div>
                                         @endif
@@ -711,134 +933,76 @@
                             </div>
                         </div>
                     @endif
+                </div>{{-- /left-col --}}
 
+                {{-- RIGHT --}}
+                <div class="right-col">
 
-                </div>
-
-                {{-- ══ RIGHT: Product details ══ --}}
-                <div class="detail-col">
-                    <div>
-                        <p class="eyebrow">{{ d_trans('Lab-Tested Product') }}</p>
-                        <h1 class="product-title">{{ $product->name }}</h1>
-                        <div class="product-meta" style="margin-top:6px;">
-                            <span>{{ $product->brand?->name ?: d_trans('Unknown brand') }}</span>
-                            <span class="meta-sep">·</span>
-                            <span>{{ $product->category->trans->name ?? d_trans('Uncategorized') }}</span>
-                            @if ($product->subCategory)
-                                <span class="meta-sep">·</span>
-                                <span>{{ $product->subCategory->trans->name }}</span>
-                            @endif
+                    <div class="stat-bar">
+                        <div class="stat-cell">
+                            <div class="stat-lbl"><i class="fas fa-star"></i> {{ d_trans('Overall Grade') }}</div>
+                            <div class="stat-val"><span class="grade-pill {{ $gpClass }}">{{ $gpLabel }}</span>
+                            </div>
+                        </div>
+                        <div class="stat-cell">
+                            <div class="stat-lbl"><i class="fas fa-calendar"></i> {{ d_trans('Test Date') }}</div>
+                            <div class="stat-val">{{ $product->test_date?->format('M d, Y') ?: '—' }}</div>
+                        </div>
+                        <div class="stat-cell">
+                            <div class="stat-lbl"><i class="fas fa-tag"></i> {{ d_trans('Price') }}</div>
+                            <div class="stat-val">
+                                {{ $product->price ? $product->currency . ' ' . numberFormat($product->price) : '—' }}</div>
+                        </div>
+                        <div class="stat-cell">
+                            <div class="stat-lbl"><i class="fas fa-weight-hanging"></i> {{ d_trans('Size') }}</div>
+                            <div class="stat-val">{{ $product->product_size ?: '—' }}</div>
                         </div>
                     </div>
 
-                    <p class="product-desc">
-                        {{ \Illuminate\Support\Str::limit(strip_tags($product->description ?: d_trans('No description available.')), 260) }}
-                    </p>
+                    @if ($product->description)
+                        <div class="desc-strip">
+                            {{ \Illuminate\Support\Str::limit(strip_tags($product->description), 300) }}
+                        </div>
+                    @endif
 
-                    {{-- Quick stats ──────────────────── --}}
-                    <div class="quick-stats">
-                        <div class="stat-box">
-                            <div class="stat-label">{{ d_trans('Overall Grade') }}</div>
-                            <div class="stat-value">
-                                @php $g = $product->overall_grade; @endphp
-                                @if ($g)
-                                    <span
-                                        class="grade-badge {{ str_contains($g, 'good') ? 'grade-good' : (str_contains($g, 'poor') ? 'grade-poor' : 'grade-ok') }}">
-                                        {{ str_replace('_', ' ', ucfirst($g)) }}
-                                    </span>
-                                @else
-                                    <span class="grade-badge grade-na">N/A</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">{{ d_trans('Test Date') }}</div>
-                            <div class="stat-value">
-                                {{ $product->test_date ? $product->test_date->format('M d, Y') : 'N/A' }}
-                            </div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">{{ d_trans('Price') }}</div>
-                            <div class="stat-value">
-                                {{ $product->price ? $product->currency . ' ' . numberFormat($product->price) : 'N/A' }}
-                            </div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">{{ d_trans('Size') }}</div>
-                            <div class="stat-value">{{ $product->product_size ?: 'N/A' }}</div>
-                        </div>
-                    </div>
-
-                    {{-- Brand / Category cards ──────── --}}
-                    <div class="entity-row">
-                        <div class="entity-card">
-                            <img src="{{ asset($product->brand?->logo) }}" alt="{{ $product->brand?->name }}">
-                            <div class="entity-info">
-                                <div class="entity-type">{{ d_trans('Brand') }}</div>
-                                <div class="entity-name">{{ $product->brand?->name ?: 'N/A' }}</div>
-                            </div>
-                        </div>
-                        <div class="entity-card">
-                            <img src="{{ asset($product->category->image) }}"
-                                alt="{{ $product->category->trans->name }}">>
-                            <div class="entity-info">
-                                <div class="entity-type">{{ d_trans('Category') }}</div>
-                                <div class="entity-name">{{ $product->category->trans->name ?: 'N/A' }}</div>
-                            </div>
-                        </div>
-                        @if ($product->subCategory)
-                            <div class="entity-card">
-                                <img src="{{ asset($product->subCategory->image) }}"
-                                    alt="{{ $product->subCategory->trans->name }}">
-                                <div class="entity-info">
-                                    <div class="entity-type">{{ d_trans('Sub Category') }}</div>
-                                    <div class="entity-name">{{ $product->subCategory->trans->name }}</div>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-
-                    {{-- Tabs ───────────────────────── --}}
                     <div class="tab-bar">
                         <button class="tab-btn active"
-                            onclick="switchTab(this,'tab-snapshot')">{{ d_trans('Lab Snapshot') }}</button>
-                        <button class="tab-btn"
-                            onclick="switchTab(this,'tab-details')">{{ d_trans('Full Test Details') }}</button>
+                            onclick="switchTab(this,'tab-snap')"><i class="fas fa-microscope"></i> {{ d_trans('Lab Snapshot') }}</button>
+                        <button class="tab-btn" onclick="switchTab(this,'tab-full')"><i class="fas fa-file-alt"></i> {{ d_trans('Full Details') }}</button>
                     </div>
 
-                    {{-- Tab: Lab Snapshot --}}
-                    <div class="tab-panel active" id="tab-snapshot">
+                    <div class="tab-panel active" id="tab-snap">
+                        @php
+                            $snap = [
+                                d_trans('Lab Name') => $lab?->lab_name ?: '—',
+                                d_trans('Ingredient Grade') => $lab?->ingredient_grade,
+                                d_trans('Defects Grade') => $lab?->defects_grade,
+                                d_trans('Overall Grade') => $lab?->overall_grade,
+                                d_trans('Fragrance') => $lab ? ($lab->has_fragrance ? 'yes' : 'no') : null,
+                                d_trans('Concerning UV Filter') => $lab
+                                    ? ($lab->concerning_uv_filter
+                                        ? 'yes'
+                                        : 'no')
+                                    : null,
+                            ];
+                        @endphp
                         <div class="lab-rows">
-                            @php
-                                $snapRows = [
-                                    d_trans('Lab Name') => $lab?->lab_name ?: 'N/A',
-                                    d_trans('Ingredient Grade') => $lab?->ingredient_grade,
-                                    d_trans('Defects Grade') => $lab?->defects_grade,
-                                    d_trans('Overall Grade') => $lab?->overall_grade,
-                                    d_trans('Fragrance') => $lab ? ($lab->has_fragrance ? 'yes' : 'no') : null,
-                                    d_trans('Concerning UV Filter') => $lab
-                                        ? ($lab->concerning_uv_filter
-                                            ? 'yes'
-                                            : 'no')
-                                        : null,
-                                ];
-                            @endphp
-                            @foreach ($snapRows as $label => $val)
+                            @foreach ($snap as $lbl => $val)
                                 <div class="lab-row">
-                                    <span class="lab-row-label">{{ $label }}</span>
-                                    <span class="lab-row-value">
+                                    <span class="lab-lbl">{{ $lbl }}</span>
+                                    <span class="lab-val">
                                         @if (is_null($val))
-                                            <span class="bool-ok">N/A</span>
+                                            <span class="bool-na">—</span>
                                         @elseif ($val === 'yes')
-                                            <span class="bool-yes">✓ Yes</span>
+                                            <span class="bool-y">✓ Yes</span>
                                         @elseif ($val === 'no')
-                                            <span class="bool-no">✗ No</span>
+                                            <span class="bool-n">✗ No</span>
                                         @elseif (in_array($val, ['very_good', 'good']))
                                             <span
-                                                class="grade-badge grade-good">{{ str_replace('_', ' ', ucfirst($val)) }}</span>
+                                                class="grade-pill gp-good">{{ str_replace('_', ' ', ucfirst($val)) }}</span>
                                         @elseif (in_array($val, ['poor', 'bad']))
                                             <span
-                                                class="grade-badge grade-poor">{{ str_replace('_', ' ', ucfirst($val)) }}</span>
+                                                class="grade-pill gp-poor">{{ str_replace('_', ' ', ucfirst($val)) }}</span>
                                         @else
                                             {{ is_string($val) ? str_replace('_', ' ', ucfirst($val)) : $val }}
                                         @endif
@@ -847,58 +1011,57 @@
                             @endforeach
                         </div>
                         @if ($lab?->test_summary)
-                            <div class="left-box mt-4">
-                                <div class="left-box-title">📋 {{ d_trans('Test Summary') }}</div>
-                                <p style="margin:0;font-size:.74rem;color:var(--text-mid);line-height:1.55;">
-                                    {{ $lab->test_summary }}</p>
+                            <div class="summary-box">
+                                <div class="section-label" style="margin-bottom:8px;">📋 {{ d_trans('Test Summary') }}
+                                </div>
+                                <p>{{ $lab->test_summary }}</p>
                             </div>
                         @endif
                     </div>
 
-                    {{-- Tab: Full Test Details --}}
-                    <div class="tab-panel" id="tab-details">
+                    <div class="tab-panel" id="tab-full">
                         @php
-                            $boolVal = fn($v) => $v ? 'yes' : 'no';
+                            $boolFn = fn($v) => $v ? 'yes' : 'no';
                             $rows = [
-                                d_trans('Lab Verified') => $boolVal($product->lab_verified),
-                                d_trans('Test Date') => $product->test_date?->format('M d, Y') ?: 'N/A',
-                                d_trans('Test Year') => $product->test_year ?: 'N/A',
-                                d_trans('Test Edition') => $product->test_edition ?: 'N/A',
-                                d_trans('Magazine Page') => $product->magazine_page ?: 'N/A',
-                                d_trans('Organic Certified') => $boolVal($product->organic_certified),
-                                d_trans('Organic Certifier') => $product->organic_certifier ?: 'N/A',
-                                d_trans('Lab Name') => $lab?->lab_name ?: 'N/A',
-                                d_trans('Lab Tested At') => $lab?->tested_at?->format('M d, Y') ?: 'N/A',
-                                d_trans('Mineral UV Filter') => $lab?->mineral_uv_filter ?: 'N/A',
-                                d_trans('Concerning UV Filter') => $lab ? $boolVal($lab->concerning_uv_filter) : 'N/A',
-                                d_trans('Has Fragrance') => $lab ? $boolVal($lab->has_fragrance) : 'N/A',
-                                d_trans('Further Concerns') => $lab ? $boolVal($lab->further_concerns) : 'N/A',
-                                d_trans('Further Concerns Detail') => $lab?->further_concerns_detail ?: 'N/A',
-                                d_trans('Plastic Compounds') => $lab ? $boolVal($lab->plastic_compounds) : 'N/A',
-                                d_trans('Further Defects') => $lab ? $boolVal($lab->further_defects) : 'N/A',
-                                d_trans('Further Defects Detail') => $lab?->further_defects_detail ?: 'N/A',
+                                d_trans('Lab Verified') => $boolFn($product->lab_verified),
+                                d_trans('Test Date') => $product->test_date?->format('M d, Y') ?: '—',
+                                d_trans('Test Year') => $product->test_year ?: '—',
+                                d_trans('Test Edition') => $product->test_edition ?: '—',
+                                d_trans('Magazine Page') => $product->magazine_page ?: '—',
+                                d_trans('Organic Certified') => $boolFn($product->organic_certified),
+                                d_trans('Organic Certifier') => $product->organic_certifier ?: '—',
+                                d_trans('Lab Name') => $lab?->lab_name ?: '—',
+                                d_trans('Lab Tested At') => $lab?->tested_at?->format('M d, Y') ?: '—',
+                                d_trans('Mineral UV Filter') => $lab?->mineral_uv_filter ?: '—',
+                                d_trans('Concerning UV Filter') => $lab ? $boolFn($lab->concerning_uv_filter) : '—',
+                                d_trans('Has Fragrance') => $lab ? $boolFn($lab->has_fragrance) : '—',
+                                d_trans('Further Concerns') => $lab ? $boolFn($lab->further_concerns) : '—',
+                                d_trans('Further Concerns Detail') => $lab?->further_concerns_detail ?: '—',
+                                d_trans('Plastic Compounds') => $lab ? $boolFn($lab->plastic_compounds) : '—',
+                                d_trans('Further Defects') => $lab ? $boolFn($lab->further_defects) : '—',
+                                d_trans('Further Defects Detail') => $lab?->further_defects_detail ?: '—',
                                 d_trans('Ingredient Grade') => $lab?->ingredient_grade
                                     ? str_replace('_', ' ', ucfirst($lab->ingredient_grade))
-                                    : 'N/A',
+                                    : '—',
                                 d_trans('Defects Grade') => $lab?->defects_grade
                                     ? str_replace('_', ' ', ucfirst($lab->defects_grade))
-                                    : 'N/A',
+                                    : '—',
                                 d_trans('Overall Grade') => $lab?->overall_grade
                                     ? str_replace('_', ' ', ucfirst($lab->overall_grade))
-                                    : 'N/A',
-                                d_trans('Footnote Reference') => $lab?->footnote_ref ?: 'N/A',
-                                d_trans('Footnote Text') => $lab?->footnote_text ?: 'N/A',
+                                    : '—',
+                                d_trans('Footnote Reference') => $lab?->footnote_ref ?: '—',
+                                d_trans('Footnote Text') => $lab?->footnote_text ?: '—',
                             ];
                         @endphp
                         <div class="lab-rows">
-                            @foreach ($rows as $label => $val)
+                            @foreach (array_slice($rows, 0, 10) as $lbl => $val)
                                 <div class="lab-row">
-                                    <span class="lab-row-label">{{ $label }}</span>
-                                    <span class="lab-row-value">
+                                    <span class="lab-lbl">{{ $lbl }}</span>
+                                    <span class="lab-val">
                                         @if ($val === 'yes')
-                                            <span class="bool-yes">✓ Yes</span>
+                                            <span class="bool-y">✓ Yes</span>
                                         @elseif ($val === 'no')
-                                            <span class="bool-no">✗ No</span>
+                                            <span class="bool-n">✗ No</span>
                                         @else
                                             {{ $val }}
                                         @endif
@@ -906,108 +1069,41 @@
                                 </div>
                             @endforeach
                         </div>
+                        @if (count($rows) > 10)
+                            <div style="padding: 0 22px 16px;">
+                                <button class="btn-show-more" onclick="openDetailsModal()">{{ d_trans('Show More') }}</button>
+                            </div>
+                        @endif
                     </div>
 
-                </div>{{-- /detail-col --}}
-            </div>{{-- /product-body --}}
-
-            {{-- ══ Comparison Table ══ --}}
-            @if ($similarProducts->count())
-                <div class="comparison-section mt-5">
-                    <h3>{{ d_trans('Compare with Similar Products') }}</h3>
-                    <div class="comparison-wrap">
-                        <table class="comp-table">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:left;">{{ d_trans('Attribute') }}</th>
-                                    <th class="current-col">
-                                        <img class="comp-prod-img"
-                                            src="{{ asset($product->image ?? 'images/placeholder.png') }}"
-                                            alt="{{ $product->name }}">
-                                        <div class="comp-prod-name">{{ $product->name }}</div>
-                                        <div class="comp-prod-brand">{{ $product->brand?->name }}</div>
-                                    </th>
-                                    @foreach ($similarProducts as $sim)
-                                        <th>
-                                            <img class="comp-prod-img"
-                                                src="{{ asset($sim->image ?? 'images/placeholder.png') }}"
-                                                alt="{{ $sim->name }}">
-                                            <div class="comp-prod-name">{{ $sim->name }}</div>
-                                            <div class="comp-prod-brand">{{ $sim->brand?->name }}</div>
-                                        </th>
-                                    @endforeach
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $gradeCell = function ($g) {
-                                        if (!$g) {
-                                            return '<span style="color:#94a3b8">N/A</span>';
-                                        }
-                                        $cls = str_contains($g, 'good')
-                                            ? 'grade-good'
-                                            : (str_contains($g, 'poor')
-                                                ? 'grade-poor'
-                                                : 'grade-ok');
-                                        return '<span class="grade-badge ' .
-                                            $cls .
-                                            '">' .
-                                            str_replace('_', ' ', ucfirst($g)) .
-                                            '</span>';
-                                    };
-                                    $boolCell = fn($v) => $v
-                                        ? '<span class="bool-yes">✓ Yes</span>'
-                                        : '<span class="bool-no">✗ No</span>';
-                                @endphp
-                                <tr>
-                                    <td>{{ d_trans('Price') }}</td>
-                                    <td class="current-col" style="font-weight:700;">{{ $product->currency ?? '€' }}
-                                        {{ numberFormat($product->price ?? 0) }}</td>
-                                    @foreach ($similarProducts as $sim)
-                                        <td>{{ $sim->currency ?? '€' }} {{ numberFormat($sim->price ?? 0) }}</td>
-                                    @endforeach
-                                </tr>
-                                <tr>
-                                    <td>{{ d_trans('Overall Grade') }}</td>
-                                    <td class="current-col">{!! $gradeCell($product->labTestingResult?->overall_grade) !!}</td>
-                                    @foreach ($similarProducts as $sim)
-                                        <td>{!! $gradeCell($sim->labTestingResult?->overall_grade) !!}</td>
-                                    @endforeach
-                                </tr>
-                                <tr>
-                                    <td>{{ d_trans('Ingredient Grade') }}</td>
-                                    <td class="current-col">{!! $gradeCell($product->labTestingResult?->ingredient_grade) !!}</td>
-                                    @foreach ($similarProducts as $sim)
-                                        <td>{!! $gradeCell($sim->labTestingResult?->ingredient_grade) !!}</td>
-                                    @endforeach
-                                </tr>
-                                <tr>
-                                    <td>{{ d_trans('Mineral UV Filter') }}</td>
-                                    <td class="current-col">{!! $boolCell($product->labTestingResult?->mineral_uv_filter) !!}</td>
-                                    @foreach ($similarProducts as $sim)
-                                        <td>{!! $boolCell($sim->labTestingResult?->mineral_uv_filter) !!}</td>
-                                    @endforeach
-                                </tr>
-                                <tr>
-                                    <td>{{ d_trans('Fragrance') }}</td>
-                                    <td class="current-col">{!! $boolCell($product->labTestingResult?->has_fragrance) !!}</td>
-                                    @foreach ($similarProducts as $sim)
-                                        <td>{!! $boolCell($sim->labTestingResult?->has_fragrance) !!}</td>
-                                    @endforeach
-                                </tr>
-                                <tr>
-                                    <td>{{ d_trans('Concerning UV Filter') }}</td>
-                                    <td class="current-col">{!! $boolCell($product->labTestingResult?->concerning_uv_filter) !!}</td>
-                                    @foreach ($similarProducts as $sim)
-                                        <td>{!! $boolCell($sim->labTestingResult?->concerning_uv_filter) !!}</td>
-                                    @endforeach
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="cmp-strip">
+                        <div>
+                            <div class="cmp-badge">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <path
+                                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                                {{ d_trans('Side-by-Side Analysis') }}
+                            </div>
+                            <div class="cmp-title">{{ d_trans('Compare with Similar Products') }}</div>
+                            <div class="cmp-sub">
+                                {{ d_trans('Stack it against alternatives — specs, price, and performance in one view.') }}
+                            </div>
+                        </div>
+                        <a href="{{ route('products.comparison', $product->id) }}" class="cmp-btn">
+                            {{ d_trans('View Comparison') }}
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </a>
                     </div>
-                </div>
-            @endif
-        </div>{{-- /card-shell --}}
+
+                </div>{{-- /right-col --}}
+            </div>{{-- /prod-body --}}
+        </div>{{-- /shell --}}
+
         <div class="mt-4">
             @include('themes.basic.partials.user-reviews', [
                 'userReviews' => $product->userReviews()->approved()->latest()->get(),
@@ -1015,15 +1111,38 @@
                 'reviewAction' => route('products.reviews.store', $product->slug ?? $product->id),
             ])
         </div>
-        <!-- Image Modal -->
+
         <div class="modal-overlay" id="imageModal">
-            <div class="modal-content">
-                <button class="modal-close" onclick="closeImageModal()">&times;</button>
-                <h3 style="margin: 0 0 16px 0; color: var(--text-dark);">{{ d_trans('All Product Images') }}</h3>
-                <div class="modal-images-grid">
-                    @foreach ($productImageUrls as $imageUrl)
-                        <div class="modal-image" onclick="selectPreviewFromModal(this, '{{ $imageUrl }}')">
-                            <img src="{{ $imageUrl }}" alt="{{ $product->name }}">
+            <div class="modal-box">
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+                <div class="modal-title">{{ d_trans('All Product Images') }}</div>
+                <div class="modal-grid">
+                    @foreach ($productImageUrls as $url)
+                        <div class="modal-img" onclick="pickFromModal('{{ $url }}')">
+                            <img src="{{ $url }}" alt="{{ $product->name }}">
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="detailsModal">
+            <div class="modal-box" style="max-width: 800px; width: 100%;">
+                <button class="modal-close" onclick="closeDetailsModal()">&times;</button>
+                <div class="modal-title">{{ d_trans('Full Test Details') }}</div>
+                <div class="modal-2col">
+                    @foreach ($rows as $lbl => $val)
+                        <div class="lab-row" style="padding: 12px 0;">
+                            <span class="lab-lbl">{{ $lbl }}</span>
+                            <span class="lab-val">
+                                @if ($val === 'yes')
+                                    <span class="bool-y">✓ Yes</span>
+                                @elseif ($val === 'no')
+                                    <span class="bool-n">✗ No</span>
+                                @else
+                                    {{ $val }}
+                                @endif
+                            </span>
                         </div>
                     @endforeach
                 </div>
@@ -1032,100 +1151,60 @@
 
         @push('scripts')
             <script>
-                const imageUrls = {!! json_encode($productImageUrls->values()->all()) !!};
-
-                function selectRoast(el) {
-                    document.querySelectorAll('.roast-card').forEach(c => c.classList.remove('active'));
-                    el.classList.add('active');
-                }
-
-                function selectPreview(el, imageUrl) {
-                    const mainImage = document.getElementById('mainProductImage');
-                    if (mainImage) {
-                        mainImage.src = imageUrl;
-                    }
-
+                function selectPreview(el, url) {
+                    document.getElementById('mainProductImage').src = url;
                     document.querySelectorAll('.img-thumb').forEach(t => t.classList.remove('active'));
                     el.classList.add('active');
                 }
 
                 function openImageModal() {
-                    document.getElementById('imageModal').classList.add('active');
+                    document.getElementById('imageModal').classList.add('open');
                     document.body.style.overflow = 'hidden';
                 }
 
-                function closeImageModal() {
-                    document.getElementById('imageModal').classList.remove('active');
-                    document.body.style.overflow = 'auto';
-                }
-
-                function selectPreviewFromModal(el, imageUrl) {
-                    const mainImage = document.getElementById('mainProductImage');
-                    if (mainImage) {
-                        mainImage.src = imageUrl;
-                    }
-                    closeImageModal();
-                }
-
-                // Close modal when clicking outside
-                document.getElementById('imageModal')?.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        closeImageModal();
-                    }
-                });
-
-                // Close modal with Escape key
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        closeImageModal();
-                    }
-                });
-
-
-
-                function selectRoast(el) {
-                    document.querySelectorAll('.roast-card').forEach(c => c.classList.remove('active'));
-                    el.classList.add('active');
-                }
-
-                function selectPreview(el, imageUrl) {
-                    document.getElementById('mainProductImage').src = imageUrl;
-                    document.querySelectorAll('.img-thumb').forEach(t => t.classList.remove('active'));
-                    el.classList.add('active');
-                }
-
-                function openImageModal() {
-                    document.getElementById('imageModal').classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                }
-
-                function closeImageModal() {
-                    document.getElementById('imageModal').classList.remove('active');
+                function closeModal() {
+                    document.getElementById('imageModal').classList.remove('open');
                     document.body.style.overflow = '';
                 }
 
-                function selectPreviewFromModal(el, imageUrl) {
-                    document.getElementById('mainProductImage').src = imageUrl;
-                    closeImageModal();
+                function pickFromModal(url) {
+                    document.getElementById('mainProductImage').src = url;
+                    closeModal();
                 }
 
-                function switchTab(btn, panelId) {
+                function switchTab(btn, id) {
                     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
                     btn.classList.add('active');
-                    document.getElementById(panelId).classList.add('active');
+                    document.getElementById(id).classList.add('active');
                 }
 
-                document.getElementById('imageModal')?.addEventListener('click', function(e) {
-                    if (e.target === this) closeImageModal();
+                function openDetailsModal() {
+                    document.getElementById('detailsModal').classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                }
+
+                function closeDetailsModal() {
+                    document.getElementById('detailsModal').classList.remove('open');
+                    document.body.style.overflow = '';
+                }
+
+                document.getElementById('imageModal')?.addEventListener('click', e => {
+                    if (e.target === e.currentTarget) closeModal();
+                });
+                document.getElementById('detailsModal')?.addEventListener('click', e => {
+                    if (e.target === e.currentTarget) closeDetailsModal();
                 });
                 document.addEventListener('keydown', e => {
-                    if (e.key === 'Escape') closeImageModal();
+                    if (e.key === 'Escape') {
+                        closeModal();
+                        closeDetailsModal();
+                    }
                 });
             </script>
         @endpush
     @else
-        <div style="height: 100vh; display:flex; align-items:center; justify-content:center;">
+        <div style="height:100vh;display:flex;align-items:center;justify-content:center;">
             @include('themes.basic.partials.plan-exceed-modal')
         </div>
     @endif
