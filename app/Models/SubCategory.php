@@ -24,6 +24,7 @@ class SubCategory extends Model
         'image',
         'title',
         'description',
+        'guide',
         'keywords',
         'views',
         'category_id',
@@ -33,6 +34,7 @@ class SubCategory extends Model
     {
         return [
             'views' => 'integer',
+            'guide' => 'array',
         ];
     }
 

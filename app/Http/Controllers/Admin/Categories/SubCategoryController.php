@@ -75,6 +75,8 @@ class SubCategoryController extends Controller
             'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:500'],
+                'guide' => ['nullable', 'array'],
+                'guide.*' => ['string', 'max:255'],
             'keywords' => ['nullable', 'string', 'max:255'],
         ]);
 
@@ -118,6 +120,7 @@ class SubCategoryController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'keywords' => $request->keywords,
+            'guide' => $request->guide,
         ]);
 
         toastr()->success(d_trans('Created Successfully'));
@@ -136,7 +139,7 @@ class SubCategoryController extends Controller
 
     public function update(Request $request, SubCategory $subCategory)
     {
-
+       
         $validator = Validator::make($request->all(), [
             'category' => ['required', 'integer', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
@@ -144,6 +147,8 @@ class SubCategoryController extends Controller
             'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:500'],
+            'guide' => ['nullable', 'array'],
+            'guide.*' => ['string', 'max:255'],
             'keywords' => ['nullable', 'string', 'max:255'],
         ]);
 
@@ -188,6 +193,7 @@ class SubCategoryController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'keywords' => $request->keywords,
+            'guide' => $request->guide,
         ]);
 
         toastr()->success(d_trans('Updated Successfully'));
