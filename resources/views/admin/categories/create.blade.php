@@ -36,6 +36,23 @@
                         <textarea name="description" class="form-control" rows="6">{{ old('description') }}</textarea>
                     </div>
                     <div class="col-12">
+                        <label class="form-label">{{ d_trans('Guide Points') }}</label>
+
+                        <div id="guide-wrapper">
+                            <div class="input-group mb-2">
+                                <input type="text" name="guide[]" class="form-control" placeholder="Enter guide point">
+
+                                <button type="button" class="btn btn-danger remove-guide">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary btn-sm mt-2" id="add-guide">
+                            <i class="fa fa-plus"></i> Add Point
+                        </button>
+                    </div>
+                    <div class="col-12">
                         <label class="form-label">{{ d_trans('Keywords (Optional)') }}</label>
                         <div class="tagsinput tagsinput-md">
                             <input type="text" name="keywords" class="form-control form-control-md tags-input"
@@ -51,5 +68,31 @@
     @endpush
     @push('scripts_libs')
         <script src="{{ asset('vendor/libs/bootstrap/tags-input/tags-input.min.js') }}"></script>
+        <script></script>
+    @endpush
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+
+                $('#add-guide').on('click', function() {
+
+                    $('#guide-wrapper').append(`
+                <div class="input-group mb-2">
+                    <input type="text" name="guide[]" class="form-control"
+                        placeholder="Enter guide point">
+
+                    <button type="button" class="btn btn-danger remove-guide">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            `);
+                });
+
+                $(document).on('click', '.remove-guide', function() {
+                    $(this).closest('.input-group').remove();
+                });
+
+            });
+        </script>
     @endpush
 @endsection

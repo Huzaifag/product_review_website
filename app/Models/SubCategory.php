@@ -75,5 +75,11 @@ class SubCategory extends Model
         return $this->hasMany(Product::class);
     }
 
+    //getImageLink()
+    public function getImageLink()
+    {
+        return asset($this->image);
+    }
+
 
 }

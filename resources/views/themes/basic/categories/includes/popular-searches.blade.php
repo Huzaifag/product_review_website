@@ -1,3 +1,5 @@
+
+
 @if ($popularSearches->count() > 0)
     <div class="mt-5 text-center">
         <h4 class="mb-4">{{ d_trans('Popular searches') }}</h4>

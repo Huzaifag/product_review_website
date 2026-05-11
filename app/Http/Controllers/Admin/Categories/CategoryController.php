@@ -57,6 +57,8 @@ class CategoryController extends Controller
             'image' => ['required', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
+            'guide' => ['nullable', 'array'],
+            'guide.*' => ['nullable', 'string'],
             'keywords' => ['nullable', 'string', 'max:255'],
         ]);
 
@@ -82,6 +84,7 @@ class CategoryController extends Controller
         $category->image = $image;
         $category->title = $request->title;
         $category->description = $request->description;
+        $category->guide = array_values(array_filter($request->guide ?? []));
         $category->keywords = $request->keywords;
         $category->save();
 
@@ -104,6 +107,8 @@ class CategoryController extends Controller
             'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
+            'guide' => ['nullable', 'array'],
+            'guide.*' => ['nullable', 'string'],
             'keywords' => ['nullable', 'string', 'max:255'],
         ]);
 
@@ -133,6 +138,7 @@ class CategoryController extends Controller
         $category->image = $image;
         $category->title = $request->title;
         $category->description = $request->description;
+        $category->guide = array_values(array_filter($request->guide ?? []));
         $category->keywords = $request->keywords;
         $category->update();
 

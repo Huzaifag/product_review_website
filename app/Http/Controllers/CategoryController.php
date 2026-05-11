@@ -59,6 +59,8 @@ class CategoryController extends Controller
         })->limit(10)->get();
 
 
+        
+
         return theme_view('categories.index', [
             'categories' => $categories,
             'search' => $search,
@@ -83,12 +85,16 @@ class CategoryController extends Controller
 
         incrementViews($category, 'categories');
 
+        $sub_categories = $category->subCategories()->limit(12)->get();
+        
+
         return theme_view('categories.category', [
             'category' => $category,
             'searchCategories' => $searchCategories,
             'popularSearches' => $popularSearches,
             'products' => $products,
             'search_brands' => $search_brands,
+            'sub_categories' => $sub_categories,
         ]);
     }
 

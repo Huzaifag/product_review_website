@@ -24,6 +24,7 @@ class Category extends Model
         'image',
         'title',
         'description',
+        'guide',
         'keywords',
         'views',
     ];
@@ -32,6 +33,7 @@ class Category extends Model
     {
         return [
             'views' => 'integer',
+            'guide' => 'array',
         ];
     }
 
@@ -42,6 +44,7 @@ class Category extends Model
             'title' => $this->title ? m_trans($this->title) : null,
             'description' => $this->description ? m_trans($this->description) : null,
             'keywords' => $this->keywords ? m_trans($this->keywords) : null,
+            'guide' => $this->guide,
         ];
     }
 
