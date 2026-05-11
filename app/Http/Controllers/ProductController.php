@@ -10,6 +10,7 @@ use App\Models\Subscription;
 use App\Models\UserProductViewCount;
 use App\Models\UserReview;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
@@ -53,8 +54,8 @@ class ProductController extends Controller
         }
 
         if (request()->filled('search')) {
-            $searchTerm = '%'.request('search').'%';
-            $searchTermStart = request('search').'%';
+            $searchTerm = '%' . request('search') . '%';
+            $searchTermStart = request('search') . '%';
             $products = $products->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'like', $searchTerm)
                     ->orWhere('description', 'like', $searchTerm)
@@ -94,7 +95,7 @@ class ProductController extends Controller
         }
 
         if (request()->filled('product_size')) {
-            $products = $products->where('product_size', 'like', '%'.request('product_size').'%');
+            $products = $products->where('product_size', 'like', '%' . request('product_size') . '%');
         }
 
         if (request()->filled('featured')) {
@@ -171,7 +172,7 @@ class ProductController extends Controller
             $product->cached_reviews = Cache::remember(
                 "product:{$product->id}:reviews",
                 now()->addDay(),
-                fn () => $product->userReviews()->approved()
+                fn() => $product->userReviews()->approved()
                     ->with(['user', 'product'])->orderbyDesc('id')->limit(6)->get()
             );
 
@@ -182,7 +183,7 @@ class ProductController extends Controller
             return Cache::remember("product:{$product->id}:first_categories", now()->addDay(), function () use ($product) {
                 $subCategory = $product->subCategory;
 
-                if (! $subCategory) {
+                if (!$subCategory) {
                     $product->first_categories = null;
 
                     return $product;
@@ -202,77 +203,54 @@ class ProductController extends Controller
 
     public function show($slug)
     {
-        $sessionId = session()->getId();
-
         $product = Product::active()
-            ->where(function ($query) use ($slug) {
-                $query->where('slug', $slug)
-                    ->orWhere('id', $slug);
-            })
-            ->with(['brand', 'category', 'subCategory', 'labTestingResult', 'ingredientConcerns', 'images'])
+            ->where(fn($q) => $q->where('slug', $slug)->orWhere('id', $slug))
+            ->with(['brand', 'category', 'subCategory', 'ingredientConcerns', 'images', 'productTest'])
             ->withCount([
-                'userReviews as approved_reviews_count' => function ($query) {
-                    $query->approved();
-                },
+                'userReviews as approved_reviews_count' => fn($q) => $q->approved(),
             ])
             ->firstOrFail();
 
-        $product->increment('view_count');
+        // Fire-and-forget increment (no SELECT round-trip)
+        Product::where('id', $product->id)->update(['view_count' => DB::raw('view_count + 1')]);
 
-        $similarProducts = Product::where('id', '!=', $product->id)
+        $similarProducts = Product::active()
+            ->where('id', '!=', $product->id)
             ->where('category_id', $product->category_id)
             ->where('sub_category_id', $product->sub_category_id)
-            ->with('labTestingResult')
             ->limit(3)
             ->get();
 
         $userProductViewCount = $this->retrieveOrCreateUserProductViewCount($product->id);
 
-        // Get combined limit from all active subscriptions
-        $subscriptions = collect();
-        $totalLimit = 0;
-        $isUnlimited = false;
+        ['subscriptions' => $subscriptions, 'combinedLimit' => $combinedLimit]
+            = $this->getSubscriptionLimit();
 
-        if (auth()->check()) {
-            $subscriptions = Subscription::with('plan')
-                ->where('user_id', auth()->id())
-                ->where(function ($query) {
-                    $query->where('expiry_at', '>', now())
-                        ->orWhereNull('expiry_at');
-                })
-                ->get();
-
-            foreach ($subscriptions as $sub) {
-                if ($sub->plan && is_null($sub->plan->products_limit)) {
-                    $isUnlimited = true;
-                    break;
-                }
-                if ($sub->plan && $sub->plan->products_limit) {
-                    $totalLimit += (int) $sub->plan->products_limit;
-                }
-            }
-        }
-
-        $combinedLimit = $isUnlimited ? null : $totalLimit;
         $canSeeDetails = $this->canSeeProductDetails($combinedLimit, $userProductViewCount, $product->id);
 
-        return theme_view('products.show', [
-            'product' => $product,
-            'similarProducts' => $similarProducts,
-            'canSeeDetails' => $canSeeDetails,
-            'subscriptions' => $subscriptions,
-            'combinedLimit' => $combinedLimit,
-            'userProductViewCount' => $userProductViewCount,
-        ]);
-    }
+        // Loaded via eager relation — no extra query
+        $testAttributes = collect();
+        if ($product->productTest?->data) {
+            $testAttributes = \App\Models\TestAttribute::whereIn('id', array_keys($product->productTest->data))
+                ->where('status', 'active')
+                ->get();
+        }
 
+        return theme_view('products.show', compact(
+            'product',
+            'similarProducts',
+            'canSeeDetails',
+            'subscriptions',
+            'combinedLimit',
+            'userProductViewCount',
+            'testAttributes'
+        ));
+    }
     //Product Comparion
     public function comparison($id)
     {
-        $product = Product::active()->where('id', $id)->first();
-        if (! $product) {
-            abort(404);
-        }
+        $product = Product::active()->findOrFail($id);
+
         $similarProducts = Product::active()
             ->where('id', '!=', $product->id)
             ->where('category_id', $product->category_id)
@@ -283,68 +261,133 @@ class ProductController extends Controller
             ->limit(2)
             ->get();
 
-        // Prepare ProductTest data
-        $productTests = collect();
+        $similarIds = $similarProducts->pluck('id')->toArray();
+
+        // Single upsert — no double fetch, no race condition
+        $userProductViewCount = $this->resolveUserProductViewCount();
+
+        $existingIds = is_array($userProductViewCount->product_ids)
+            ? $userProductViewCount->product_ids
+            : json_decode($userProductViewCount->product_ids, true) ?? [];
+
+        $updatedIds = collect($existingIds)->merge($similarIds)->unique()->values()->toArray();
+
+        $userProductViewCount->update([
+            'product_ids' => $updatedIds,
+            'products_viewed' => count($updatedIds),
+        ]);
+
+        ['subscriptions' => $subscriptions, 'combinedLimit' => $combinedLimit]
+            = $this->getSubscriptionLimit();
+
+        $canSeeDetails = $this->canSeeProductDetails($combinedLimit, $userProductViewCount, $product->id);
+
+        // Fix N+1: load ALL product tests in 1 query
+        $allProductIds = collect([$product->id])->merge($similarIds)->toArray();
+
+        $productTests = \App\Models\ProductTest::whereIn('product_id', $allProductIds)
+            ->get()
+            ->keyBy('product_id');   // keyed collection — O(1) lookup
+
+        $mainTest = $productTests->get($product->id);
         $allTestIds = collect();
-        
-        // Get test for main product
-        $mainTest = \App\Models\ProductTest::where('product_id', $product->id)->first();
-        if ($mainTest && $mainTest->data) {
-            $productTests->put($product->id, $mainTest);
-            $allTestIds = $allTestIds->merge(array_keys($mainTest->data));
-        }
-        
-        // Get tests for similar products
-        foreach ($similarProducts as $sim) {
-            $test = \App\Models\ProductTest::where('product_id', $sim->id)->first();
-            if ($test && $test->data) {
-                $productTests->put($sim->id, $test);
+
+        foreach ($productTests as $test) {
+            if ($test->data) {
                 $allTestIds = $allTestIds->merge(array_keys($test->data));
             }
         }
-        
-        // Get unique test attribute IDs and load attributes
+
         $allTestIds = $allTestIds->unique()->sort();
         $testAttributes = \App\Models\TestAttribute::whereIn('id', $allTestIds->values())
             ->where('status', 'active')
             ->get();
 
-        // Get test name (use mainTest name if available, otherwise from first available test)
         $testName = $mainTest?->name ?? $productTests->first()?->name ?? null;
 
-        // Find overall_grade attribute ID
-        $overallGradeAttr = $testAttributes->firstWhere('name', 'overall_grade') 
-            ?? $testAttributes->first(function($attr) {
-                return strtolower($attr->name) === 'overall_grade' || strtolower($attr->name) === 'gesamturteil';
-            });
-
+        $overallGradeAttr = $testAttributes->first(
+            fn($a) => in_array(strtolower($a->name), ['overall_grade', 'gesamturteil'])
+        );
         $overallGradeAttrId = $overallGradeAttr?->id;
 
-        // Prepare overall grades from test attributes
         $overallGrades = collect();
-        if ($overallGradeAttrId && $mainTest && isset($mainTest->data[$overallGradeAttrId])) {
-            $overallGrades->put($product->id, $mainTest->data[$overallGradeAttrId]);
-        } else {
-            $overallGrades->put($product->id, null);
+        foreach ($allProductIds as $pid) {
+            $test = $productTests->get($pid);
+            $overallGrades->put(
+                $pid,
+                ($overallGradeAttrId && $test && isset($test->data[$overallGradeAttrId]))
+                ? $test->data[$overallGradeAttrId]
+                : null
+            );
         }
 
-        foreach ($similarProducts as $sim) {
-            $test = $productTests->get($sim->id);
-            if ($overallGradeAttrId && $test && isset($test->data[$overallGradeAttrId])) {
-                $overallGrades->put($sim->id, $test->data[$overallGradeAttrId]);
-            } else {
-                $overallGrades->put($sim->id, null);
+        return theme_view('products.comparison', compact(
+            'product',
+            'similarProducts',
+            'productTests',
+            'mainTest',
+            'testAttributes',
+            'testName',
+            'overallGrades',
+            'canSeeDetails',
+            'subscriptions',
+            'combinedLimit',
+            'userProductViewCount'
+        ));
+    }
+
+
+    private function getSubscriptionLimit(): array
+    {
+        if (!auth()->check()) {
+            return ['subscriptions' => collect(), 'combinedLimit' => 0];
+        }
+
+        $subscriptions = Subscription::with('plan')
+            ->where('user_id', auth()->id())
+            ->where(function ($q) {
+                $q->where('expiry_at', '>', now())->orWhereNull('expiry_at');
+            })
+            ->get();
+
+        $totalLimit = 0;
+        $isUnlimited = false;
+
+        foreach ($subscriptions as $sub) {
+            if ($sub->plan && is_null($sub->plan->products_limit)) {
+                $isUnlimited = true;
+                break;
+            }
+            if ($sub->plan?->products_limit) {
+                $totalLimit += (int) $sub->plan->products_limit;
             }
         }
 
-        return theme_view('products.comparison', compact('product', 'similarProducts', 'productTests', 'mainTest', 'testAttributes', 'testName', 'overallGrades'));
+        return [
+            'subscriptions' => $subscriptions,
+            'combinedLimit' => $isUnlimited ? null : $totalLimit,
+        ];
+    }
+
+    private function resolveUserProductViewCount(): UserProductViewCount
+    {
+        $query = fn($q) => auth()->check()
+            ? $q->where('user_id', auth()->id())
+            : $q->where('session_id', session()->getId())->whereNull('user_id');
+
+        return UserProductViewCount::where($query)->firstOrCreate(
+            auth()->check()
+            ? ['user_id' => auth()->id()]
+            : ['session_id' => session()->getId(), 'user_id' => null],
+            ['product_ids' => [], 'products_viewed' => 0]
+        );
     }
 
     public function reviewStore(Request $request, $slug)
     {
 
         $user = authUser();
-        if (! $user) {
+        if (!$user) {
             toastr()->info(d_trans('Please sign in to your account in order to leave a review'));
 
             return redirect()->route('login');
@@ -401,7 +444,7 @@ class ProductController extends Controller
     public function reviewHelpful($review)
     {
         $user = authUser();
-        if (! $user) {
+        if (!$user) {
             toastr()->info(d_trans('Please sign in to your account in order to mark a review as helpful'));
 
             return redirect()->route('login');
@@ -409,7 +452,7 @@ class ProductController extends Controller
 
         $review = UserReview::approved()->where('id', $review)->firstOrFail();
 
-        $cacheKey = 'user_review_helpful:'.$user->id.':'.$review->id;
+        $cacheKey = 'user_review_helpful:' . $user->id . ':' . $review->id;
         if (Cache::has($cacheKey)) {
             toastr()->info(d_trans('You already marked this review as helpful'));
 
@@ -486,7 +529,7 @@ class ProductController extends Controller
         $alreadyViewed = in_array($productId, $productIds);
         $canAddNewView = is_null($productsLimit) || $alreadyViewed || count($productIds) < (int) $productsLimit;
 
-        if (! $alreadyViewed && $canAddNewView) {
+        if (!$alreadyViewed && $canAddNewView) {
             $productIds[] = $productId;
             $userProductViewCount->product_ids = $productIds;
             $userProductViewCount->products_viewed = count($productIds);
@@ -521,8 +564,8 @@ class ProductController extends Controller
             return response()->json([]);
         }
 
-        $searchLike = '%'.$searchTerm.'%';
-        $searchStart = $searchTerm.'%';
+        $searchLike = '%' . $searchTerm . '%';
+        $searchStart = $searchTerm . '%';
 
         $products = Product::active()
             ->with(['category', 'brand'])

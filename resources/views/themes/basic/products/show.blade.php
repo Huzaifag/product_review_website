@@ -807,10 +807,11 @@
             $productImageUrls = collect([$product->getImageLink()]);
         }
 
-        $lab = $product->labTestingResult;
+        $productTest = $product->productTest;
+        $testData = $productTest?->data ?? [];
         $concerns = $product->ingredientConcerns ?? collect();
 
-        $g = $product->overall_grade ?? $lab?->overall_grade;
+        $g = $product->overall_grade;
         $gpClass = $g
             ? (in_array($g, ['very_good', 'good'])
                 ? 'gp-good'
@@ -945,13 +946,14 @@
                             </div>
                         </div>
                         <div class="stat-cell">
-                            <div class="stat-lbl"><i class="fas fa-calendar"></i> {{ d_trans('Test Date') }}</div>
-                            <div class="stat-val">{{ $product->test_date?->format('M d, Y') ?: '—' }}</div>
+                            <div class="stat-lbl"><i class="fas fa-microscope"></i> {{ d_trans('Test Name') }}</div>
+                            <div class="stat-val">{{ $productTest?->name ?: '—' }}</div>
                         </div>
                         <div class="stat-cell">
                             <div class="stat-lbl"><i class="fas fa-tag"></i> {{ d_trans('Price') }}</div>
                             <div class="stat-val">
-                                {{ $product->price ? $product->currency . ' ' . numberFormat($product->price) : '—' }}</div>
+                                {{ $product->price ? $product->currency . ' ' . numberFormat($product->price) : '—' }}
+                            </div>
                         </div>
                         <div class="stat-cell">
                             <div class="stat-lbl"><i class="fas fa-weight-hanging"></i> {{ d_trans('Size') }}</div>
@@ -966,114 +968,80 @@
                     @endif
 
                     <div class="tab-bar">
-                        <button class="tab-btn active"
-                            onclick="switchTab(this,'tab-snap')"><i class="fas fa-microscope"></i> {{ d_trans('Lab Snapshot') }}</button>
-                        <button class="tab-btn" onclick="switchTab(this,'tab-full')"><i class="fas fa-file-alt"></i> {{ d_trans('Full Details') }}</button>
+                        <button class="tab-btn active" onclick="switchTab(this,'tab-snap')"><i
+                                class="fas fa-microscope"></i> {{ d_trans('Lab Snapshot') }}</button>
+                        <button class="tab-btn" onclick="switchTab(this,'tab-full')"><i class="fas fa-file-alt"></i>
+                            {{ d_trans('Full Details') }}</button>
                     </div>
 
                     <div class="tab-panel active" id="tab-snap">
-                        @php
-                            $snap = [
-                                d_trans('Lab Name') => $lab?->lab_name ?: '—',
-                                d_trans('Ingredient Grade') => $lab?->ingredient_grade,
-                                d_trans('Defects Grade') => $lab?->defects_grade,
-                                d_trans('Overall Grade') => $lab?->overall_grade,
-                                d_trans('Fragrance') => $lab ? ($lab->has_fragrance ? 'yes' : 'no') : null,
-                                d_trans('Concerning UV Filter') => $lab
-                                    ? ($lab->concerning_uv_filter
-                                        ? 'yes'
-                                        : 'no')
-                                    : null,
-                            ];
-                        @endphp
                         <div class="lab-rows">
-                            @foreach ($snap as $lbl => $val)
-                                <div class="lab-row">
-                                    <span class="lab-lbl">{{ $lbl }}</span>
-                                    <span class="lab-val">
-                                        @if (is_null($val))
-                                            <span class="bool-na">—</span>
-                                        @elseif ($val === 'yes')
-                                            <span class="bool-y">✓ Yes</span>
-                                        @elseif ($val === 'no')
-                                            <span class="bool-n">✗ No</span>
-                                        @elseif (in_array($val, ['very_good', 'good']))
-                                            <span
-                                                class="grade-pill gp-good">{{ str_replace('_', ' ', ucfirst($val)) }}</span>
-                                        @elseif (in_array($val, ['poor', 'bad']))
-                                            <span
-                                                class="grade-pill gp-poor">{{ str_replace('_', ' ', ucfirst($val)) }}</span>
-                                        @else
-                                            {{ is_string($val) ? str_replace('_', ' ', ucfirst($val)) : $val }}
-                                        @endif
-                                    </span>
-                                </div>
-                            @endforeach
-                        </div>
-                        @if ($lab?->test_summary)
-                            <div class="summary-box">
-                                <div class="section-label" style="margin-bottom:8px;">📋 {{ d_trans('Test Summary') }}
-                                </div>
-                                <p>{{ $lab->test_summary }}</p>
+                            <div class="lab-row">
+                                <span class="lab-lbl">{{ d_trans('Test Name') }}</span>
+                                <span class="lab-val">{{ $productTest?->name ?: '—' }}</span>
                             </div>
-                        @endif
+                            @if ($productTest && $testAttributes->count() > 0)
+                                @foreach ($testAttributes->take(6) as $attr)
+                                    @php
+                                        $value = $testData[$attr->id] ?? null;
+                                    @endphp
+                                    <div class="lab-row">
+                                        <span class="lab-lbl">{{ $attr->name }}</span>
+                                        <span class="lab-val">{{ $value ?: '—' }}</span>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="lab-row">
+                                    <span class="lab-lbl">{{ d_trans('Test Data') }}</span>
+                                    <span class="lab-val"><span
+                                            class="bool-na">{{ d_trans('No test data available') }}</span></span>
+                                </div>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="tab-panel" id="tab-full">
-                        @php
-                            $boolFn = fn($v) => $v ? 'yes' : 'no';
-                            $rows = [
-                                d_trans('Lab Verified') => $boolFn($product->lab_verified),
-                                d_trans('Test Date') => $product->test_date?->format('M d, Y') ?: '—',
-                                d_trans('Test Year') => $product->test_year ?: '—',
-                                d_trans('Test Edition') => $product->test_edition ?: '—',
-                                d_trans('Magazine Page') => $product->magazine_page ?: '—',
-                                d_trans('Organic Certified') => $boolFn($product->organic_certified),
-                                d_trans('Organic Certifier') => $product->organic_certifier ?: '—',
-                                d_trans('Lab Name') => $lab?->lab_name ?: '—',
-                                d_trans('Lab Tested At') => $lab?->tested_at?->format('M d, Y') ?: '—',
-                                d_trans('Mineral UV Filter') => $lab?->mineral_uv_filter ?: '—',
-                                d_trans('Concerning UV Filter') => $lab ? $boolFn($lab->concerning_uv_filter) : '—',
-                                d_trans('Has Fragrance') => $lab ? $boolFn($lab->has_fragrance) : '—',
-                                d_trans('Further Concerns') => $lab ? $boolFn($lab->further_concerns) : '—',
-                                d_trans('Further Concerns Detail') => $lab?->further_concerns_detail ?: '—',
-                                d_trans('Plastic Compounds') => $lab ? $boolFn($lab->plastic_compounds) : '—',
-                                d_trans('Further Defects') => $lab ? $boolFn($lab->further_defects) : '—',
-                                d_trans('Further Defects Detail') => $lab?->further_defects_detail ?: '—',
-                                d_trans('Ingredient Grade') => $lab?->ingredient_grade
-                                    ? str_replace('_', ' ', ucfirst($lab->ingredient_grade))
-                                    : '—',
-                                d_trans('Defects Grade') => $lab?->defects_grade
-                                    ? str_replace('_', ' ', ucfirst($lab->defects_grade))
-                                    : '—',
-                                d_trans('Overall Grade') => $lab?->overall_grade
-                                    ? str_replace('_', ' ', ucfirst($lab->overall_grade))
-                                    : '—',
-                                d_trans('Footnote Reference') => $lab?->footnote_ref ?: '—',
-                                d_trans('Footnote Text') => $lab?->footnote_text ?: '—',
-                            ];
-                        @endphp
                         <div class="lab-rows">
-                            @foreach (array_slice($rows, 0, 10) as $lbl => $val)
-                                <div class="lab-row">
-                                    <span class="lab-lbl">{{ $lbl }}</span>
-                                    <span class="lab-val">
-                                        @if ($val === 'yes')
-                                            <span class="bool-y">✓ Yes</span>
-                                        @elseif ($val === 'no')
-                                            <span class="bool-n">✗ No</span>
-                                        @else
-                                            {{ $val }}
-                                        @endif
-                                    </span>
-                                </div>
-                            @endforeach
-                        </div>
-                        @if (count($rows) > 10)
-                            <div style="padding: 0 22px 16px;">
-                                <button class="btn-show-more" onclick="openDetailsModal()">{{ d_trans('Show More') }}</button>
+                            <div class="lab-row">
+                                <span class="lab-lbl">{{ d_trans('Test Name') }}</span>
+                                <span class="lab-val">{{ $productTest?->name ?: '—' }}</span>
                             </div>
-                        @endif
+                            <div class="lab-row">
+                                <span class="lab-lbl">{{ d_trans('Lab Verified') }}</span>
+                                <span class="lab-val">{{ $product->lab_verified ? '✓ Yes' : '✗ No' }}</span>
+                            </div>
+                            <div class="lab-row">
+                                <span class="lab-lbl">{{ d_trans('Test Date') }}</span>
+                                <span class="lab-val">{{ $product->test_date?->format('M d, Y') ?: '—' }}</span>
+                            </div>
+                            <div class="lab-row">
+                                <span class="lab-lbl">{{ d_trans('Test Year') }}</span>
+                                <span class="lab-val">{{ $product->test_year ?: '—' }}</span>
+                            </div>
+                            <div class="lab-row">
+                                <span class="lab-lbl">{{ d_trans('Test Edition') }}</span>
+                                <span class="lab-val">{{ $product->test_edition ?: '—' }}</span>
+                            </div>
+                            <div class="lab-row">
+                                <span class="lab-lbl">{{ d_trans('Organic Certified') }}</span>
+                                <span class="lab-val">{{ $product->organic_certified ? '✓ Yes' : '✗ No' }}</span>
+                            </div>
+                            <div class="lab-row">
+                                <span class="lab-lbl">{{ d_trans('Organic Certifier') }}</span>
+                                <span class="lab-val">{{ $product->organic_certifier ?: '—' }}</span>
+                            </div>
+                            @if ($productTest && $testAttributes->count() > 0)
+                                @foreach ($testAttributes as $attr)
+                                    @php
+                                        $value = $testData[$attr->id] ?? null;
+                                    @endphp
+                                    <div class="lab-row">
+                                        <span class="lab-lbl">{{ $attr->name }}</span>
+                                        <span class="lab-val">{{ $value ?: '—' }}</span>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
                     </div>
 
                     <div class="cmp-strip">
@@ -1126,28 +1094,25 @@
             </div>
         </div>
 
-        <div class="modal-overlay" id="detailsModal">
-            <div class="modal-box" style="max-width: 800px; width: 100%;">
-                <button class="modal-close" onclick="closeDetailsModal()">&times;</button>
-                <div class="modal-title">{{ d_trans('Full Test Details') }}</div>
-                <div class="modal-2col">
-                    @foreach ($rows as $lbl => $val)
-                        <div class="lab-row" style="padding: 12px 0;">
-                            <span class="lab-lbl">{{ $lbl }}</span>
-                            <span class="lab-val">
-                                @if ($val === 'yes')
-                                    <span class="bool-y">✓ Yes</span>
-                                @elseif ($val === 'no')
-                                    <span class="bool-n">✗ No</span>
-                                @else
-                                    {{ $val }}
-                                @endif
-                            </span>
-                        </div>
-                    @endforeach
+        @if ($productTest && $testAttributes->count() > 0)
+            <div class="modal-overlay" id="detailsModal">
+                <div class="modal-box" style="max-width: 800px; width: 100%;">
+                    <button class="modal-close" onclick="closeDetailsModal()">&times;</button>
+                    <div class="modal-title">{{ d_trans('Full Test Details') }}</div>
+                    <div class="modal-2col">
+                        @foreach ($testAttributes as $attr)
+                            @php
+                                $value = $testData[$attr->id] ?? null;
+                            @endphp
+                            <div class="lab-row" style="padding: 12px 0;">
+                                <span class="lab-lbl">{{ $attr->name }}</span>
+                                <span class="lab-val">{{ $value ?: '—' }}</span>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
         @push('scripts')
             <script>

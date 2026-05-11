@@ -28,6 +28,15 @@
         }
     }
     
+    // If no active subscriptions, fall back to the plan from userProductViewCount
+    if ($totalLimit === 0 && !$totalUnlimited && $plan) {
+        if (is_null($plan->products_limit)) {
+            $totalUnlimited = true;
+        } else {
+            $totalLimit = (int)$plan->products_limit;
+        }
+    }
+    
     $isUnlimited = $totalUnlimited;
     $limit = $isUnlimited ? 0 : $totalLimit;
     $pct = $limit > 0 ? min(100, round(($used / $limit) * 100, 1)) : 0;
@@ -112,6 +121,53 @@
                         </div>
                     </div>
                 @endforeach
+            </div>
+        </div>
+    </div>
+    @elseif ($plan)
+    <!-- Fallback: Show default plan when no active subscriptions -->
+    <div class="card mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h5 class="fw-bold mb-0">{{ d_trans('Current Plan') }}</h5>
+                </div>
+                <span class="badge bg-info fs-6">{{ d_trans('Default') }}</span>
+            </div>
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <div class="border rounded p-3 bg-light">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="fw-bold mb-1">{{ $plan->trans->name ?? $plan->name }}</h6>
+                                <small class="text-muted">{{ $plan->getIntervalName() ?? 'N/A' }}</small>
+                            </div>
+                            <span class="badge bg-success">{{ d_trans('Active') }}</span>
+                        </div>
+                        <div class="small mt-2">
+                            <div class="mb-1">
+                                <span class="text-muted">{{ d_trans('Type:') }}</span>
+                                <strong>
+                                    @if ($plan->isLifetime())
+                                        {{ d_trans('Lifetime') }}
+                                    @else
+                                        {{ $plan->getIntervalName() }}
+                                    @endif
+                                </strong>
+                            </div>
+                            <div>
+                                <span class="text-muted">{{ d_trans('Limit:') }}</span>
+                                <strong>
+                                    @if (is_null($plan->products_limit))
+                                        {{ d_trans('Unlimited') }}
+                                    @else
+                                        {{ $plan->products_limit }}
+                                    @endif
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -162,7 +162,7 @@ class PaymentController extends Controller
         return redirect()->route('plans');
     }
 
-B
+
     public static function adminSubscriptionNotify($user, $plan, $subscription, $transaction)
     {
         $title = d_trans(':username subscribed to :plan Plan', [

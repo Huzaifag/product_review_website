@@ -409,155 +409,173 @@
             }
         </style>
     @endpush
+    @if ($canSeeDetails)
+        @if ($similarProducts->count())
+            @php
+                $gradeChip = function ($g) {
+                    if (!$g) {
+                        return '<span class="bool-na">—</span>';
+                    }
+                    $label = \App\Enums\GradeEnum::getLabel($g);
+                    $class = \App\Enums\GradeEnum::getClass($g);
+                    return "<span class='grade-chip {$class}'>{$label}</span>";
+                };
+                $boolCell = function ($v) {
+                    return \App\Enums\BooleanEnum::getHtml($v);
+                };
+                $total = 1 + $similarProducts->count();
+            @endphp
 
-    @if ($similarProducts->count())
-        @php
-            $gradeChip = function ($g) {
-                if (!$g) {
-                    return '<span class="bool-na">—</span>';
-                }
-                $label = \App\Enums\GradeEnum::getLabel($g);
-                $class = \App\Enums\GradeEnum::getClass($g);
-                return "<span class='grade-chip {$class}'>{$label}</span>";
-            };
-            $boolCell = function ($v) {
-                return \App\Enums\BooleanEnum::getHtml($v);
-            };
-            $total = 1 + $similarProducts->count();
-        @endphp
+            <div class="cmp-shell">
 
-        <div class="cmp-shell">
-
-            {{-- Title bar --}}
-            <div class="cmp-titlebar">
-                <div class="cmp-titlebar-left">
-                    <span class="cmp-eyebrow">{{ d_trans('Side-by-Side Analysis') }}</span>
-                    <div class="cmp-title">{{ d_trans('Product Comparison') }}</div>
-                    <div class="cmp-sub">{{ $product->category->trans->name ?? '' }} · {{ d_trans('Lab-tested results') }}
+                {{-- Title bar --}}
+                <div class="cmp-titlebar">
+                    <div class="cmp-titlebar-left">
+                        <span class="cmp-eyebrow">{{ d_trans('Side-by-Side Analysis') }}</span>
+                        <div class="cmp-title">{{ d_trans('Product Comparison') }}</div>
+                        <div class="cmp-sub">{{ $product->category->trans->name ?? '' }} ·
+                            {{ d_trans('Lab-tested results') }}
+                        </div>
                     </div>
+                    <span class="cmp-count-badge">{{ $total }} {{ d_trans('products') }}</span>
                 </div>
-                <span class="cmp-count-badge">{{ $total }} {{ d_trans('products') }}</span>
-            </div>
 
-            {{-- Table --}}
-            <div class="cmp-scroll">
-                <table class="comp-table">
-                    <thead>
+                {{-- Table --}}
+                <div class="cmp-scroll">
+                    <table class="comp-table">
+                        <thead>
 
-                        {{-- Image row --}}
-                        <tr class="row-images">
-                            <th>
-                                <div class="row-img-corner">
-                                    <div class="row-img-cat-h">{{ $testName ?? d_trans('Product Test') }}
-                                    </div>
-                            </th>
-                            <th>
-                                <img class="comp-prod-img" src="{{ asset($product->image ?? 'images/placeholder.png') }}"
-                                    alt="{{ $product->name }}">
-                                <div class="prod-img-label is-primary">{{ $product->name }}</div>
-                            </th>
-                            @foreach ($similarProducts as $sim)
+                            {{-- Image row --}}
+                            <tr class="row-images">
                                 <th>
-                                    <img class="comp-prod-img" src="{{ asset($sim->image ?? 'images/placeholder.png') }}"
-                                        alt="{{ $sim->name }}">
-                                    <div class="prod-img-label">{{ $sim->name }}</div>
+                                    <div class="row-img-corner">
+                                        <div class="row-img-cat-h">{{ $testName ?? d_trans('Product Test') }}
+                                        </div>
                                 </th>
-                            @endforeach
-                        </tr>
+                                <th>
+                                    <img class="comp-prod-img"
+                                        src="{{ asset($product->image ?? 'images/placeholder.png') }}"
+                                        alt="{{ $product->name }}">
+                                    <div class="prod-img-label is-primary">{{ $product->name }}</div>
+                                </th>
+                                @foreach ($similarProducts as $sim)
+                                    <th>
+                                        <img class="comp-prod-img"
+                                            src="{{ asset($sim->image ?? 'images/placeholder.png') }}"
+                                            alt="{{ $sim->name }}">
+                                        <div class="prod-img-label">{{ $sim->name }}</div>
+                                    </th>
+                                @endforeach
+                            </tr>
 
-                        {{-- Name/header row --}}
-                        <tr class="row-header">
-                            <th>{{ d_trans('Attribute') }}</th>
-                            <th class="is-primary">{{ $product->name }}</th>
-                            @foreach ($similarProducts as $sim)
-                                <th>{{ $sim->name }}</th>
-                            @endforeach
-                        </tr>
+                            {{-- Name/header row --}}
+                            <tr class="row-header">
+                                <th>{{ d_trans('Attribute') }}</th>
+                                <th class="is-primary">{{ $product->name }}</th>
+                                @foreach ($similarProducts as $sim)
+                                    <th>{{ $sim->name }}</th>
+                                @endforeach
+                            </tr>
 
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
 
-                        <tr>
-                            <td>{{ d_trans('Anbieter') }}</td>
-                            <td class="is-primary">{{ $product->brand?->name ?? '—' }}</td>
-                            @foreach ($similarProducts as $sim)
-                                <td>{{ $sim->brand?->name ?? '—' }}</td>
-                            @endforeach
-                        </tr>
-
-                        <tr>
-                            <td>{{ d_trans('Preis') }}</td>
-                            <td class="is-primary">{{ numberFormat($product->price ?? 0) }}
-                                {{ $product->currency ?? 'Euro' }}</td>
-                            @foreach ($similarProducts as $sim)
-                                <td>{{ numberFormat($sim->price ?? 0) }} {{ $sim->currency ?? 'Euro' }}</td>
-                            @endforeach
-                        </tr>
-
-                        <tr>
-                            <td>{{ d_trans('Size') }}</td>
-                            <td class="is-primary">{{ $product->product_size ?? '—' }}</td>
-                            @foreach ($similarProducts as $sim)
-                                <td>{{ $sim->product_size ?? '—' }}</td>
-                            @endforeach
-                        </tr>
-
-                        {{-- Dynamic test attribute rows --}}
-                        @foreach ($testAttributes as $attr)
-                            @php
-                                // Skip attributes already shown as hardcoded rows or at the bottom
-                                $skipAttributes = ['brand', 'anbieter', 'provider', 'price', 'preis', 'size', 'größe', 'gesamturteil', 'overall_grade'];
-                                if (in_array(strtolower($attr->name), $skipAttributes)) {
-                                    continue;
-                                }
-                            @endphp
                             <tr>
-                                <td>{{ $attr->name }}</td>
+                                <td>{{ d_trans('Anbieter') }}</td>
+                                <td class="is-primary">{{ $product->brand?->name ?? '—' }}</td>
+                                @foreach ($similarProducts as $sim)
+                                    <td>{{ $sim->brand?->name ?? '—' }}</td>
+                                @endforeach
+                            </tr>
+
+                            <tr>
+                                <td>{{ d_trans('Preis') }}</td>
+                                <td class="is-primary">{{ numberFormat($product->price ?? 0) }}
+                                    {{ $product->currency ?? 'Euro' }}</td>
+                                @foreach ($similarProducts as $sim)
+                                    <td>{{ numberFormat($sim->price ?? 0) }} {{ $sim->currency ?? 'Euro' }}</td>
+                                @endforeach
+                            </tr>
+
+                            <tr>
+                                <td>{{ d_trans('Size') }}</td>
+                                <td class="is-primary">{{ $product->product_size ?? '—' }}</td>
+                                @foreach ($similarProducts as $sim)
+                                    <td>{{ $sim->product_size ?? '—' }}</td>
+                                @endforeach
+                            </tr>
+
+                            {{-- Dynamic test attribute rows --}}
+                            @foreach ($testAttributes as $attr)
+                                @php
+                                    // Skip attributes already shown as hardcoded rows or at the bottom
+                                    $skipAttributes = [
+                                        'brand',
+                                        'anbieter',
+                                        'provider',
+                                        'price',
+                                        'preis',
+                                        'size',
+                                        'größe',
+                                        'gesamturteil',
+                                        'overall_grade',
+                                    ];
+                                    if (in_array(strtolower($attr->name), $skipAttributes)) {
+                                        continue;
+                                    }
+                                @endphp
+                                <tr>
+                                    <td>{{ $attr->name }}</td>
+                                    <td class="is-primary">
+                                        @php
+                                            $val = $mainTest?->data[$attr->id] ?? null;
+                                        @endphp
+                                        @if ($val === null)
+                                            <span class="bool-na">—</span>
+                                        @elseif ($attr->type === 'boolean')
+                                            {!! $val ? '<span class="bool-y">✓ Yes</span>' : '<span class="bool-n">✗ No</span>' !!}
+                                        @else
+                                            {{ $val }}
+                                        @endif
+                                    </td>
+                                    @foreach ($similarProducts as $sim)
+                                        <td>
+                                            @php
+                                                $simVal = $productTests->get($sim->id)?->data[$attr->id] ?? null;
+                                            @endphp
+                                            @if ($simVal === null)
+                                                <span class="bool-na">—</span>
+                                            @elseif ($attr->type === 'boolean')
+                                                {!! $simVal ? '<span class="bool-y">✓ Yes</span>' : '<span class="bool-n">✗ No</span>' !!}
+                                            @else
+                                                {{ $simVal }}
+                                            @endif
+                                        </td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+
+                            <tr class="row-overall">
+                                <td>{{ d_trans('Gesamturteil') }}</td>
                                 <td class="is-primary">
-                                    @php
-                                        $val = $mainTest?->data[$attr->id] ?? null;
-                                    @endphp
-                                    @if ($val === null)
-                                        <span class="bool-na">—</span>
-                                    @elseif ($attr->type === 'boolean')
-                                        {!! $val ? '<span class="bool-y">✓ Yes</span>' : '<span class="bool-n">✗ No</span>' !!}
-                                    @else
-                                        {{ $val }}
-                                    @endif
+                                    {!! $gradeChip($overallGrades->get($product->id)) !!}
                                 </td>
                                 @foreach ($similarProducts as $sim)
                                     <td>
-                                        @php
-                                            $simVal = $productTests->get($sim->id)?->data[$attr->id] ?? null;
-                                        @endphp
-                                        @if ($simVal === null)
-                                            <span class="bool-na">—</span>
-                                        @elseif ($attr->type === 'boolean')
-                                            {!! $simVal ? '<span class="bool-y">✓ Yes</span>' : '<span class="bool-n">✗ No</span>' !!}
-                                        @else
-                                            {{ $simVal }}
-                                        @endif
+                                        {!! $gradeChip($overallGrades->get($sim->id)) !!}
                                     </td>
                                 @endforeach
                             </tr>
-                        @endforeach
 
-                        <tr class="row-overall">
-                            <td>{{ d_trans('Gesamturteil') }}</td>
-                            <td class="is-primary">
-                                {!! $gradeChip($overallGrades->get($product->id)) !!}
-                            </td>
-                            @foreach ($similarProducts as $sim)
-                                <td>
-                                    {!! $gradeChip($overallGrades->get($sim->id)) !!}
-                                </td>
-                            @endforeach
-                        </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                    </tbody>
-                </table>
             </div>
-
+        @endif
+    @else
+        <div style="height:100vh;display:flex;align-items:center;justify-content:center;">
+            @include('themes.basic.partials.plan-exceed-modal')
         </div>
     @endif
 
