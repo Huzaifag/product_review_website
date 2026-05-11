@@ -87,7 +87,7 @@
         <label class="form-label">{{ d_trans('Sub Category') }}</label>
         <select name="sub_category_id" class="select2-sub-category py-3 form-select form-select-md">
             <option value="">{{ d_trans('None') }}</option>
-            @foreach ($subcategories as $subCategory)
+            @foreach ($subCategories as $subCategory)
                 <option value="{{ $subCategory->id }}" @selected(old('sub_category_id', $product->sub_category_id ?? null) == $subCategory->id)>
                     {{ $subCategory->trans->name ?? $subCategory->name }}
                 </option>

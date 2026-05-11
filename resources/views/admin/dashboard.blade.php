@@ -91,6 +91,19 @@
             </div>
         </div>
 
+
+        <div class="col">
+            <div class="split-stat-card theme-brand-mahogany">
+                <div class="split-card-content">
+                    <p class="split-card-title">{{ d_trans('Total Tests') }}</p>
+                    <h3 class="split-card-number">{{ $counters['product_tests'] }}</h3>
+                </div>
+                <div class="split-card-icon">
+                    <i class="bi bi-clipboard-data"></i>
+                </div>
+            </div>
+        </div>
+
         <div class="col">
             <div class="split-stat-card theme-brand-copper">
                 <div class="split-card-content">
@@ -151,6 +164,8 @@
             </div>
         </div>
 
+        
+
         <div class="col">
             <div class="split-stat-card theme-brand-brick">
                 <div class="split-card-content">
@@ -163,17 +178,7 @@
             </div>
         </div>
 
-        <div class="col">
-            <div class="split-stat-card theme-brand-mahogany">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('KYC Pending') }}</p>
-                    <h3 class="split-card-number">{{ $counters['pending_kyc_verifications'] }}</h3>
-                </div>
-                <div class="split-card-icon">
-                    <i class="bi bi-clock-history"></i>
-                </div>
-            </div>
-        </div>
+        
     </div>
     <div class="row g-3">
         <div class="col-12 col-lg-7 col-xxl-8">

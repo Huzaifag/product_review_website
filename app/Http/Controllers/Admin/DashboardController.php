@@ -11,6 +11,7 @@ use App\Models\BusinessReviewReport;
 use App\Models\Category;
 use App\Models\KycVerification;
 use App\Models\Product;
+use App\Models\ProductTest;
 use App\Models\SubCategory;
 use App\Models\Subscription;
 use App\Models\Transaction;
@@ -41,6 +42,9 @@ class DashboardController extends Controller
 
         // 4. Brands
         $counters['brands'] = Brand::count();
+
+        // 5. Product Tests
+        $counters['product_tests'] = ProductTest::active()->count();
 
         //All Recently added Products 
         $products = Product::orderbyDesc('id')->limit(6)->get();

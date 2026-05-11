@@ -151,4 +151,10 @@ class Product extends Model
     {
         return $this->is_featured;
     }
+
+    //productTest is the lab testing result for the product
+    public function productTest()
+    {
+        return $this->hasOne(ProductTest::class);
+    }
 }

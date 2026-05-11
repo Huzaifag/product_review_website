@@ -205,7 +205,7 @@
 
             .row-img-cat-h {
                 font-size: 1.4rem;
-                text-transform: uppercase;
+                /* text-transform: uppercase; */
                 letter-spacing: .1em;
                 color: var(--gr);
                 font-weight: 700;
@@ -448,11 +448,7 @@
                         <tr class="row-images">
                             <th>
                                 <div class="row-img-corner">
-                                    <div class="row-img-cat-h">{{ $product->category->trans->name ?? d_trans('Category') }}
-                                        <div class="row-img-cat">
-                                            {{ $product->subCategory->trans->name ?? d_trans('Sub Category') }}</div>
-                                        {{-- <div class="row-img-heading">{{ d_trans('Comparing') }} {{ $total }}
-                                            {{ d_trans('products') }}</div> --}}
+                                    <div class="row-img-cat-h">{{ $testName ?? d_trans('Product Test') }}
                                     </div>
                             </th>
                             <th>
@@ -498,7 +494,6 @@
                             @endforeach
                         </tr>
 
-
                         <tr>
                             <td>{{ d_trans('Size') }}</td>
                             <td class="is-primary">{{ $product->product_size ?? '—' }}</td>
@@ -507,43 +502,55 @@
                             @endforeach
                         </tr>
 
-                        <tr>
-                            <td>{{ d_trans('Parfüm und/oder ätherische Öle') }}</td>
-                            <td class="is-primary">{!! $boolCell($product->labTestingResult?->has_fragrance) !!}</td>
-                            @foreach ($similarProducts as $sim)
-                                <td>{!! $boolCell($sim->labTestingResult?->has_fragrance) !!}</td>
-                            @endforeach
-                        </tr>
-
-                        <tr class="row-blue">
-                            <td>{{ d_trans('Testergebnis Inhaltsstoffe') }}</td>
-                            <td class="is-primary">{!! $gradeChip($product->labTestingResult?->ingredient_grade) !!}</td>
-                            @foreach ($similarProducts as $sim)
-                                <td>{!! $gradeChip($sim->labTestingResult?->ingredient_grade) !!}</td>
-                            @endforeach
-                        </tr>
-
-                        <tr>
-                            <td>{{ d_trans('Mineral UV Filter') }}</td>
-                            <td class="is-primary">{!! $boolCell($product->labTestingResult?->mineral_uv_filter) !!}</td>
-                            @foreach ($similarProducts as $sim)
-                                <td>{!! $boolCell($sim->labTestingResult?->mineral_uv_filter) !!}</td>
-                            @endforeach
-                        </tr>
-
-                        <tr>
-                            <td>{{ d_trans('Concerning UV Filter') }}</td>
-                            <td class="is-primary">{!! $boolCell($product->labTestingResult?->concerning_uv_filter) !!}</td>
-                            @foreach ($similarProducts as $sim)
-                                <td>{!! $boolCell($sim->labTestingResult?->concerning_uv_filter) !!}</td>
-                            @endforeach
-                        </tr>
+                        {{-- Dynamic test attribute rows --}}
+                        @foreach ($testAttributes as $attr)
+                            @php
+                                // Skip attributes already shown as hardcoded rows or at the bottom
+                                $skipAttributes = ['brand', 'anbieter', 'provider', 'price', 'preis', 'size', 'größe', 'gesamturteil', 'overall_grade'];
+                                if (in_array(strtolower($attr->name), $skipAttributes)) {
+                                    continue;
+                                }
+                            @endphp
+                            <tr>
+                                <td>{{ $attr->name }}</td>
+                                <td class="is-primary">
+                                    @php
+                                        $val = $mainTest?->data[$attr->id] ?? null;
+                                    @endphp
+                                    @if ($val === null)
+                                        <span class="bool-na">—</span>
+                                    @elseif ($attr->type === 'boolean')
+                                        {!! $val ? '<span class="bool-y">✓ Yes</span>' : '<span class="bool-n">✗ No</span>' !!}
+                                    @else
+                                        {{ $val }}
+                                    @endif
+                                </td>
+                                @foreach ($similarProducts as $sim)
+                                    <td>
+                                        @php
+                                            $simVal = $productTests->get($sim->id)?->data[$attr->id] ?? null;
+                                        @endphp
+                                        @if ($simVal === null)
+                                            <span class="bool-na">—</span>
+                                        @elseif ($attr->type === 'boolean')
+                                            {!! $simVal ? '<span class="bool-y">✓ Yes</span>' : '<span class="bool-n">✗ No</span>' !!}
+                                        @else
+                                            {{ $simVal }}
+                                        @endif
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
 
                         <tr class="row-overall">
                             <td>{{ d_trans('Gesamturteil') }}</td>
-                            <td class="is-primary">{!! $gradeChip($product->labTestingResult?->overall_grade) !!}</td>
+                            <td class="is-primary">
+                                {!! $gradeChip($overallGrades->get($product->id)) !!}
+                            </td>
                             @foreach ($similarProducts as $sim)
-                                <td>{!! $gradeChip($sim->labTestingResult?->overall_grade) !!}</td>
+                                <td>
+                                    {!! $gradeChip($overallGrades->get($sim->id)) !!}
+                                </td>
                             @endforeach
                         </tr>
 

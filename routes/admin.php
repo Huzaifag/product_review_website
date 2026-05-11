@@ -2,25 +2,24 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::
-        namespace('Auth')->group(function () {
-            Route::get('/', function () {
-                return redirect()->route('admin.login');
-            })->name('index');
-            Route::get('login', 'LoginController@showLoginForm')->name('login');
-            Route::post('login', 'LoginController@login')->name('login.store');
-            Route::post('logout', 'LoginController@logout')->name('logout');
-            Route::middleware('smtp')->group(function () {
-                Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
-                Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-            });
-            Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
-            Route::post('password/reset', 'ResetPasswordController@reset')->name('password.update');
-            Route::middleware('auth:admin')->group(function () {
-                Route::get('2fa/verify', 'TwoFactorController@show2FaVerifyForm')->name('2fa.verify');
-                Route::post('2fa/verify', 'TwoFactorController@verify2fa');
-            });
-        });
+Route::namespace('Auth')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('admin.login');
+    })->name('index');
+    Route::get('login', 'LoginController@showLoginForm')->name('login');
+    Route::post('login', 'LoginController@login')->name('login.store');
+    Route::post('logout', 'LoginController@logout')->name('logout');
+    Route::middleware('smtp')->group(function () {
+        Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
+        Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+    });
+    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
+    Route::post('password/reset', 'ResetPasswordController@reset')->name('password.update');
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('2fa/verify', 'TwoFactorController@show2FaVerifyForm')->name('2fa.verify');
+        Route::post('2fa/verify', 'TwoFactorController@verify2fa');
+    });
+});
 
 Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
     Route::prefix('dashboard')->group(function () {
@@ -57,8 +56,17 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
     Route::delete('products/bulk-destroy', 'ProductController@bulkDestroy')->name('products.bulk-destroy')->middleware('demo');
     Route::resource('products', 'ProductController')->middleware('demo');
     Route::resource('brands', 'BrandController')->middleware('demo');
+    Route::name('test-attributes.')->prefix('test-attributes')->group(function () {
+        Route::get('/', 'TestAttributeController@index')->name('index');
+        Route::get('create', 'TestAttributeController@create')->name('create');
+        Route::post('/', 'TestAttributeController@store')->name('store');
+        Route::get('{testAttribute}/edit', 'TestAttributeController@edit')->name('edit');
+        Route::put('{testAttribute}', 'TestAttributeController@update')->name('update');
+        Route::delete('{testAttribute}', 'TestAttributeController@destroy')->name('destroy');
+    });
+    
     Route::resource('plans', 'PlanController')->except(['show']);
-    //admin.plans.sortable 
+    //admin.plans.sortable
     Route::post('plans/sortable', 'PlanController@sortable')->name('plans.sortable')->middleware('demo');
     Route::resource('transactions', 'TransactionController')->middleware('demo');
     //cancel transaction
@@ -176,7 +184,6 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
             Route::get('{advertisement}/edit', 'AdvertisementController@edit')->name('edit');
             Route::post('{advertisement}', 'AdvertisementController@update')->name('update');
         });
-
 
         Route::name('newsletter.')->prefix('newsletter')->group(function () {
             Route::get('settings', 'NewsletterController@settings')->name('settings');

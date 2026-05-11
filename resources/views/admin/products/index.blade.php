@@ -226,6 +226,12 @@
                                                 </a>
                                             </li>
                                             <li>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('admin.products.lab-tests', $product->id) }}">
+                                                    <i class="fa-solid fa-flask-vial"></i>{{ d_trans('Lab Test') }}
+                                                </a>
+                                            </li>
+                                            <li>
                                                 <hr class="dropdown-divider" />
                                             </li>
                                             <li>

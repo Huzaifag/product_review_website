@@ -9,9 +9,10 @@ use App\Models\Category;
 use App\Models\IngredientLibrary;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductTest;
 use App\Models\SubCategory;
+use App\Models\TestAttribute;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Str;
 
@@ -60,7 +61,7 @@ class ProductController extends Controller
         $counters['active'] = $filteredProducts->where('is_active', true)->count();
         $counters['inactive'] = $filteredProducts->where('is_active', false)->count();
         $counters['featured'] = $filteredProducts->where('is_featured', true)->count();
-        $counters['lab_verified'] = $filteredProducts->where('lab_verified', true)->count();
+        $counters['lab_verified'] = ProductTest::whereIn('product_id', $filteredProducts->pluck('id'))->where('status', 'active')->count();
 
         $products = $products->orderbyDesc('id')->paginate(50);
         $products->appends(request()->only(['search', 'category', 'sub_category', 'brand', 'status', 'featured']));
@@ -86,7 +87,7 @@ class ProductController extends Controller
 
         return view('admin.products.create', [
             'categories' => $categories,
-            'subcategories' => $subCategories,
+            'subCategories' => $subCategories,
             'brands' => $brands,
             'ingredientLibraries' => $ingredientLibraries,
             'grades' => $this->availableGrades(),
@@ -136,7 +137,6 @@ class ProductController extends Controller
             $data['image'] = $uploadedImages[0];
         }
 
-
         // Generate slug from name if not provided
         if (empty($data['slug'] ?? null)) {
             $data['slug'] = Str::slug($data['name']);
@@ -152,6 +152,7 @@ class ProductController extends Controller
         $this->storeProductImages($product, $uploadedImages);
 
         toastr()->success(d_trans('Created Successfully'));
+
         return redirect()->route('admin.products.show', $product->id);
     }
 
@@ -169,7 +170,7 @@ class ProductController extends Controller
         return view('admin.products.show', [
             'product' => $product,
             'categories' => $categories,
-            'subcategories' => $subCategories,
+            'subCategories' => $subCategories,
             'brands' => $brands,
             'ingredientLibraries' => $ingredientLibraries,
             'grades' => $this->availableGrades(),
@@ -183,14 +184,14 @@ class ProductController extends Controller
     {
         $product->load(['images']);
         $categories = Category::select('id', 'name')->get();
-        $subcategories = SubCategory::select('id', 'name')->get();
+        $subCategories = SubCategory::select('id', 'name')->get();
         $brands = Brand::select('id', 'name')->get();
         $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
 
         return view('admin.products.edit', [
             'product' => $product,
             'categories' => $categories,
-            'subcategories' => $subcategories,
+            'subCategories' => $subCategories,
             'brands' => $brands,
             'ingredientLibraries' => $ingredientLibraries,
             'grades' => $this->availableGrades(),
@@ -213,7 +214,7 @@ class ProductController extends Controller
                 ->withInput()
                 ->with([
                     'categories' => Category::select('id', 'name')->get(),
-                    'subcategories' => SubCategory::select('id', 'name')->get(),
+                    'subCategories' => SubCategory::select('id', 'name')->get(),
                     'brands' => Brand::select('id', 'name')->get(),
                     'ingredientLibraries' => IngredientLibrary::select('id', 'name')->orderBy('name')->get(),
                     'grades' => $this->availableGrades(),
@@ -245,7 +246,6 @@ class ProductController extends Controller
             $data['slug'] = Str::slug($data['name']);
         }
 
-
         $product->update($data);
 
         $this->storeProductImages($product, $uploadedImages);
@@ -269,13 +269,14 @@ class ProductController extends Controller
         $product->delete();
 
         toastr()->success(d_trans('Deleted Successfully'));
+
         return redirect()->route('admin.products.index');
     }
 
     public function bulkDestroy(Request $request)
     {
         $request->validate([
-            'ids'   => ['required', 'array', 'min:1'],
+            'ids' => ['required', 'array', 'min:1'],
             'ids.*' => ['integer', 'exists:products,id'],
         ]);
 
@@ -290,125 +291,87 @@ class ProductController extends Controller
         }
 
         toastr()->success(d_trans('Deleted Successfully'));
+
         return redirect()->route('admin.products.index');
     }
 
     public function labTestsUpdate(Request $request, Product $product)
     {
-        $validator = Validator::make($request->all(), [
-            'mineral_uv_filter' => ['nullable', 'string', 'max:255'],
-            'lab_name' => ['nullable', 'string', 'max:255'],
-            'ingredient_grade' => ['nullable', 'string', 'in:' . implode(',', $this->availableGrades())],
-            'defects_grade' => ['nullable', 'string', 'in:' . implode(',', $this->availableGrades())],
-            'overall_grade' => ['nullable', 'string', 'in:' . implode(',', $this->availableGrades())],
-            'tested_at' => ['nullable', 'date'],
-            'footnote_ref' => ['nullable', 'string', 'max:255'],
-            'footnote_text' => ['nullable', 'string'],
-            'test_summary' => ['nullable', 'string'],
-            'concerning_uv_filter' => ['nullable', 'boolean'],
-            'has_fragrance' => ['nullable', 'boolean'],
-            'plastic_compounds' => ['nullable', 'boolean'],
-            'further_concerns' => ['nullable', 'boolean'],
-            'further_concerns_detail' => ['nullable', 'string', 'max:500'],
-            'further_defects' => ['nullable', 'boolean'],
-            'further_defects_detail' => ['nullable', 'string', 'max:500'],
-
-            'concerns' => ['nullable', 'array'],
-            'concerns.*.ingredient_library_id' => ['nullable', 'integer', 'exists:ingredients_library,id'],
-            'concerns.*.ingredient_name' => ['required_with:concerns.*.severity', 'string', 'max:255'],
-            'concerns.*.inci_name' => ['nullable', 'string', 'max:255'],
-            'concerns.*.severity' => ['required_with:concerns.*.ingredient_name', 'string', 'in:avoid,concern,caution'],
-            'concerns.*.concentration' => ['nullable', 'numeric', 'min:0'],
-            'concerns.*.description' => ['nullable', 'string', 'max:1000'],
+        $request->validate([
+            'product_test_name' => ['required', 'string', 'max:255'],
+            'product_test_status' => ['required', 'string', 'in:active,inactive'],
+            'test_attribute' => ['required', 'array'],
+            [
+                'data.required' => 'Lab test data cannot be empty.',
+            ]
         ]);
 
-        if ($validator->fails()) {
-            foreach ($validator->errors()->all() as $error) {
-                toastr()->error($error);
+        // Clean and build attribute data
+        $attributeData = [];
+        $rawAttributes = $request->input('test_attribute', []);
+        foreach ($rawAttributes as $attributeId => $value) {
+            $value = is_string($value) ? trim($value) : $value;
+            if ($value !== null && $value !== '') {
+                $attributeData[$attributeId] = $value;
             }
-
-            $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
-
-            return back()->withInput()->with([
-                'ingredientLibraries' => $ingredientLibraries,
-                'grades' => $this->availableGrades(),
-            ]);
         }
 
-        $data = $validator->validated();
-
-        // Prepare Lab Testing Data
-        $labData = [
-            'mineral_uv_filter' => $data['mineral_uv_filter'] ?? null,
-            'lab_name' => $data['lab_name'] ?? null,
-            'ingredient_grade' => $data['ingredient_grade'] ?? null,
-            'defects_grade' => $data['defects_grade'] ?? null,
-            'overall_grade' => $data['overall_grade'] ?? null,
-            'tested_at' => $data['tested_at'] ?? null,
-            'footnote_ref' => $data['footnote_ref'] ?? null,
-            'footnote_text' => $data['footnote_text'] ?? null,
-            'test_summary' => $data['test_summary'] ?? null,
-            'concerning_uv_filter' => $request->boolean('concerning_uv_filter'),
-            'has_fragrance' => $request->boolean('has_fragrance'),
-            'plastic_compounds' => $request->boolean('plastic_compounds'),
-            'further_concerns' => $request->boolean('further_concerns'),
-            'further_concerns_detail' => $data['further_concerns_detail'] ?? null,
-            'further_defects' => $request->boolean('further_defects'),
-            'further_defects_detail' => $data['further_defects_detail'] ?? null,
+        $matchData = ['product_id' => $product->id];
+        $fillData = [
+            'product_id' => $product->id,
+            'category_id' => $product->category_id,
+            'sub_category_id' => $product->sub_category_id,
+            'name' => $request->product_test_name,
+            'data' => !empty($attributeData) ? $attributeData : null,
+            'status' => $request->product_test_status,
         ];
 
-        // === IMPROVED CONCERNS PROCESSING ===
-        $concernsData = collect($data['concerns'] ?? [])
-            ->map(function ($concern) {
-                return [
-                    'ingredient_library_id' => !empty($concern['ingredient_library_id']) ? (int) $concern['ingredient_library_id'] : null,
-                    'ingredient_name' => trim($concern['ingredient_name'] ?? ''),
-                    'inci_name' => trim($concern['inci_name'] ?? '') ?: null,
-                    'severity' => $concern['severity'] ?? null,
-                    'concentration' => $concern['concentration'] ?? null,
-                    'description' => trim($concern['description'] ?? '') ?: null,
-                ];
-            })
-            ->filter(function ($concern) {
-                // Keep only rows that have at least name + severity
-                return !empty($concern['ingredient_name']) && !empty($concern['severity']);
-            })
-            ->values()
-            ->all();
+        // dd([
+        //     'request' => $request->all(),
+        //     'product' => $product->toArray(),
+        //     'fillData' => $fillData,
+        //     'matchData' => $matchData,
+        // ]);
 
-        DB::transaction(function () use ($product, $labData, $concernsData) {
-            // Update or create lab test record
-            $product->labTestingResult()->updateOrCreate(
-                ['product_id' => $product->id],
-                $labData
-            );
+        ProductTest::updateOrCreate($matchData, $fillData);
 
-            // Delete old concerns and insert new ones
-            $product->ingredientConcerns()->delete();
+        toastr()->success(d_trans('Product test updated successfully'));
 
-            if (!empty($concernsData)) {
-                $product->ingredientConcerns()->createMany($concernsData);
-            }
-
-            // Optional: sync overall grade
-            if (!empty($labData['overall_grade'])) {
-                $product->update(['overall_grade' => $labData['overall_grade']]);
-            }
-        });
-
-        toastr()->success(d_trans('Lab tests updated successfully'));
         return back();
     }
 
-
     public function labTests(Product $product)
     {
-        $product->load(['category', 'subCategory', 'images', 'labTestingResult', 'ingredientConcerns']);
-        $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
+        $testAttributes = TestAttribute::active()->orderBy('name')->get();
+
+        // 1. Own test → load with real values
+        $productTest = ProductTest::where('product_id', $product->id)->latest()->first();
+
+
+
+        // 2. No own test → use same category/subcategory as structure template (null values)
+        if (!$productTest) {
+            $templateTest = ProductTest::where('category_id', $product->category_id)
+                ->where('sub_category_id', $product->sub_category_id)
+                ->whereNotNull('data')
+                ->latest()
+                ->first();
+
+            if ($templateTest) {
+                $productTest = $templateTest->replicate();
+                $productTest->exists = false;
+                $productTest->product_id = $product->id;
+                $productTest->data = array_fill_keys(
+                    array_map('strval', array_keys($templateTest->data)),
+                    null
+                );
+            }
+        }
+
         return view('admin.products.lab-tests', [
             'product' => $product,
-            'ingredientLibraries' => $ingredientLibraries,
-            'grades' => $this->availableGrades(),
+            'testAttributes' => $testAttributes,
+            'productTest' => $productTest,
         ]);
     }
 

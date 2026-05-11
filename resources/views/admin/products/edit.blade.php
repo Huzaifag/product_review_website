@@ -18,7 +18,7 @@
                     'buttonLabel' => d_trans('Save Changes'),
                     'brands' => $brands,
                     'categories' => $categories,
-                    'subcategories' => $subcategories,
+                    'subCategories' => $subCategories,
                     'ingredientLibraries' => $ingredientLibraries,
                     'grades' => $grades
                 ])

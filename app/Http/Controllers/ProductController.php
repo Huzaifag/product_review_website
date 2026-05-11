@@ -280,10 +280,64 @@ class ProductController extends Controller
             ->where('product_size', $product->product_size)
             ->with('labTestingResult')
             ->inRandomOrder()
-            ->limit(3)
+            ->limit(2)
             ->get();
 
-        return theme_view('products.comparison', compact('product', 'similarProducts'));
+        // Prepare ProductTest data
+        $productTests = collect();
+        $allTestIds = collect();
+        
+        // Get test for main product
+        $mainTest = \App\Models\ProductTest::where('product_id', $product->id)->first();
+        if ($mainTest && $mainTest->data) {
+            $productTests->put($product->id, $mainTest);
+            $allTestIds = $allTestIds->merge(array_keys($mainTest->data));
+        }
+        
+        // Get tests for similar products
+        foreach ($similarProducts as $sim) {
+            $test = \App\Models\ProductTest::where('product_id', $sim->id)->first();
+            if ($test && $test->data) {
+                $productTests->put($sim->id, $test);
+                $allTestIds = $allTestIds->merge(array_keys($test->data));
+            }
+        }
+        
+        // Get unique test attribute IDs and load attributes
+        $allTestIds = $allTestIds->unique()->sort();
+        $testAttributes = \App\Models\TestAttribute::whereIn('id', $allTestIds->values())
+            ->where('status', 'active')
+            ->get();
+
+        // Get test name (use mainTest name if available, otherwise from first available test)
+        $testName = $mainTest?->name ?? $productTests->first()?->name ?? null;
+
+        // Find overall_grade attribute ID
+        $overallGradeAttr = $testAttributes->firstWhere('name', 'overall_grade') 
+            ?? $testAttributes->first(function($attr) {
+                return strtolower($attr->name) === 'overall_grade' || strtolower($attr->name) === 'gesamturteil';
+            });
+
+        $overallGradeAttrId = $overallGradeAttr?->id;
+
+        // Prepare overall grades from test attributes
+        $overallGrades = collect();
+        if ($overallGradeAttrId && $mainTest && isset($mainTest->data[$overallGradeAttrId])) {
+            $overallGrades->put($product->id, $mainTest->data[$overallGradeAttrId]);
+        } else {
+            $overallGrades->put($product->id, null);
+        }
+
+        foreach ($similarProducts as $sim) {
+            $test = $productTests->get($sim->id);
+            if ($overallGradeAttrId && $test && isset($test->data[$overallGradeAttrId])) {
+                $overallGrades->put($sim->id, $test->data[$overallGradeAttrId]);
+            } else {
+                $overallGrades->put($sim->id, null);
+            }
+        }
+
+        return theme_view('products.comparison', compact('product', 'similarProducts', 'productTests', 'mainTest', 'testAttributes', 'testName', 'overallGrades'));
     }
 
     public function reviewStore(Request $request, $slug)

@@ -65,6 +65,14 @@
                         <span><i class="fa-solid fa-tags"></i>{{ d_trans('Brands') }}</span>
                     </p>
                 </a>
+
+                {{-- test-attributes --}}
+                <a href="{{ route('admin.test-attributes.index') }}"
+                    class="dashboard-sidebar-link {{ currentLink('test-attributes', 2) }}">
+                    <p class="dashboard-sidebar-link-title">
+                        <span><i class="fa-solid fa-tags"></i>{{ d_trans('Test Attributes') }}</span>
+                    </p>
+                </a>
                 <a href="{{ route('admin.plans.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('plans', 2) }}">
                     <p class="dashboard-sidebar-link-title">
@@ -127,15 +135,15 @@
                     </a>
                 @endif
                 @if (config('settings.kyc.actions.status'))
-                <a href="{{ route('admin.kyc-verifications.index') }}"
-                    class="dashboard-sidebar-link {{ currentLink('kyc-verifications', 2) }}">
-                    <p class="dashboard-sidebar-link-title">
-                        <span><i class="far fa-id-card"></i>{{ d_trans('KYC Verifications') }}</span>
-                        @if ($sidebarCounters['kyc_verifications'])
-                            <span class="counter">{{ numberFormat($sidebarCounters['kyc_verifications']) }}</span>
-                        @endif
-                    </p>
-                </a>
+                    <a href="{{ route('admin.kyc-verifications.index') }}"
+                        class="dashboard-sidebar-link {{ currentLink('kyc-verifications', 2) }}">
+                        <p class="dashboard-sidebar-link-title">
+                            <span><i class="far fa-id-card"></i>{{ d_trans('KYC Verifications') }}</span>
+                            @if ($sidebarCounters['kyc_verifications'])
+                                <span class="counter">{{ numberFormat($sidebarCounters['kyc_verifications']) }}</span>
+                            @endif
+                        </p>
+                    </a>
                 @endif
                 <a href="{{ route('admin.advertisements.index') }}"
                     class="dashboard-sidebar-link {{ currentLink('advertisements', 2) }}">
@@ -163,7 +171,7 @@
                         </p>
                     </a>
                 @endif
-                
+
                 <div class="dashboard-sidebar-link {{ activeLink('navigation', 2) }}" data-toggle>
                     <p class="dashboard-sidebar-link-title toggle-title">
                         <span><i class="fa-solid fa-list-ul"></i>{{ d_trans('Navigation') }}</span>

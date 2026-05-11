@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 // optime-clear
 
 Route::get('/optimize-clear', function () {
+    //route to clear all caches
+    
     Artisan::call('optimize:clear');
 
     return 'Application cache cleared';
