@@ -8,13 +8,16 @@
 @section('content')
     <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3">
         @foreach ($themes as $theme)
+        @php
+            $theme->preview_image = asset('images/themes/theme.png');
+        @endphp
             <div class="col">
                 <div class="card theme-card">
                     <div class="card-header p-0 border-bottom">
                         @if ($theme->isActive())
                             <span class="badge bg-success theme-card-active-badge shadow-sm">{{ d_trans('Active') }}</span>
                         @endif
-                        <img src="{{ $theme->getPreviewImageLink() }}" class="card-img-top theme-card-image" />
+                        <img src="{{ $theme->preview_image }}" class="card-img-top theme-card-image" />
                     </div>
                     <div class="card-body">
                         <h5 class="card-title theme-card-title">

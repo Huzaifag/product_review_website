@@ -211,9 +211,20 @@ class ProductController extends Controller
             ])
             ->firstOrFail();
 
-        // Fire-and-forget increment (no SELECT round-trip)
-        Product::where('id', $product->id)->update(['view_count' => DB::raw('view_count + 1')]);
+        Product::where('id', $product->id)->update([
+            'view_count' => DB::raw('view_count + 1')
+        ]);
 
+        if (auth()->check()) {
+            $canSeeDetails = $this->recordProductViewsAcrossSubscriptions(auth()->id(), [$product->id]);
+            $productViewCount = null;
+        } else {
+            $canSeeDetails = $this->canSeeProductDetails($product->id);
+            $productViewCount = $canSeeDetails
+                ? $this->incrementProductViewCount($product->id)
+                : null;
+        }
+        
         $similarProducts = Product::active()
             ->where('id', '!=', $product->id)
             ->where('category_id', $product->category_id)
@@ -221,15 +232,8 @@ class ProductController extends Controller
             ->limit(3)
             ->get();
 
-        $userProductViewCount = $this->retrieveOrCreateUserProductViewCount($product->id);
-
-        ['subscriptions' => $subscriptions, 'combinedLimit' => $combinedLimit]
-            = $this->getSubscriptionLimit();
-
-        $canSeeDetails = $this->canSeeProductDetails($combinedLimit, $userProductViewCount, $product->id);
-
-        // Loaded via eager relation — no extra query
         $testAttributes = collect();
+
         if ($product->productTest?->data) {
             $testAttributes = \App\Models\TestAttribute::whereIn('id', array_keys($product->productTest->data))
                 ->where('status', 'active')
@@ -240,12 +244,330 @@ class ProductController extends Controller
             'product',
             'similarProducts',
             'canSeeDetails',
-            'subscriptions',
-            'combinedLimit',
-            'userProductViewCount',
-            'testAttributes'
+            'testAttributes',
+            'productViewCount'
         ));
     }
+
+    private function resolveUsageSubscriptionForProducts(?int $userId, array $productIds): ?Subscription
+    {
+        $productIds = collect($productIds)
+            ->filter()
+            ->unique()
+            ->values();
+
+        if (!$userId || $productIds->isEmpty()) {
+            return null;
+        }
+
+        $subscriptions = Subscription::with('plan')
+            ->where('user_id', $userId)
+            ->active()
+            ->orderBy('started_at')
+            ->get();
+
+        foreach ($subscriptions as $subscription) {
+            $plan = $subscription->plan;
+            if (!$plan) {
+                continue;
+            }
+
+            if (is_null($plan->products_limit)) {
+                return $subscription;
+            }
+
+            $userProductViewCount = UserProductViewCount::where('user_id', $userId)
+                ->where('subscription_id', $subscription->id)
+                ->first();
+
+            $existingIds = collect($userProductViewCount?->product_ids ?? [])
+                ->filter()
+                ->unique();
+
+            $newIds = $productIds->diff($existingIds);
+            if ($newIds->isEmpty()) {
+                return $subscription;
+            }
+            $remaining = (int) $plan->products_limit - $existingIds->count();
+
+            if ($newIds->count() <= $remaining) {
+                return $subscription;
+            }
+        }
+
+        return null;
+    }
+
+    private function recordProductViewsAcrossSubscriptions(int $userId, array $productIds): bool
+    {
+        $productIds = collect($productIds)
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($productIds->isEmpty()) {
+            return true;
+        }
+
+        $subscriptions = Subscription::with('plan')
+            ->where('user_id', $userId)
+            ->active()
+            ->orderBy('started_at')
+            ->get();
+
+        if ($subscriptions->isEmpty()) {
+            return false;
+        }
+
+        $subscriptionIds = $subscriptions->pluck('id');
+        $counts = UserProductViewCount::where('user_id', $userId)
+            ->whereIn('subscription_id', $subscriptionIds)
+            ->get()
+            ->keyBy('subscription_id');
+
+        $existingAll = $counts
+            ->flatMap(fn($count) => $count->product_ids ?? [])
+            ->filter()
+            ->unique();
+
+        $newIds = $productIds->diff($existingAll)->values();
+        if ($newIds->isEmpty()) {
+            return true;
+        }
+
+        $totalRemaining = 0;
+        $hasUnlimited = false;
+        foreach ($subscriptions as $subscription) {
+            $plan = $subscription->plan;
+            if (!$plan) {
+                continue;
+            }
+            if (is_null($plan->products_limit)) {
+                $hasUnlimited = true;
+                break;
+            }
+            $existingIds = collect($counts->get($subscription->id)?->product_ids ?? [])
+                ->filter()
+                ->unique();
+            $remaining = (int) $plan->products_limit - $existingIds->count();
+            if ($remaining > 0) {
+                $totalRemaining += $remaining;
+            }
+        }
+
+        if (!$hasUnlimited && $totalRemaining < $newIds->count()) {
+            return false;
+        }
+
+        $ip = request()->header('CF-Connecting-IP') ?: request()->ip();
+        $sessionId = session()->getId();
+
+        foreach ($subscriptions as $subscription) {
+            $plan = $subscription->plan;
+            if (!$plan) {
+                continue;
+            }
+
+            if ($newIds->isEmpty()) {
+                break;
+            }
+
+            $existingIds = collect($counts->get($subscription->id)?->product_ids ?? [])
+                ->filter()
+                ->unique();
+
+            if (is_null($plan->products_limit)) {
+                $assigned = $newIds->all();
+                $newIds = collect();
+            } else {
+                $remaining = (int) $plan->products_limit - $existingIds->count();
+                if ($remaining <= 0) {
+                    continue;
+                }
+                $assigned = $newIds->take($remaining)->values()->all();
+                $newIds = $newIds->slice(count($assigned))->values();
+            }
+
+            if (empty($assigned)) {
+                continue;
+            }
+
+            $userProductViewCount = UserProductViewCount::firstOrCreate(
+                [
+                    'user_id' => $userId,
+                    'subscription_id' => $subscription->id,
+                ],
+                [
+                    'ip_address' => $ip,
+                    'session_id' => $sessionId,
+                    'product_ids' => [],
+                    'products_viewed' => 0,
+                ]
+            );
+
+            $updatedIds = $existingIds->merge($assigned)->unique()->values()->all();
+            $userProductViewCount->update([
+                'ip_address' => $ip,
+                'session_id' => $sessionId,
+                'product_ids' => $updatedIds,
+                'products_viewed' => count($updatedIds),
+            ]);
+        }
+
+        return true;
+    }
+
+    function incrementProductViewCount($productIds)
+    {
+        $productIds = collect(is_array($productIds) ? $productIds : [$productIds])
+            ->filter()
+            ->unique()
+            ->values()
+            ->toArray();
+
+        if (empty($productIds)) {
+            return null;
+        }
+
+        $ip = request()->header('CF-Connecting-IP') ?: request()->ip();
+        $sessionId = session()->getId();
+
+        $subscription = auth()->check()
+            ? $this->resolveUsageSubscriptionForProducts(auth()->id(), $productIds)
+            : null;
+
+        if (auth()->check() && !$subscription) {
+            return null;
+        }
+
+        if (auth()->check()) {
+            $where = [
+                'user_id' => auth()->id(),
+                'subscription_id' => $subscription?->id,
+            ];
+        } else {
+            $where = [
+                'session_id' => $sessionId,
+                'user_id' => null,
+            ];
+        }
+
+        $userProductViewCount = UserProductViewCount::firstOrCreate(
+            $where,
+            [
+                'ip_address' => $ip,
+                'session_id' => $sessionId,
+                'subscription_id' => $subscription?->id,
+                'product_ids' => [],
+                'products_viewed' => 0,
+            ]
+        );
+
+        $existingIds = $userProductViewCount->product_ids ?? [];
+
+        $newIds = collect($productIds)
+            ->diff($existingIds)
+            ->values()
+            ->toArray();
+
+        if (empty($newIds)) {
+            return $userProductViewCount;
+        }
+
+        $updatedIds = collect($existingIds)
+            ->merge($newIds)
+            ->unique()
+            ->values()
+            ->toArray();
+
+        $userProductViewCount->update([
+            'ip_address' => $ip,
+            'session_id' => $sessionId,
+            'subscription_id' => $subscription?->id,
+            'product_ids' => $updatedIds,
+            'products_viewed' => count($updatedIds),
+        ]);
+
+        return $userProductViewCount;
+    }
+
+    function canSeeProductDetails($productIds): bool
+{
+    $productIds = collect(is_array($productIds) ? $productIds : [$productIds])
+        ->filter()
+        ->unique()
+        ->values();
+
+    if ($productIds->isEmpty()) {
+        return false;
+    }
+
+    $sessionId = session()->getId();
+
+        $subscription = auth()->check()
+            ? $this->resolveUsageSubscriptionForProducts(auth()->id(), $productIds->toArray())
+            : null;
+
+        $hasActiveSubscriptions = auth()->check()
+            ? Subscription::where('user_id', auth()->id())->active()->exists()
+            : false;
+
+        if ($hasActiveSubscriptions && !$subscription) {
+            return false;
+        }
+
+        $plan = $subscription?->plan;
+
+    // Guest OR logged-in user without subscription uses Free plan
+    if (!$plan) {
+        $plan = Plan::where('name', 'Free')
+            ->active()
+            ->first();
+    }
+
+    if (!$plan) {
+        return false;
+    }
+
+    if (auth()->check()) {
+        $where = [
+            'user_id' => auth()->id(),
+            'subscription_id' => $subscription?->id,
+        ];
+    } else {
+        $where = [
+            'session_id' => $sessionId,
+            'user_id' => null,
+        ];
+    }
+
+    $userProductViewCount = UserProductViewCount::where($where)->first();
+
+    $existingIds = collect($userProductViewCount?->product_ids ?? [])
+        ->filter()
+        ->unique()
+        ->values();
+
+    // Only count products that are not already viewed
+    $newIds = $productIds
+        ->diff($existingIds)
+        ->values();
+
+    // Already viewed products are always allowed
+    if ($newIds->isEmpty()) {
+        return true;
+    }
+
+    // Null means unlimited
+    if (is_null($plan->products_limit)) {
+        return true;
+    }
+
+    $currentViewed = $existingIds->count();
+
+    return ($currentViewed + $newIds->count()) <= (int) $plan->products_limit;
+}
+
     //Product Comparion
     public function comparison($id)
     {
@@ -263,33 +585,28 @@ class ProductController extends Controller
 
         $similarIds = $similarProducts->pluck('id')->toArray();
 
-        // Single upsert — no double fetch, no race condition
-        $userProductViewCount = $this->resolveUserProductViewCount();
+        $allProductIds = collect([$product->id])
+            ->merge($similarIds)
+            ->unique()
+            ->values()
+            ->toArray();
 
-        $existingIds = is_array($userProductViewCount->product_ids)
-            ? $userProductViewCount->product_ids
-            : json_decode($userProductViewCount->product_ids, true) ?? [];
-
-        $updatedIds = collect($existingIds)->merge($similarIds)->unique()->values()->toArray();
-
-        $userProductViewCount->update([
-            'product_ids' => $updatedIds,
-            'products_viewed' => count($updatedIds),
-        ]);
-
-        ['subscriptions' => $subscriptions, 'combinedLimit' => $combinedLimit]
-            = $this->getSubscriptionLimit();
-
-        $canSeeDetails = $this->canSeeProductDetails($combinedLimit, $userProductViewCount, $product->id);
-
-        // Fix N+1: load ALL product tests in 1 query
-        $allProductIds = collect([$product->id])->merge($similarIds)->toArray();
+        if (auth()->check()) {
+            $canSeeDetails = $this->recordProductViewsAcrossSubscriptions(auth()->id(), $allProductIds);
+            $userProductViewCount = null;
+        } else {
+            $canSeeDetails = $this->canSeeProductDetails($allProductIds);
+            $userProductViewCount = $canSeeDetails
+                ? $this->incrementProductViewCount($allProductIds)
+                : null;
+        }
 
         $productTests = \App\Models\ProductTest::whereIn('product_id', $allProductIds)
             ->get()
-            ->keyBy('product_id');   // keyed collection — O(1) lookup
+            ->keyBy('product_id');
 
         $mainTest = $productTests->get($product->id);
+
         $allTestIds = collect();
 
         foreach ($productTests as $test) {
@@ -299,6 +616,7 @@ class ProductController extends Controller
         }
 
         $allTestIds = $allTestIds->unique()->sort();
+
         $testAttributes = \App\Models\TestAttribute::whereIn('id', $allTestIds->values())
             ->where('status', 'active')
             ->get();
@@ -308,11 +626,14 @@ class ProductController extends Controller
         $overallGradeAttr = $testAttributes->first(
             fn($a) => in_array(strtolower($a->name), ['overall_grade', 'gesamturteil'])
         );
+
         $overallGradeAttrId = $overallGradeAttr?->id;
 
         $overallGrades = collect();
+
         foreach ($allProductIds as $pid) {
             $test = $productTests->get($pid);
+
             $overallGrades->put(
                 $pid,
                 ($overallGradeAttrId && $test && isset($test->data[$overallGradeAttrId]))
@@ -330,58 +651,11 @@ class ProductController extends Controller
             'testName',
             'overallGrades',
             'canSeeDetails',
-            'subscriptions',
-            'combinedLimit',
             'userProductViewCount'
         ));
     }
 
 
-    private function getSubscriptionLimit(): array
-    {
-        if (!auth()->check()) {
-            return ['subscriptions' => collect(), 'combinedLimit' => 0];
-        }
-
-        $subscriptions = Subscription::with('plan')
-            ->where('user_id', auth()->id())
-            ->where(function ($q) {
-                $q->where('expiry_at', '>', now())->orWhereNull('expiry_at');
-            })
-            ->get();
-
-        $totalLimit = 0;
-        $isUnlimited = false;
-
-        foreach ($subscriptions as $sub) {
-            if ($sub->plan && is_null($sub->plan->products_limit)) {
-                $isUnlimited = true;
-                break;
-            }
-            if ($sub->plan?->products_limit) {
-                $totalLimit += (int) $sub->plan->products_limit;
-            }
-        }
-
-        return [
-            'subscriptions' => $subscriptions,
-            'combinedLimit' => $isUnlimited ? null : $totalLimit,
-        ];
-    }
-
-    private function resolveUserProductViewCount(): UserProductViewCount
-    {
-        $query = fn($q) => auth()->check()
-            ? $q->where('user_id', auth()->id())
-            : $q->where('session_id', session()->getId())->whereNull('user_id');
-
-        return UserProductViewCount::where($query)->firstOrCreate(
-            auth()->check()
-            ? ['user_id' => auth()->id()]
-            : ['session_id' => session()->getId(), 'user_id' => null],
-            ['product_ids' => [], 'products_viewed' => 0]
-        );
-    }
 
     public function reviewStore(Request $request, $slug)
     {
@@ -470,91 +744,10 @@ class ProductController extends Controller
         return back();
     }
 
-    //retrieve or save UserProductViewCount for current user or guest and increment viewed product count
 
-    private function retrieveOrCreateUserProductViewCount($productId)
-    {
-        $ip = request()->header('CF-Connecting-IP') ?: request()->ip();
-        $userId = auth()->check() ? auth()->id() : null;
-        $sessionId = session()->getId();
 
-        $subscription = null;
-        if ($userId) {
-            // Get only active (non-expired) subscriptions, excluding lifetime plans
-            $subscription = Subscription::active()
-                ->where('user_id', $userId)
-                ->whereHas('plan', function ($query) {
-                    $query->whereNot('interval', Plan::INTERVAL_LIFETIME);
-                })
-                ->first();
-        }
 
-        $defaultPlan = Plan::where('interval', Plan::INTERVAL_LIFETIME)->first();
 
-        // Build lookup key: user_id for auth, session_id for guest
-        $lookupKey = $userId
-            ? ['user_id' => $userId]
-            : ['session_id' => $sessionId, 'user_id' => null];
-
-        $userProductViewCount = UserProductViewCount::updateOrCreate(
-            $lookupKey,
-            [
-                'plan_id' => $subscription ? $subscription->plan_id : $defaultPlan?->id,
-                'subscription_id' => $subscription ? $subscription->id : null,
-                'ip_address' => $ip,
-                'session_id' => $sessionId,
-            ]
-        );
-
-        // If subscription has expired, reset it to default lifetime plan
-        if ($userProductViewCount->subscription_id && $userProductViewCount->subscription) {
-            if ($userProductViewCount->subscription->isExpired()) {
-                $userProductViewCount->update([
-                    'plan_id' => $defaultPlan?->id,
-                    'subscription_id' => null,
-                    'product_ids' => [],
-                    'products_viewed' => 0,
-                ]);
-
-                return $userProductViewCount;
-            }
-        }
-
-        $productsLimit = $subscription?->plan?->products_limit ?? $defaultPlan?->products_limit;
-
-        $productIds = is_array($userProductViewCount->product_ids)
-            ? $userProductViewCount->product_ids
-            : [];
-
-        $alreadyViewed = in_array($productId, $productIds);
-        $canAddNewView = is_null($productsLimit) || $alreadyViewed || count($productIds) < (int) $productsLimit;
-
-        if (!$alreadyViewed && $canAddNewView) {
-            $productIds[] = $productId;
-            $userProductViewCount->product_ids = $productIds;
-            $userProductViewCount->products_viewed = count($productIds);
-            $userProductViewCount->save();
-        }
-
-        return $userProductViewCount;
-    }
-
-    private function canSeeProductDetails($products_limit, $userProductViewCount, $productId)
-    {
-        if (is_null($products_limit)) {
-            return true; // Unlimited products
-        }
-
-        $productIds = $userProductViewCount->product_ids ?? [];
-        $productIds = is_array($productIds) ? $productIds : [];
-
-        // Always allow details for products already counted as viewed.
-        if (in_array($productId, $productIds)) {
-            return true;
-        }
-
-        return count($productIds) < (int) $products_limit;
-    }
 
     public function ajaxSearch(Request $request)
     {

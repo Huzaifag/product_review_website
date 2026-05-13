@@ -69,6 +69,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append([StartSession::class, ShareErrorsFromSession::class, Localization::class]);
         $middleware->encryptCookies(except: ['locale', 'direction']);
         $middleware->validateCsrfTokens(except: ['payments/webhooks/*', 'payments/notifications/*', 'payments/ipn/iyzico']);
+        $middleware->trustProxies(at: '*');
         $middleware->alias([
             'demo' => DemoMode::class,
             'addon' => AddonMiddleware::class,

@@ -180,7 +180,7 @@
             </div>
 
             <!-- Themes -->
-            {{-- <div class="col page-search-element">
+            <div class="col page-search-element">
                 <a href="{{ route('admin.settings.themes.index') }}" class="premium-card">
                     <div class="card-glow"></div>
                     <div class="premium-card-body">
@@ -194,7 +194,7 @@
                     </div>
                     <i class="bi bi-chevron-right arrow-hint"></i>
                 </a>
-            </div> --}}
+            </div>
 
             <!-- Pages -->
             <div class="col page-search-element">
@@ -302,7 +302,8 @@
         </div>
     </div>
 
-    <style>
+@push('styles')
+        <style>
         :root {
             --card-bg: #ffffff;
             --card-radius: 16px;
@@ -424,4 +425,5 @@
             pointer-events: none;
         }
     </style>
+@endpush
 @endsection

@@ -38,6 +38,14 @@ class LoginController extends Controller
         if ($user->isBanned()) {
             Auth::logout();
             toastr()->error(d_trans('Your account has been banned'));
+
+            return redirect()->route('login');
+        }
+
+        if (! $user->isEmailVerified()) {
+            Auth::logout();
+            toastr()->error(d_trans('Please verify your email address before logging in.'));
+
             return redirect()->route('login');
         }
 

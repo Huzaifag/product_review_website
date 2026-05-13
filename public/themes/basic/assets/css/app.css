@@ -1911,8 +1911,10 @@ a:hover {
 
 .languages.drop-down .language-img img {
     display: block;
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .languages.drop-down .drop-down-menu .drop-down-item {

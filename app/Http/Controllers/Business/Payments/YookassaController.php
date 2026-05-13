@@ -16,12 +16,14 @@ class YookassaController extends Controller
     public function __construct()
     {
         $this->paymentGateway = paymentGateway('yookassa');
-
-        $this->client = new Client();
-        $this->client->setAuth(
-            $this->paymentGateway->credentials->shop_id,
-            $this->paymentGateway->credentials->secret_key
-        );
+        if ($this->paymentGateway) {
+    
+            $this->client = new Client();
+            $this->client->setAuth(
+                $this->paymentGateway->credentials->shop_id,
+                $this->paymentGateway->credentials->secret_key
+            );
+        }
     }
 
     public function process($trx)

@@ -11,9 +11,7 @@ class UserProductViewCount extends Model
     protected $fillable = [
         'ip_address',
         'session_id',
-        'season_id',
         'user_id',
-        'plan_id',
         'subscription_id',
         'products_viewed',
         'product_ids',
@@ -29,9 +27,9 @@ class UserProductViewCount extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function plan()
+    public function plans()
     {
-        return $this->belongsTo(Plan::class);
+        return Plan::whereIn('id', $this->plan_ids ?? []);
     }
 
     public function subscription()

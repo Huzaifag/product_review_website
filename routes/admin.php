@@ -64,7 +64,7 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
         Route::put('{testAttribute}', 'TestAttributeController@update')->name('update');
         Route::delete('{testAttribute}', 'TestAttributeController@destroy')->name('destroy');
     });
-    
+
     Route::resource('plans', 'PlanController')->except(['show']);
     //admin.plans.sortable
     Route::post('plans/sortable', 'PlanController@sortable')->name('plans.sortable')->middleware('demo');
@@ -110,8 +110,8 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
     });
 
     Route::name('ai-review-writer.')->prefix('ai-review-writer')->middleware(['demo', 'addon:ai_review_writer'])->group(function () {
-        Route::get('/', 'AiReviewWriterController@index')->name('index');
-        Route::post('/', 'AiReviewWriterController@update')->name('update');
+        // Route::get('/', 'AiReviewWriterController@index')->name('index');
+        // Route::post('/', 'AiReviewWriterController@update')->name('update');
     });
 
     Route::name('members.')->prefix('members')->namespace('Members')->middleware('demo')->group(function () {

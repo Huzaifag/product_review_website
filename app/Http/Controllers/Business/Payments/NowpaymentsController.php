@@ -19,10 +19,12 @@ class NowpaymentsController extends Controller
     public function __construct()
     {
         $this->paymentGateway = paymentGateway('nowpayments');
-        $this->client = new Client(
-            $this->paymentGateway->credentials->api_key,
-            $this->paymentGateway->isSandboxMode()
-        );
+        if ($this->paymentGateway) {
+            $this->client = new Client(
+                $this->paymentGateway->credentials->api_key,
+                $this->paymentGateway->isSandboxMode()
+            );
+        }
     }
 
     public function process($trx)

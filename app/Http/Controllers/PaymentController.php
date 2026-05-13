@@ -89,9 +89,7 @@ class PaymentController extends Controller
             $userId = auth()->id();
             $user = auth()->user();
 
-            $userProductViewCount = UserProductViewCount::where('user_id', $userId)->first();
-
-            DB::transaction(function () use ($session, $plan, $amount, $userId, $user, $stripeGateway, $userProductViewCount) {
+            DB::transaction(function () use ($session, $plan, $amount, $userId, $user, $stripeGateway) {
                 $transaction = Transaction::updateOrCreate(
                     ['payment_id' => $session->id],
                     [
@@ -117,22 +115,15 @@ class PaymentController extends Controller
                     'last_notification_at' => null,
                 ]);
 
-                // ✅ UserProductViewCount → link to NEW subscription, reset counts
-                if ($userProductViewCount) {
-                    $userProductViewCount->plan_id = $plan->id;
-                    $userProductViewCount->subscription_id = $subscription->id;
-                    $userProductViewCount->products_viewed = 0;
-                    $userProductViewCount->product_ids = [];
-                    $userProductViewCount->save();
-                } else {
-                    UserProductViewCount::create([
-                        'user_id' => $userId,
-                        'plan_id' => $plan->id,
-                        'subscription_id' => $subscription->id,
-                        'session_id' => session()->getId(),
-                        'ip_address' => request()->header('CF-Connecting-IP') ?: request()->ip(),
-                    ]);
-                }
+                // Create a dedicated view counter per subscription
+                UserProductViewCount::create([
+                    'user_id' => $userId,
+                    'subscription_id' => $subscription->id,
+                    'session_id' => session()->getId(),
+                    'ip_address' => request()->header('CF-Connecting-IP') ?: request()->ip(),
+                    'product_ids' => [],
+                    'products_viewed' => 0,
+                ]);
 
                 $subscription->sendSubscriptionEmailNotification();
                 self::adminSubscriptionNotify($user, $plan, $subscription, $transaction);

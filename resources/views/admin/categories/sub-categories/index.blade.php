@@ -106,12 +106,12 @@
                                                     <i class="fa-solid fa-tags"></i>{{ d_trans('Sub Categories') }}
                                                 </a>
                                             </li>
-                                            <li>
+                                            {{-- <li>
                                                 <a class="dropdown-item"
                                                     href="{{ route('admin.businesses.index', ['sub_category' => $subCategory->id]) }}">
                                                     <i class="fa-solid fa-briefcase"></i>{{ d_trans('Businesses') }}
                                                 </a>
-                                            </li>
+                                            </li> --}}
                                             <li>
                                                 <hr class="dropdown-divider" />
                                             </li>

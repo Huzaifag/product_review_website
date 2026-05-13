@@ -18,11 +18,13 @@ class UddoktapayController extends Controller
     public function __construct()
     {
         $this->paymentGateway = paymentGateway('uddoktapay');
-
-        $this->uddoktaPay = UddoktaPay::make(
-            $this->paymentGateway->credentials->api_key,
-            $this->paymentGateway->credentials->base_url
-        );
+        if ($this->paymentGateway) {
+    
+            $this->uddoktaPay = UddoktaPay::make(
+                $this->paymentGateway->credentials->api_key,
+                $this->paymentGateway->credentials->base_url
+            );
+        }
     }
 
     public function process($trx)

@@ -1,7 +1,7 @@
 <div>
     @if ($newsletterFooterStatus)
         <div class="footer-subscribe {{ $hasSocialLinks ? 'mb-5' : '' }} pe-lg-5">
-            <h3 class="mb-3">{{ d_trans('Subscribe to Our Newsletter') }}</h3>
+            <h3 class="mb-3 text-white">{{ d_trans('Subscribe to Our Newsletter') }}</h3>
             <p class="mb-4">
                 {{ d_trans("We'll keep you updated with the latest news and updates.") }}
             </p>

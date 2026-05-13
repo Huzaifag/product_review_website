@@ -14,6 +14,7 @@
                         </button>
                     </div>
                     <div class="nav-bar-links">
+                        
                         @foreach ($navbarLinks as $navbarLink)
                             @if ($navbarLink->children->count() > 0)
                                 <div class="drop-down" data-dropdown>

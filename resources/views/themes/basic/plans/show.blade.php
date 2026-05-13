@@ -243,10 +243,24 @@
                             {{-- CTA --}}
                             <div class="plan-card-footer">
                                 @if ($plan->price > 0)
-                                     <a href="{{ route('plans.details', $plan->slug) }}"
-                                        class="{{ $plan->isFeatured() ? 'btn btn-primary' : 'btn btn-outline-primary' }} w-100">
-                                        {{ d_trans('Get started') }}
-                                    </a> 
+                                    {{-- if user has not already subscribed to this plan, show the button --}}
+
+                                    @php
+                                        $userPlanIds = auth()->check()
+                                            ? (optional(auth()->user()->currentPlans())->pluck('id') ?? collect())
+                                            : collect();
+                                    @endphp
+                                    @if (!auth()->check() || !$userPlanIds->contains($plan->id))
+                                        <a href="{{ route('plans.details', $plan->slug) }}"
+                                            class="{{ $plan->isFeatured() ? 'btn btn-primary' : 'btn btn-outline-primary' }} w-100">
+                                            {{ d_trans('Get started') }}
+                                        </a>
+                                    @else
+                                        <a href="{{ route('user.profile', auth()->user()->username) }}"
+                                            class="btn btn-success w-100">
+                                            {{ d_trans('You are subscribed') }}
+                                        </a>
+                                    @endif
                                 @endif
                             </div>
 

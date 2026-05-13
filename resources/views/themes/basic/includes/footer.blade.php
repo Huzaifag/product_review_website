@@ -16,13 +16,13 @@
                 <div class="col-12 col-sm-6 col-md-4 col-lg-2 nav-col">
                     <h4 class="text-uppercase fw-600 mb-3">{{ d_trans('Navigation') }}</h4>
                     <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ route('products.index') }}"
+                                class="text-decoration-none">{{ d_trans('All Products') }}</a></li>
                         <li class="mb-2"><a href="{{ route('businesses.index') }}"
-                                class="text-decoration-none">{{ d_trans('All Test Results') }}</a></li>
-                        <li class="mb-2"><a href="{{ route('businesses.index') }}"
-                                class="text-decoration-none">{{ d_trans('Product Search') }}</a></li>
-                        <li class="mb-2"><a href="/#how-we-test"
-                                class="text-decoration-none">{{ d_trans('Rating System') }}</a></li>
-                        <li class="mb-2"><a href="#"
+                                class="text-decoration-none">{{ d_trans('Categories') }}</a></li>
+                        <li class="mb-2"><a href="/plans"
+                                class="text-decoration-none">{{ d_trans('Plans') }}</a></li>
+                        <li class="mb-2"><a href="/ingredients"
                                 class="text-decoration-none">{{ d_trans('Ingredient Guide') }}</a></li>
                         <li class="mb-2"><a href="{{ route('blog.index') }}"
                                 class="text-decoration-none">{{ d_trans('Blog') }}</a></li>
@@ -58,7 +58,7 @@
             <div class="row py-3 px-md-4 align-items-center justify-content-between text-center text-md-start">
                 <div class="col-12 col-md-auto mb-2 mb-md-0">
                     <p class="footer-copyright mb-0">
-                        &copy; <span data-year></span>
+                        &copy; {{ date('Y') }}
                         {{ m_trans(config('settings.general.site_name')) }}
                         &mdash; {{ d_trans('All rights reserved. Developed by team Bitlogicx') }}.
                     </p>

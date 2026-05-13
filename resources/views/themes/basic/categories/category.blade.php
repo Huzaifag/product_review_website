@@ -36,9 +36,11 @@
                     </div>
                 </div>
             @endif
-           
+
             @if ($sub_categories && $sub_categories->count() > 0)
-                @include('themes.basic.categories.includes.sub_categories', ['sub_categories' => $sub_categories])
+                @include('themes.basic.categories.includes.sub_categories', [
+                    'sub_categories' => $sub_categories,
+                ])
             @endif
         </div>
         @include('themes.basic.partials.search-params', [
@@ -47,7 +49,7 @@
             'search_categories' => $searchCategories,
             'search_brands' => $search_brands,
         ])
-        
+
         <div class="col-lg-8 col-xxl-9">
             @include('themes.basic.partials.grid-header', [
                 'grid_title' => '',

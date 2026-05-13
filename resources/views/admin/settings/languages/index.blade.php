@@ -42,9 +42,9 @@
                                     <i class="fa-solid fa-up-down-left-right"></i>
                                 </td>
                                 <td>
-                                    <a href="{{ route('admin.settings.languages.translates', $language->id) }}">
+                                    <a href="{{ route('admin.settings.languages.translates', $language->id) }}" class="language-img">
                                         <img src="{{ $language->getLogoLink() }}" alt="{{ $language->trans->name }}"
-                                            width="30px" height="30px">
+                                            class="img-fluid">
                                     </a>
                                 </td>
                                 <td>
@@ -125,6 +125,15 @@
     @endpush
     @push('styles_libs')
         <link rel="stylesheet" href="{{ asset('vendor/libs/bootstrap/select/bootstrap-select.min.css') }}">
+        <style>
+            .language-img img {
+                display: block;
+                width: 35px;
+                height: 35px;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+        </style>
     @endpush
     @push('scripts_libs')
         <script src="{{ asset('vendor/libs/bootstrap/select/bootstrap-select.min.js') }}"></script>

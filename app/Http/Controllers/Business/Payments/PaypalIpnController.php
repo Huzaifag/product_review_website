@@ -12,13 +12,16 @@ use Illuminate\Support\Facades\Http;
 class PaypalIpnController extends Controller
 {
     private $paymentGateway;
+
     private $endpoint;
 
     public function __construct()
     {
         $this->paymentGateway = paymentGateway('paypal_ipn');
-        $this->endpoint = $this->paymentGateway->isSandboxMode() ?
-        'https://www.sandbox.paypal.com/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
+        if ($this->paymentGateway) {
+            $this->endpoint = $this->paymentGateway->isSandboxMode() ?
+            'https://www.sandbox.paypal.com/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
+        }
     }
 
     public function process($trx)
@@ -51,17 +54,17 @@ class PaypalIpnController extends Controller
         try {
             $response = Http::asForm()->post($this->endpoint, $body);
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 throw new Exception(d_trans('An error occurred while calling the API'));
             }
 
-            $redirectUrl = $this->endpoint . '?' . http_build_query($body);
+            $redirectUrl = $this->endpoint.'?'.http_build_query($body);
 
-            $data['type'] = "success";
-            $data['method'] = "redirect";
+            $data['type'] = 'success';
+            $data['method'] = 'redirect';
             $data['redirect_url'] = $redirectUrl;
         } catch (\Exception $e) {
-            $data['type'] = "error";
+            $data['type'] = 'error';
             $data['msg'] = $e->getMessage();
         }
 
@@ -88,6 +91,7 @@ class PaypalIpnController extends Controller
         }
 
         toastr()->warning(d_trans("Your payment is being processed and you will get email notification when it's completed"));
+
         return redirect()->route('business.subscription.plans.index');
     }
 
@@ -95,7 +99,7 @@ class PaypalIpnController extends Controller
     {
         try {
             $payload = $request->all();
-            if (!$payload) {
+            if (! $payload) {
                 return response('Invalid payload', 401);
             }
 

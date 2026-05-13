@@ -8,20 +8,27 @@ use Illuminate\Database\Eloquent\Model;
 class Plan extends Model
 {
     const STATUS_DISABLED = 0;
+
     const STATUS_ACTIVE = 1;
 
     const NOT_FEATURED = 0;
+
     const FEATURED = 1;
 
     const INTERVAL_WEEK = 'week';
+
     const INTERVAL_MONTH = 'month';
+
     const INTERVAL_YEAR = 'year';
+
     const INTERVAL_LIFETIME = 'lifetime';
 
     const NO_EMPLOYEES_FEATURE = 0;
+
     const EMPLOYEES_FEATURE = 1;
 
     const NO_CATEGORIES_FEATURE = 0;
+
     const CATEGORIES_FEATURE = 1;
 
     protected static function booted()
@@ -138,9 +145,9 @@ class Plan extends Model
     {
         if ($this->isWeekly()) {
             return 7;
-        } else if ($this->isMonthly()) {
+        } elseif ($this->isMonthly()) {
             return 30;
-        } else if ($this->isYearly()) {
+        } elseif ($this->isYearly()) {
             return 365;
         }
 
@@ -175,5 +182,10 @@ class Plan extends Model
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);
+    }
+
+    public static function getFreePlan()
+    {
+        return self::where('slug', 'free')->first();
     }
 }

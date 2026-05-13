@@ -19,9 +19,11 @@ class MercadopagoController extends Controller
     public function __construct()
     {
         $this->paymentGateway = paymentGateway('mercadopago');
-        MercadoPagoConfig::setAccessToken($this->paymentGateway->credentials->access_token);
-        $this->preferenceClient = new PreferenceClient();
-        $this->paymentClient = new PaymentClient();
+        if ($this->paymentGateway) {
+            MercadoPagoConfig::setAccessToken($this->paymentGateway->credentials->access_token);
+            $this->preferenceClient = new PreferenceClient();
+            $this->paymentClient = new PaymentClient();
+        }
     }
 
     public function process($trx)

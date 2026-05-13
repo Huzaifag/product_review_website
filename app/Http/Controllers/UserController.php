@@ -22,15 +22,61 @@ class UserController extends Controller
             ->firstOrFail();
 
         // Get plan usage data
-        $userProductViewCount = $user->userProductViewCounts()->with('plan')->latest()->first();
-        $plan = $userProductViewCount?->plan;
-        $productIds = $userProductViewCount?->getViewedProductIds() ?? [];
-        $productViewed = \App\Models\Product::whereIn('id', $productIds)->get();
         $subscriptions = \App\Models\Subscription::with('plan')
             ->where('user_id', $user->id)
-            ->latest('started_at')
+            ->orderBy('started_at')
             ->get();
-        $subscription = $subscriptions->first();
+
+        $subscription = null;
+        foreach ($subscriptions as $candidate) {
+            if ($candidate->isExpired() || !$candidate->plan) {
+                continue;
+            }
+
+            if (is_null($candidate->plan->products_limit)) {
+                $subscription = $candidate;
+                break;
+            }
+
+            $viewed = $user->userProductViewCounts()
+                ->where('subscription_id', $candidate->id)
+                ->value('products_viewed') ?? 0;
+
+            if ($viewed < (int) $candidate->plan->products_limit) {
+                $subscription = $candidate;
+                break;
+            }
+        }
+
+        if (!$subscription) {
+            $subscription = $subscriptions
+                ->filter(fn($candidate) => !$candidate->isExpired())
+                ->sortByDesc('started_at')
+                ->first();
+        }
+
+        $userProductViewCounts = $user->userProductViewCounts()->get();
+        $userProductViewCount = $subscription
+            ? $userProductViewCounts->firstWhere('subscription_id', $subscription->id)
+            : null;
+        $productIds = $userProductViewCount?->getViewedProductIds() ?? [];
+        $allProductIds = $userProductViewCounts
+            ->flatMap(fn($count) => $count->getViewedProductIds())
+            ->unique()
+            ->values();
+        $productsById = $allProductIds->isNotEmpty()
+            ? \App\Models\Product::whereIn('id', $allProductIds)->get()->keyBy('id')
+            : collect();
+        $productViewed = $productsById->only($productIds)->values();
+        $productViewedBySubscription = $userProductViewCounts
+            ->filter(fn($count) => !is_null($count->subscription_id))
+            ->mapWithKeys(function ($count) use ($productsById) {
+                $items = collect($count->getViewedProductIds())
+                    ->map(fn($id) => $productsById->get($id))
+                    ->filter();
+                return [$count->subscription_id => $items];
+            });
+        $plan = $subscription?->plan;
         $plans = \App\Models\Plan::active()->get();
 
         return theme_view('user.profile', [
@@ -41,6 +87,8 @@ class UserController extends Controller
             'plans' => $plans,
             'userProductViewCount' => $userProductViewCount,
             'productViewed' => $productViewed,
+            'productViewedBySubscription' => $productViewedBySubscription,
+            'userProductViewCounts' => $userProductViewCounts,
         ]);
     }
 

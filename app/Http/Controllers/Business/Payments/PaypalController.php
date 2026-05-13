@@ -16,28 +16,31 @@ use Vironeer\PayPal\Orders\OrdersCreateRequest;
 class PaypalController extends Controller
 {
     private $paymentGateway;
+
     private $environment;
 
     public function __construct()
     {
         $this->paymentGateway = paymentGateway('paypal');
-        if ($this->paymentGateway->isSandboxMode()) {
-            $this->environment = new SandboxEnvironment(
-                $this->paymentGateway->credentials->client_id,
-                $this->paymentGateway->credentials->client_secret
-            );
-        } else {
-            $this->environment = new ProductionEnvironment(
-                $this->paymentGateway->credentials->client_id,
-                $this->paymentGateway->credentials->client_secret
-            );
+        if ($this->paymentGateway) {
+            if ($this->paymentGateway->isSandboxMode()) {
+                $this->environment = new SandboxEnvironment(
+                    $this->paymentGateway->credentials->client_id,
+                    $this->paymentGateway->credentials->client_secret
+                );
+            } else {
+                $this->environment = new ProductionEnvironment(
+                    $this->paymentGateway->credentials->client_id,
+                    $this->paymentGateway->credentials->client_secret
+                );
+            }
         }
     }
 
     public function process($trx)
     {
         $client = new PayPalHttpClient($this->environment);
-        $request = new OrdersCreateRequest();
+        $request = new OrdersCreateRequest;
         $request->prefer('return=representation');
 
         $gateway = $this->paymentGateway;
@@ -49,35 +52,35 @@ class PaypalController extends Controller
         $total = amountFormat($amount + $fees + $tax);
 
         $request->body = [
-            "intent" => "CAPTURE",
-            "purchase_units" => [[
-                "reference_id" => $trx->id,
-                "description" => d_trans('Payment for subscription #:number', [
+            'intent' => 'CAPTURE',
+            'purchase_units' => [[
+                'reference_id' => $trx->id,
+                'description' => d_trans('Payment for subscription #:number', [
                     'number' => $trx->id,
                 ]),
-                "amount" => [
-                    "value" => $total,
-                    "currency_code" => $currency,
-                    "breakdown" => [
-                        "item_total" => [
-                            "value" => $amount,
-                            "currency_code" => $currency,
+                'amount' => [
+                    'value' => $total,
+                    'currency_code' => $currency,
+                    'breakdown' => [
+                        'item_total' => [
+                            'value' => $amount,
+                            'currency_code' => $currency,
                         ],
-                        "handling" => [
-                            "value" => $fees,
-                            "currency_code" => $currency,
+                        'handling' => [
+                            'value' => $fees,
+                            'currency_code' => $currency,
                         ],
-                        "tax_total" => [
-                            "value" => $tax,
-                            "currency_code" => $currency,
+                        'tax_total' => [
+                            'value' => $tax,
+                            'currency_code' => $currency,
                         ],
                     ],
                 ],
             ]],
-            "application_context" => [
-                "return_url" => route('payments.ipn.paypal'),
-                "cancel_url" => route('business.checkout.index', hash_encode($trx->id)),
-                "shipping_preference" => "NO_SHIPPING",
+            'application_context' => [
+                'return_url' => route('payments.ipn.paypal'),
+                'cancel_url' => route('business.checkout.index', hash_encode($trx->id)),
+                'shipping_preference' => 'NO_SHIPPING',
             ],
         ];
 
@@ -87,11 +90,11 @@ class PaypalController extends Controller
             $trx->payment_id = $response->result->id;
             $trx->update();
 
-            $data['type'] = "success";
-            $data['method'] = "redirect";
+            $data['type'] = 'success';
+            $data['method'] = 'redirect';
             $data['redirect_url'] = $response->result->links[1]->href;
         } catch (\Exception $e) {
-            $data['type'] = "error";
+            $data['type'] = 'error';
             $data['msg'] = $e->getMessage();
         }
 
@@ -108,6 +111,7 @@ class PaypalController extends Controller
             foreach ($validator->errors()->all() as $error) {
                 toastr()->error($error);
             }
+
             return redirect()->route('business.subscription.plans.index');
         }
 
@@ -130,6 +134,7 @@ class PaypalController extends Controller
 
             if (@$response->result->status != 'COMPLETED') {
                 toastr()->error(d_trans('Payment failed'));
+
                 return redirect($checkoutLink);
             }
 
@@ -139,9 +144,11 @@ class PaypalController extends Controller
             $trx->update();
 
             event(new TransactionPaid($trx));
+
             return redirect($checkoutLink);
         } catch (\Exception $e) {
             toastr()->error($e->getMessage());
+
             return redirect($checkoutLink);
         }
     }
@@ -153,13 +160,13 @@ class PaypalController extends Controller
 
         try {
             $signatureVerified = $this->verifyPayPalSignature($headers, $rawRequestBody);
-            if (!$signatureVerified) {
+            if (! $signatureVerified) {
                 return response('Invalid signature', 401);
             }
 
             $payload = json_decode($request->getContent(), true);
 
-            if (!$payload) {
+            if (! $payload) {
                 return response('Invalid payload', 401);
             }
 
@@ -214,4 +221,9 @@ class PaypalController extends Controller
         return $verified === 1;
     }
 
+    //isSandboxMode
+    private function isSandboxMode()
+    {
+        return $this->paymentGateway->isSandboxMode();
+    }
 }

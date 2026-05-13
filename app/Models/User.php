@@ -6,27 +6,32 @@ use App\Classes\AvatarGenerator;
 use App\Classes\BrowserDetector;
 use App\Classes\IPLookup;
 use App\Classes\OSDetector;
-use App\Models\UserLoginLog;
 use App\Notifications\ResetPasswordNotification;
-use App\Notifications\VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Log;
+use Mail;
+use Illuminate\Support\Facades\URL;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
     const STATUS_BANNED = 0;
+
     const STATUS_ACTIVE = 1;
 
     const EMAIL_UNVERIFIED = 0;
+
     const EMAIL_VERIFIED = 1;
 
     const KYC_STATUS_UNVERIFIED = 0;
+
     const KYC_STATUS_VERIFIED = 1;
 
     const TWO_FACTOR_DISABLED = 0;
+
     const TWO_FACTOR_ACTIVE = 1;
 
     public function scopeActive($query)
@@ -105,6 +110,7 @@ class User extends Authenticatable implements MustVerifyEmail
         if (!$this->email || !$this->password) {
             return false;
         }
+
         return true;
     }
 
@@ -152,6 +158,7 @@ class User extends Authenticatable implements MustVerifyEmail
             return $this->username;
         } elseif ($this->email) {
             $emailUsername = explode('@', $this->email);
+
             return $emailUsername[0];
         }
     }
@@ -217,7 +224,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
         $loginLog = UserLoginLog::where('user_id', $this->id)->where('ip', $ip)->first();
         if (!$loginLog) {
-            $loginLog = new UserLoginLog();
+            $loginLog = new UserLoginLog;
             $loginLog->user_id = $this->id;
             $loginLog->ip = $ipLookup->ip;
         }
@@ -296,7 +303,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         if (config('settings.user.actions.email_verification')) {
-            $this->notify(new VerifyEmailNotification('verification.verify'));
+            $this->emailVerification();
         }
     }
 
@@ -331,15 +338,126 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // Plan and Subscription related methods
-        public function subscription()
-        {
-            return $this->hasOne(Subscription::class);
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function currentPlans()
+    {
+        $subscriptions = $this->subscriptions()->active()->latest()->get();
+
+        return $subscriptions->isNotEmpty() ? $subscriptions->pluck('plan') : null;
+    }
+
+    public function emailVerification()
+    {
+        Log::info('emailVerification method called for user ID: ' . $this->id . ' Email: ' . $this->email);
+
+        if (!config('settings.smtp.status')) {
+            Log::warning('SMTP is disabled (config settings.smtp.status is false). Cannot send email verification notification.');
+
+            return;
         }
 
-        public function currentPlan()
-        {
-            return $this->subscription ? $this->subscription->plan : null;
-        }
+        try {
+            Log::info('SMTP is enabled. Proceeding to generate verification URL.');
+            $user = $this;
 
-        
+            $verificationUrl = URL::temporarySignedRoute(
+                'custom.verification.verified',
+                now()->addMinutes(60),
+                [
+                    'id' => $user->id,
+                    'hash' => sha1($user->getEmailForVerification()),
+                ]
+            );
+
+            Log::info('Verification URL generated successfully: ' . $verificationUrl);
+
+            $email = $user->email;
+            $subject = 'Please verify your email address';
+
+
+            $userName = e($user->getName());
+            $currentYear = date('Y');
+
+            $msg = <<<HTML
+            <div style="margin:0; padding:0; background:#f6f3f1; font-family:Arial, Helvetica, sans-serif;">
+                <div style="max-width:640px; margin:0 auto; padding:40px 20px;">
+
+                    <div style="text-align:center; margin-bottom:24px;">
+                        <div style="display:inline-block; background:#c62828; color:#ffffff; font-size:20px; font-weight:800; letter-spacing:1px; padding:10px 18px; border-radius:10px;">
+                            OKO Test
+                        </div>
+                    </div>
+
+                    <div style="background:#ffffff; border-radius:18px; overflow:hidden; border:1px solid #eee2df; box-shadow:0 18px 45px rgba(33, 20, 20, 0.08);">
+                        
+                        <div style="background:linear-gradient(135deg, #c62828 0%, #e45858 100%); padding:34px 30px; text-align:center;">
+                            <h1 style="margin:0; color:#ffffff; font-size:28px; line-height:1.3; font-weight:800;">
+                                Verify Your Email
+                            </h1>
+                            <p style="margin:10px 0 0; color:#ffecec; font-size:15px; line-height:1.6;">
+                                One quick step to activate your OKO Test account.
+                            </p>
+                        </div>
+
+                        <div style="padding:36px 34px 30px;">
+                            <p style="margin:0 0 18px; color:#2b2b2b; font-size:16px; line-height:1.7;">
+                                Dear <strong>{$userName}</strong>,
+                            </p>
+
+                            <p style="margin:0 0 20px; color:#555555; font-size:15px; line-height:1.8;">
+                                Thank you for registering with <strong style="color:#c62828;">OKO Test</strong>. 
+                                Please confirm your email address to complete your registration and secure your account.
+                            </p>
+
+                            <div style="text-align:center; margin:34px 0;">
+                                <a href="{$verificationUrl}"
+                                style="display:inline-block; background:#c62828; color:#ffffff; padding:15px 34px; 
+                                        text-decoration:none; border-radius:999px; font-size:15px; font-weight:700;
+                                        box-shadow:0 10px 22px rgba(198, 40, 40, 0.28);">
+                                    Verify Email Address
+                                </a>
+                            </div>
+
+                            <div style="background:#fff7f6; border:1px solid #f4d4d0; border-radius:12px; padding:16px 18px; margin-bottom:24px;">
+                                <p style="margin:0; color:#7a3b36; font-size:14px; line-height:1.7;">
+                                    For your security, this verification link will expire in 60 minutes. If you did not create an account with OKO Test, you can safely ignore this email.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style="background:#faf7f6; border-top:1px solid #eee2df; padding:22px 34px; text-align:center;">
+                            <p style="margin:0; color:#777777; font-size:13px; line-height:1.6;">
+                                Best regards,<br>
+                                <strong style="color:#222222;">OKO Test Team</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <p style="text-align:center; margin:22px 0 0; color:#999999; font-size:12px; line-height:1.6;">
+                        © {$currentYear} OKO Test. All rights reserved.
+                    </p>
+
+                </div>
+            </div>
+            HTML;
+
+            Log::info('Attempting to send email via Mail::send() to: ' . $email);
+
+            Mail::send([], [], function ($message) use ($msg, $email, $subject) {
+                $message->to($email)
+                    ->subject($subject)
+                    ->html($msg);
+            });
+
+            Log::info('Mail::send() executed successfully without throwing exceptions for user: ' . $email);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to send email verification notification: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
+        }
+    }
 }

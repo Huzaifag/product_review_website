@@ -20,7 +20,9 @@ class StripeController extends Controller
     public function __construct()
     {
         $this->paymentGateway = paymentGateway('stripe');
-        Stripe::setApiKey($this->paymentGateway->credentials->secret_key);
+        if ($this->paymentGateway) {
+            Stripe::setApiKey($this->paymentGateway->credentials->secret_key);
+        }
     }
 
     public function process($trx)
@@ -43,8 +45,8 @@ class StripeController extends Controller
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            "cancel_url" => route('business.checkout.index', hash_encode($trx->id)),
-            'success_url' => route('payments.ipn.stripe') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('business.checkout.index', hash_encode($trx->id)),
+            'success_url' => route('payments.ipn.stripe').'?session_id={CHECKOUT_SESSION_ID}',
         ];
 
         try {
@@ -53,11 +55,11 @@ class StripeController extends Controller
             $trx->payment_id = $session->id;
             $trx->update();
 
-            $data['type'] = "success";
-            $data['method'] = "redirect";
+            $data['type'] = 'success';
+            $data['method'] = 'redirect';
             $data['redirect_url'] = $session->url;
         } catch (\Exception $e) {
-            $data['type'] = "error";
+            $data['type'] = 'error';
             $data['msg'] = $e->getMessage();
         }
 
@@ -81,8 +83,9 @@ class StripeController extends Controller
 
         try {
             $session = Session::retrieve($sessionId);
-            if ($session->payment_status != "paid" || $session->status != "complete") {
+            if ($session->payment_status != 'paid' || $session->status != 'complete') {
                 toastr()->error(d_trans('Payment failed'));
+
                 return redirect($checkoutLink);
             }
 
@@ -93,9 +96,11 @@ class StripeController extends Controller
             $trx->update();
 
             event(new TransactionPaid($trx));
+
             return redirect($checkoutLink);
         } catch (\Exception $e) {
             toastr()->error($e->getMessage());
+
             return redirect($checkoutLink);
         }
     }
@@ -107,7 +112,7 @@ class StripeController extends Controller
         $sigHeader = $request->header('Stripe-Signature');
         $payload = $request->getContent();
 
-        if (!$payload) {
+        if (! $payload) {
             return response('Invalid payload', 401);
         }
 

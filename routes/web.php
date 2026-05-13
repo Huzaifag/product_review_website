@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/optimize-clear', function () {
     //route to clear all caches
-    
+
     Artisan::call('optimize:clear');
 
     return 'Application cache cleared';
@@ -31,6 +31,10 @@ Route::get('/storage-link', function () {
 })->name('storage.link');
 
 Route::middleware('maintenance')->group(function () {
+    Route::get('/email/custom-verify/{id}/{hash}', 'Auth\RegisterController@verified')
+        ->middleware('signed')
+        ->name('custom.verification.verified');
+
     Auth::routes(['verify' => true]);
     Route::namespace('Auth')->group(function () {
         Route::get('login', 'LoginController@showLoginForm')->name('login');
@@ -40,10 +44,12 @@ Route::middleware('maintenance')->group(function () {
             Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
             Route::post('register', 'RegisterController@register');
         });
+
         Route::middleware(['auth', 'account.status'])->group(function () {
             Route::get('data/complete', 'DataCompleteController@showCompleteForm');
             Route::post('data/complete', 'DataCompleteController@complete')->name('data.complete');
         });
+
         Route::middleware('smtp')->group(function () {
             Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
             Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
@@ -85,7 +91,7 @@ Route::middleware('maintenance')->group(function () {
                 Route::name('review.')->prefix('{domain}/review')->group(function () {
                     Route::get('/', 'BusinessController@reviewCreate')->name('create');
                     Route::post('/', 'BusinessController@reviewStore')->name('store')->middleware('kyc.required');
-                    Route::post('ai-review-writer', 'AiReviewWriterController@write')->name('ai-review-writer')->middleware(['demo', 'addon:ai_review_writer']);
+                    // Route::post('ai-review-writer', 'AiReviewWriterController@write')->name('ai-review-writer')->middleware(['demo', 'addon:ai_review_writer']);
                     Route::get('{id}', 'BusinessController@reviewShow')->name('show');
                     Route::post('{id}/update', 'BusinessController@reviewUpdate')->name('update')->middleware(['demo', 'kyc.required']);
                     Route::post('{id}/report', 'BusinessController@reviewReport')->name('report')->middleware('auth');
