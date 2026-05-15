@@ -5,15 +5,15 @@
                 <div class="section-header featured-luxe-header">
                     <div class="row align-items-center g-3 featured-luxe-header-row">
                         <div class="col text-center text-lg-start featured-luxe-header-main">
-                            <span class="mag-label">Browse Products</span>
-                            <h2 class="mag-title">{{ $featuredSection->trans->name }}</h2>
+                            <span class="mag-label">{{ d_trans('Browse Products') }}</span>
+                            <h2 class="mag-title">{{ d_trans('Featured Products') }}</h2>
                             @if ($featuredSection->description)
                                 <p class="section-text col-lg-8 featured-luxe-text">
-                                    {{ $featuredSection->trans->description }}</p>
+                                    {{ d_trans($featuredSection->trans->description) }}</p>
                             @endif
                         </div>
                         <div class="col-auto d-none d-lg-flex align-items-center gap-3">
-                            <span class="featured-luxe-count">{{ $featuredProducts->count() }} Curated</span>
+                            <span class="featured-luxe-count">{{ d_trans('Curated') }} {{ d_trans('Products') }}: {{ $featuredProducts->count() }}</span>
                             <a href="#featured-products" class=" featured-luxe-btn">
                                 {{ d_trans('Explore Products') }}<i class="fa-solid fa-arrow-right icon-rtl ms-2"></i>
                             </a>

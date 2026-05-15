@@ -74,6 +74,14 @@ class Product extends Model
         ];
     }
 
+    public function getTransAttribute()
+    {
+        return (object) [
+            'name' => m_trans($this->name),
+            'description' => $this->description ? m_trans($this->description) : null,
+        ];
+    }
+
     public function brand()
     {
         return $this->belongsTo(Brand::class);

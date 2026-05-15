@@ -17,6 +17,14 @@ class TestAttribute extends Model
         'options' => 'array',
     ];
 
+    public function getTransAttribute()
+    {
+        return (object) [
+            'name' => m_trans($this->name),
+            'options' => $this->options ? array_map('m_trans', $this->options) : null,
+        ];
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status', 'active');

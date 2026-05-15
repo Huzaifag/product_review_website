@@ -8,16 +8,16 @@
 
         <div class="featured-lab-head">
             <div class="featured-lab-thumb">
-                <img loading="lazy" src="{{ $imageSrc }}" alt="{{ $product->name }}">
+                <img loading="lazy" src="{{ $imageSrc }}" alt="{{ d_trans($product->name) }}">
             </div>
             <div class="featured-lab-head-copy">
                 <span class="featured-lab-kicker">
                     <i class="bi bi-bag-check"></i>{{ d_trans('Featured Product') }}
                 </span>
                 <h5 class="featured-lab-title">
-                    {{ \Illuminate\Support\Str::limit($product->name, 42) }}</h5>
+                    {{ \Illuminate\Support\Str::limit(d_trans($product->name), 42) }}</h5>
                 <p class="featured-lab-description">
-                    {{ \Illuminate\Support\Str::limit($product->brand?->name . ($product->description ? ' • ' . $product->description : ''), 112) }}
+                    {{ \Illuminate\Support\Str::limit(d_trans($product->brand?->name) . (d_trans($product->description) ? ' • ' . d_trans($product->description) : ''), 112) }}
                 </p>
             </div>
         </div>

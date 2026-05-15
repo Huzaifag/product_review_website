@@ -334,7 +334,7 @@
                 padding-inline: 22px;
             }
 
-            
+
 
             .visual-container {
                 height: 190px;
@@ -365,7 +365,6 @@
                 font-size: 0.88rem;
             }
         }
-
     </style>
 @endpush
 
@@ -381,13 +380,12 @@
 
             <!-- Right Text & Badges -->
             <div class="text-content col-lg-6" data-aos="fade-left" data-aos-duration="900">
-                <h2>Not All <br> Ingredients Are <br>What They Seem</h2>
-                <p>Some concerning ingredients never appear on the label.
-                    We test every product in accredited laboratories and
-                    publish the full findings — so you know exactly
-                    what you are putting on your skin.</p>
+               <h2>{!! d_trans('Not All <br> Ingredients Are <br> What They Seem') !!}</h2> 
+                <p>
+                    {{ d_trans('Some concerning ingredients never appear on the label. We test every product in accredited laboratories and publish the full findings — so you know exactly what you are putting on your skin.') }}
+                </p>
                 <a href="#" class="explore-btn">
-                    Explore Ingredients
+                   {!! d_trans(' Explore Ingredients') !!}
                     <span style="font-size: 1.4rem; line-height: 1;">→</span>
                 </a>
 
@@ -396,22 +394,22 @@
                     <div class="ingredient-badge" data-aos="fade-up" data-aos-delay="100" data-aos-duration="800">
                         <i class="fas fa-flask badge-icon"></i>
                         <div class="badge-text">
-                            <span class="badge-label">Lab Tested</span>
-                            <span class="badge-value">50+ Substances</span>
+                            <span class="badge-label">{{ d_trans('Lab Tested') }}</span>
+                            <span class="badge-value">{{ d_trans('50+ Substances') }}</span>
                         </div>
                     </div>
                     <div class="ingredient-badge" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
                         <i class="fas fa-check-circle badge-icon"></i>
                         <div class="badge-text">
-                            <span class="badge-label">Safety Score</span>
-                            <span class="badge-value">Science-Based</span>
+                            <span class="badge-label">{{ d_trans('Safety Score') }}</span>
+                            <span class="badge-value">{{ d_trans('Science-Based') }}</span>
                         </div>
                     </div>
                     <div class="ingredient-badge" data-aos="fade-up" data-aos-delay="300" data-aos-duration="800">
                         <i class="fas fa-chart-bar badge-icon"></i>
                         <div class="badge-text">
-                            <span class="badge-label">Full Transparency</span>
-                            <span class="badge-value">Complete Analysis</span>
+                            <span class="badge-label">{{ d_trans('Full Transparency') }}</span>
+                            <span class="badge-value">{{ d_trans('Complete Analysis') }}</span>
                         </div>
                     </div>
                 </div>

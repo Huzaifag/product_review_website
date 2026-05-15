@@ -25,41 +25,40 @@
                         <!-- Tag 1 (red) -->
                         <div class="floating-tag" style="top: 10%; left: 0;">
                             <span class="tag-icon" style="color: var(--badge-avoid-bg);">&#10007;</span>
-                            <span style="color: var(--text-dark);">Titanium Dioxide</span>
-                            <span class="text-muted-custom" style="font-size: 12px; font-weight: 500;">avoid</span>
+                            <span style="color: var(--text-dark);">{{ d_trans('Titanium Dioxide') }}</span>
+                            <span class="text-muted-custom" style="font-size: 12px; font-weight: 500;">{{ d_trans('avoid') }}</span>
                         </div>
 
                         <!-- Tag 2 (amber) -->
                         <div class="floating-tag" style="top: 45%; right: -5%;">
                             <span class="tag-icon" style="color: var(--badge-concern-bg);">&#9888;</span>
-                            <span style="color: var(--text-dark);">Paraffinum Liquidum</span>
-                            <span class="text-muted-custom" style="font-size: 12px; font-weight: 500;">concern</span>
+                            <span style="color: var(--text-dark);">{{ d_trans('Paraffinum Liquidum') }}</span>
+                            <span class="text-muted-custom" style="font-size: 12px; font-weight: 500;">{{ d_trans('Concern') }}</span>
                         </div>
 
                         <!-- Tag 3 (green) -->
                         <div class="floating-tag" style="bottom: 15%; left: 5%;">
                             <span class="tag-icon" style="color: var(--badge-safe-bg);">&#10003;</span>
-                            <span style="color: var(--text-dark);">Shea Butter</span>
-                            <span class="text-muted-custom" style="font-size: 12px; font-weight: 500;">safe</span>
+                            <span style="color: var(--text-dark);">{{ d_trans('Shea Butter') }}</span>
+                            <span class="text-muted-custom" style="font-size: 12px; font-weight: 500;">{{ d_trans('Safe') }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- RIGHT SIDE: Text Content -->
                 <div class="col-lg-6 offset-lg-1">
-                    <span class="small-red-label">Ingredient Guide</span>
+                    <span class="small-red-label">{{ d_trans('Ingredient Guide') }}</span>
                     <h1 class="display-4 font-heading mb-4" style="line-height: 1.1;">
-                        Know Every<br>Ingredient<br>In Your Products
+                        {!! d_trans('Know Every<br>Ingredient<br>In Your Products') !!}
                     </h1>
                     <p class="fs-5 text-body-custom mb-5" style="line-height: 1.6; max-width: 500px;">
-                        Our A-Z reference covers every concerning cosmetic ingredient found in our 2023 lab tests — with
-                        plain English explanations of the risks.
+                        {{ d_trans('Our A-Z reference covers every concerning cosmetic ingredient found in our 2023 lab tests — with plain English explanations of the risks.') }}
                     </p>
 
                     <!-- Search Bar -->
                     <div class="search-container mb-5" style="max-width: 550px;">
-                        <input type="text" class="search-input" placeholder="Search ingredient name or INCI code...">
-                        <button class="search-btn">Search</button>
+                        <input type="text" class="search-input" placeholder="{{ d_trans('Search ingredient name or INCI code...') }}">
+                        <button class="search-btn">{{ d_trans('Search') }}</button>
                     </div>
 
                     <!-- Three Stat Cards -->
@@ -67,30 +66,25 @@
                         <div class="col-12 col-md-4">
                             <div class="stat-card h-100">
                                 <i class="fa-solid fa-flask text-brand-red fs-4 mb-3"></i>
-                                <div class="small-red-label" style="font-size: 10px; margin-bottom: 4px;">LAB TESTED</div>
+                                <div class="small-red-label" style="font-size: 10px; margin-bottom: 4px;">{{ d_trans('LAB TESTED') }}</div>
                                 <div class="font-weight-bold"
-                                    style="color: var(--text-dark); font-weight: 700; font-size: 15px;">735 Products
-                                    Analysed</div>
+                                    style="color: var(--text-dark); font-weight: 700; font-size: 15px;">{{ d_trans('735 Products Analysed') }}</div>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="stat-card h-100">
                                 <i class="fa-solid fa-shield-halved text-brand-red fs-4 mb-3"></i>
-                                <div class="small-red-label" style="font-size: 10px; margin-bottom: 4px;">SUBSTANCES FOUND
-                                </div>
+                                <div class="small-red-label" style="font-size: 10px; margin-bottom: 4px;">{{ d_trans('SUBSTANCES FOUND') }}</div>
                                 <div class="font-weight-bold"
-                                    style="color: var(--text-dark); font-weight: 700; font-size: 15px;">50+ Ingredients
-                                    Flagged</div>
+                                    style="color: var(--text-dark); font-weight: 700; font-size: 15px;">{{ d_trans('50+ Ingredients Flagged') }}</div>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="stat-card h-100">
                                 <i class="fa-solid fa-list text-brand-red fs-4 mb-3"></i>
-                                <div class="small-red-label" style="font-size: 10px; margin-bottom: 4px;">SEVERITY LEVELS
-                                </div>
+                                <div class="small-red-label" style="font-size: 10px; margin-bottom: 4px;">{{ d_trans('SEVERITY LEVELS') }}</div>
                                 <div class="font-weight-bold"
-                                    style="color: var(--text-dark); font-weight: 700; font-size: 15px;">Avoid / Concern /
-                                    Caution</div>
+                                    style="color: var(--text-dark); font-weight: 700; font-size: 15px;">{{ d_trans('Avoid / Concern / Caution') }}</div>
                             </div>
                         </div>
                     </div>
@@ -106,25 +100,25 @@
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
             <!-- Filters -->
             <div class="d-flex flex-wrap gap-2">
-                <div class="filter-pill active">All Ingredients</div>
-                <div class="filter-pill pill-avoid">Avoid</div>
-                <div class="filter-pill pill-concern">Concern</div>
-                <div class="filter-pill pill-caution">Caution</div>
+                <div class="filter-pill active">{{ d_trans('All Ingredients') }}</div>
+                <div class="filter-pill pill-avoid">{{ d_trans('Avoid') }}</div>
+                <div class="filter-pill pill-concern">{{ d_trans('Concern') }}</div>
+                <div class="filter-pill pill-caution">{{ d_trans('Caution') }}</div>
             </div>
 
             <!-- Sort -->
             <div>
                 <select class="form-select rounded-pill shadow-none"
                     style="border-color: #E5D5C5; padding: 8px 36px 8px 16px; font-size: 14px; font-weight: 500; color: var(--text-body); cursor: pointer;">
-                    <option selected>Sort by: Most Found in Products</option>
-                    <option value="1">Sort by: Severity (High to Low)</option>
-                    <option value="2">Sort by: Alphabetical (A-Z)</option>
+                    <option selected>{{ d_trans('Sort by: Most Found in Products') }}</option>
+                    <option value="1">{{ d_trans('Sort by: Severity (High to Low)') }}</option>
+                    <option value="2">{{ d_trans('Sort by: Alphabetical (A-Z)') }}</option>
                 </select>
             </div>
         </div>
 
         <div class="mt-3">
-            <span class="text-muted-custom" style="font-size: 13px;">Showing 47 ingredients — 12 flagged as Avoid</span>
+            <span class="text-muted-custom" style="font-size: 13px;">{{ d_trans('Showing 47 ingredients — 12 flagged as Avoid') }}</span>
         </div>
     </div>
 
@@ -140,7 +134,7 @@
                                     {{ strtoupper($ingredient->severity) }}
                                 </span>
                                 <span class="text-muted-custom small">
-                                    Found in {{ $ingredient->found_in_count }} products
+                                    {{ d_trans('Found in') }} {{ $ingredient->found_in_count }} {{ d_trans('products') }}
                                 </span>
                             </div>
                             <h3 class="font-heading fs-4 mb-1">{{ $ingredient->name }}</h3>
@@ -154,12 +148,12 @@
                             <div class="mb-4">
                                 <a class="card-expand-link" data-bs-toggle="collapse"
                                     href="#expandCard{{ $ingredient->id }}" role="button" aria-expanded="false">
-                                    More details <span class="icon-arrow">&#8595;</span>
+                                    {{ d_trans('More details') }} <span class="icon-arrow">&#8595;</span>
                                 </a>
                                 <div class="collapse mt-3" id="expandCard{{ $ingredient->id }}">
-                                    <p class="small text-body-custom mb-2"><strong>Health Effects:</strong>
+                                    <p class="small text-body-custom mb-2"><strong>{{ d_trans('Health Effects:') }}</strong>
                                         {{ $ingredient->health_effects }}</p>
-                                    <p class="small text-body-custom mb-2"><strong>Regulatory Status:</strong>
+                                    <p class="small text-body-custom mb-2"><strong>{{ d_trans('Regulatory Status:') }}</strong>
                                         {{ $ingredient->regulatory_status }}</p>
                                 </div>
                             </div>
@@ -168,7 +162,7 @@
                                 style="border-color: rgba(0,0,0,0.05) !important;">
                                 <div></div>
                                 <a href="#" class="text-brand-red text-decoration-none small fw-bold">
-                                    View affected products &rarr;
+                                    {{ d_trans('View affected products') }} &rarr;
                                 </a>
                             </div>
                         </div>
@@ -177,60 +171,57 @@
             </div>
             {{ $ingredients->links() }}
         @else
-            <p>No ingredients found.</p>
+            <p>{{ d_trans('No ingredients found.') }}</p>
         @endif
     </div>
 
     <!-- BLOCK 5 — LOAD MORE -->
     <div class="pb-5 pt-2 text-center" style="padding: 20px 0 60px 0;">
-        <p class="text-muted-custom mb-4" style="font-size: 14px;">Showing 9 of 47 ingredients</p>
-        <a href="#" class="pill-btn pill-btn-dark">Load More Ingredients</a>
+        <p class="text-muted-custom mb-4" style="font-size: 14px;">{{ d_trans('Showing 9 of 47 ingredients') }}</p>
+        <a href="#" class="pill-btn pill-btn-dark">{{ d_trans('Load More Ingredients') }}</a>
     </div>
 
     <!-- BLOCK 4 — SEVERITY GUIDE -->
     <div style="padding: 80px 0;">
         <div class="text-center mb-5">
-            <span class="small-red-label">HOW WE CLASSIFY</span>
-            <h2 class="font-heading display-6">What Each Severity Level Means</h2>
+            <span class="small-red-label">{{ d_trans('HOW WE CLASSIFY') }}</span>
+            <h2 class="font-heading display-6">{{ d_trans('What Each Severity Level Means') }}</h2>
         </div>
 
         <div class="row g-4">
             <!-- Avoid -->
             <div class="col-12 col-lg-4">
                 <div class="guide-card guide-card-avoid">
-                    <div class="guide-inner-badge" style="color: var(--badge-avoid-bg); background-color: #FFEBEE;">AVOID
-                    </div>
-                    <h3 class="font-heading h4 mb-3">Do Not Use</h3>
+                    <div class="guide-inner-badge" style="color: var(--badge-avoid-bg); background-color: #FFEBEE;">{{ d_trans('AVOID') }}</div>
+                    <h3 class="font-heading h4 mb-3">{{ d_trans('Do Not Use') }}</h3>
                     <p class="text-body-custom mb-4" style="font-size: 15px; line-height: 1.6;">
-                        This ingredient has serious safety concerns backed by scientific evidence...
+                        {{ d_trans('This ingredient has serious safety concerns backed by scientific evidence...') }}
                     </p>
-                    <p class="text-muted-custom small m-0 font-italic">e.g. Titanium Dioxide (nano) in lip products</p>
+                    <p class="text-muted-custom small m-0 font-italic">{{ d_trans('e.g. Titanium Dioxide (nano) in lip products') }}</p>
                 </div>
             </div>
 
             <!-- Concern -->
             <div class="col-12 col-lg-4">
                 <div class="guide-card guide-card-concern">
-                    <div class="guide-inner-badge" style="color: var(--badge-concern-bg); background-color: #FFF3E0;">
-                        CONCERN</div>
-                    <h3 class="font-heading h4 mb-3">Use With Caution</h3>
+                    <div class="guide-inner-badge" style="color: var(--badge-concern-bg); background-color: #FFF3E0;">{{ d_trans('CONCERN') }}</div>
+                    <h3 class="font-heading h4 mb-3">{{ d_trans('Use With Caution') }}</h3>
                     <p class="text-body-custom mb-4" style="font-size: 15px; line-height: 1.6;">
-                        Scientific evidence suggests potential harm but further research is ongoing...
+                        {{ d_trans('Scientific evidence suggests potential harm but further research is ongoing...') }}
                     </p>
-                    <p class="text-muted-custom small m-0 font-italic">e.g. Paraffinum Liquidum in body creams</p>
+                    <p class="text-muted-custom small m-0 font-italic">{{ d_trans('e.g. Paraffinum Liquidum in body creams') }}</p>
                 </div>
             </div>
 
             <!-- Caution -->
             <div class="col-12 col-lg-4">
                 <div class="guide-card guide-card-caution">
-                    <div class="guide-inner-badge" style="color: var(--badge-caution-bg); background-color: #FFFDE7;">
-                        CAUTION</div>
-                    <h3 class="font-heading h4 mb-3">Be Aware</h3>
+                    <div class="guide-inner-badge" style="color: var(--badge-caution-bg); background-color: #FFFDE7;">{{ d_trans('CAUTION') }}</div>
+                    <h3 class="font-heading h4 mb-3">{{ d_trans('Be Aware') }}</h3>
                     <p class="text-body-custom mb-4" style="font-size: 15px; line-height: 1.6;">
-                        This ingredient is not considered harmful at typical concentrations...
+                        {{ d_trans('This ingredient is not considered harmful at typical concentrations...') }}
                     </p>
-                    <p class="text-muted-custom small m-0 font-italic">e.g. PEG Compounds in face creams</p>
+                    <p class="text-muted-custom small m-0 font-italic">{{ d_trans('e.g. PEG Compounds in face creams') }}</p>
                 </div>
             </div>
         </div>
@@ -242,20 +233,20 @@
         <div style="max-width: 1280px; margin: 0 auto; position: relative;">
             <div class="row align-items-center">
                 <div class="col-lg-6">
-                    <span class="small-red-label" style="color: #FF8A8A;">SEARCH BY PRODUCT</span>
+                    <span class="small-red-label" style="color: #FF8A8A;">{{ d_trans('SEARCH BY PRODUCT') }}</span>
                     <h2 class="font-heading display-5 mb-4" style="color: white; line-height: 1.2;">
-                        See Which Products<br>Contain These Ingredients
+                        {!! d_trans('See Which Products<br>Contain These Ingredients') !!}
                     </h2>
                     <p class="fs-5 mb-5" style="color: #E5D5C5; max-width: 480px; line-height: 1.6;">
-                        Search our database of 735 tested products...
+                        {{ d_trans('Search our database of 735 tested products...') }}
                     </p>
-                    <a href="{{ route('products.index') }}" class="pill-btn pill-btn-red">Search All Products &rarr;</a>
+                    <a href="{{ route('products.index') }}" class="pill-btn pill-btn-red">{{ d_trans('Search All Products') }} &rarr;</a>
                 </div>
 
                 <!-- Right side (Decorative tags) -->
                 <div class="col-lg-6 d-none d-lg-block position-relative" style="height: 300px;">
 
-                    <img src="{{ asset('images/frontend/cta-image.webp') }}" alt="Safe beauty updates"
+                    <img src="{{ asset('images/frontend/cta-image.webp') }}" alt="{{ d_trans('Safe beauty updates') }}"
                         class="img-fluid">
                 </div>
 

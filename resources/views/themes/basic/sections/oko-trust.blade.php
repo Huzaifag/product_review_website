@@ -1,14 +1,11 @@
 @push('styles')
     <style>
         .main-section {
-            
             background-color: var(--bg-color);
-            /* Subtle radial pattern for background */
             background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
             background-size: 20px 20px;
         }
 
-        /* --- Left Text Section --- */
         .text-content {
             padding-right: 40px;
         }
@@ -60,7 +57,6 @@
             box-shadow: var(--accent-shadow);
         }
 
-        /* --- Right Cards Section (3 Pillars) --- */
         .cards-wrapper {
             width: 100%;
             display: flex;
@@ -101,7 +97,6 @@
             box-shadow: var(--accent-shadow);
         }
 
-        /* Card Typography */
         .card-icon {
             width: 46px;
             height: 46px;
@@ -131,7 +126,6 @@
             color: rgba(255, 255, 255, 0.92);
         }
 
-        /* --- Responsive Layout --- */
         @media (max-width: 991px) {
             .text-content {
                 padding-right: 0;
@@ -188,22 +182,26 @@
     <div class="container container-custom home-section-container">
         <div class="row align-items-center">
 
-            <!-- Left Text Column -->
             <div class="col-lg-5 col-md-12">
                 <div class="text-content">
-                    <p class="small-label">WHY TRUST US</p>
-                    <h2 class="main-heading">Independent Testing<br>You Can Trust</h2>
+                    <p class="small-label">{{ d_trans('WHY TRUST US') }}</p>
+
+                    <h2 class="main-heading">
+                        {!! d_trans('Independent Testing<br>You Can Trust') !!}
+                    </h2>
+
                     <div class="heading-underline"></div>
-                    <a href="#" class="btn-custom">Our Methodology</a>
+
+                    <a href="#" class="btn-custom">
+                        {{ d_trans('Our Methodology') }}
+                    </a>
                 </div>
             </div>
 
-            <!-- Right Cards Column - 3 Pillars -->
             <div class="col-lg-7 col-md-12">
                 <div class="cards-wrapper">
                     <div class="cards-container">
 
-                        <!-- Card 1: Rigorous Lab Testing -->
                         <div class="feature-card" data-aos="fade-up" data-aos-duration="900" data-aos-delay="100">
                             <div class="card-icon">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -216,14 +214,17 @@
                                     <circle cx="12" cy="19" r="1" fill="var(--primary-accent)" />
                                 </svg>
                             </div>
-                            <h3 class="card-title">Rigorous Lab<br>Testing</h3>
-                            <p class="card-text">Every product undergoes strict hands-on evaluation in our independent
-                                labs.</p>
+
+                            <h3 class="card-title">
+                                {!! d_trans('Rigorous Lab<br>Testing') !!}
+                            </h3>
+
+                            <p class="card-text">
+                                {{ d_trans('Every product undergoes strict hands-on evaluation in our independent labs.') }}
+                            </p>
                         </div>
 
-                        <!-- Card 2: 100% Independent (Orange) -->
-                        <div class="feature-card card-orange" data-aos="fade-up" data-aos-duration="900"
-                            data-aos-delay="200">
+                        <div class="feature-card card-orange" data-aos="fade-up" data-aos-duration="900" data-aos-delay="200">
                             <div class="card-icon">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="white"
@@ -232,25 +233,40 @@
                                         stroke-linejoin="round" />
                                 </svg>
                             </div>
-                            <h3 class="card-title">100%<br>Independent</h3>
-                            <p class="card-text">We buy our own test units. No sponsored reviews, ever.</p>
+
+                            <h3 class="card-title">
+                                {!! d_trans('100%<br>Independent') !!}
+                            </h3>
+
+                            <p class="card-text">
+                                {{ d_trans('We buy our own test units. No sponsored reviews, ever.') }}
+                            </p>
                         </div>
 
-                        <!-- Card 3: No Commercial Bias -->
                         <div class="feature-card" data-aos="fade-up" data-aos-duration="900" data-aos-delay="300">
                             <div class="card-icon">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="var(--primary-accent)"
-                                        stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                                        stroke="var(--primary-accent)"
+                                        stroke-width="1.6"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round" />
                                     <circle cx="12" cy="13" r="3" fill="none"
                                         stroke="var(--primary-accent)" stroke-width="1.8" />
-                                    <path d="M9 9L15 15M15 9L9 15" stroke="var(--primary-accent)" stroke-width="1.6"
+                                    <path d="M9 9L15 15M15 9L9 15"
+                                        stroke="var(--primary-accent)"
+                                        stroke-width="1.6"
                                         stroke-linecap="round" />
                                 </svg>
                             </div>
-                            <h3 class="card-title">No Commercial<br>Bias</h3>
-                            <p class="card-text">Zero affiliate pressure. Zero manufacturer influence. Pure, honest
-                                testing.</p>
+
+                            <h3 class="card-title">
+                                {!! d_trans('No Commercial<br>Bias') !!}
+                            </h3>
+
+                            <p class="card-text">
+                                {{ d_trans('Zero affiliate pressure. Zero manufacturer influence. Pure, honest testing.') }}
+                            </p>
                         </div>
 
                     </div>

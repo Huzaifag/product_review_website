@@ -183,6 +183,10 @@ function languages($code = null)
 
 function d_trans($key, $replace = [])
 {
+    if ($key === null || $key === '') {
+        return $key ?? '';
+    }
+
     if (config('system.install.complete')) {
         $cache_key = sha1($key . '_dynamic_' . getLocale());
 

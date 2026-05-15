@@ -20,8 +20,8 @@
                                 class="text-decoration-none">{{ d_trans('All Products') }}</a></li>
                         <li class="mb-2"><a href="{{ route('businesses.index') }}"
                                 class="text-decoration-none">{{ d_trans('Categories') }}</a></li>
-                        <li class="mb-2"><a href="/plans"
-                                class="text-decoration-none">{{ d_trans('Plans') }}</a></li>
+                        <li class="mb-2"><a href="/plans" class="text-decoration-none">{{ d_trans('Plans') }}</a>
+                        </li>
                         <li class="mb-2"><a href="/ingredients"
                                 class="text-decoration-none">{{ d_trans('Ingredient Guide') }}</a></li>
                         <li class="mb-2"><a href="{{ route('blog.index') }}"
@@ -55,19 +55,25 @@
     {{-- Footer Lower --}}
     <div class="footer-lower">
         <div class="container-fluid">
-            <div class="row py-3 px-md-4 align-items-center justify-content-between text-center text-md-start">
-                <div class="col-12 col-md-auto mb-2 mb-md-0">
-                    <p class="footer-copyright mb-0">
-                        &copy; {{ date('Y') }}
-                        {{ m_trans(config('settings.general.site_name')) }}
-                        &mdash; {{ d_trans('All rights reserved. Developed by team Bitlogicx') }}.
-                    </p>
-                </div>
-                <div class="col-12 col-md-auto">
-                    <p class="footer-copyright mb-0 text-md-end">
-                        {{ d_trans('All test results are independent and laboratory-verified.') }}
-                    </p>
-                </div>
+            <div class="footer-bottom-wrap px-md-4">
+
+                <p class="footer-copyright mb-0">
+                    &copy; {{ date('Y') }}
+                    {{ m_trans(config('settings.general.site_name')) }}
+                    &mdash; {{ d_trans('All rights reserved.') }}
+                </p>
+
+                <a href="https://bitlogicx.com" target="_blank" rel="noopener noreferrer" class="dev-badge">
+                    <span class="dev-icon">
+                        <i class="fa-solid fa-code"></i>
+                    </span>
+                    <span>{{ d_trans('Developed by') }} <strong>Bitlogicx</strong></span>
+                </a>
+
+                <p class="footer-copyright mb-0 footer-note">
+                    {{ d_trans('All test results are independent and laboratory-verified.') }}
+                </p>
+
             </div>
         </div>
     </div>
@@ -88,8 +94,7 @@
     }
 
     .footer .footer-upper {
-        padding-top: clamp(20px, 4vw, 40px);
-        padding-bottom: clamp(20px, 4vw, 40px);
+        padding: clamp(20px, 4vw, 40px) 0;
     }
 
     .footer h2 {
@@ -115,14 +120,12 @@
     }
 
     .footer a {
-        display: inline-block;
-        padding: 2px 0;
         transition: opacity 0.2s ease;
     }
 
     .footer a:hover {
         opacity: 0.85;
-        text-decoration: underline !important;
+        /* text-decoration: underline !important; */
     }
 
     /* Brand Section */
@@ -137,7 +140,6 @@
         line-height: 0.9;
         letter-spacing: -2px;
         word-wrap: break-word;
-        overflow-wrap: break-word;
     }
 
     .footer-credit {
@@ -147,20 +149,83 @@
         opacity: 0.9;
     }
 
-    /* Lower Footer */
+    /* Footer Lower */
     .footer .footer-lower {
-        padding: clamp(15px, 2vw, 20px) 0;
+        padding: 18px 0;
         border-top: 1px solid rgba(var(--footer_border_color), 0.8);
     }
 
-    .footer .footer-copyright {
-        color: var(--footer-text) !important;
-        font-size: clamp(0.8rem, 2vw, 0.95rem);
-        opacity: 0.9;
+    .footer-bottom-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
     }
 
-    /* Mobile Enhancements */
-    @media (max-width: 767px) {
+    .footer-copyright {
+        color: #fff !important;
+        font-size: 15px !important;
+        font-weight: 600;
+        line-height: 1.5;
+        margin: 0;
+        opacity: 1 !important;
+    }
+
+    .footer-note {
+        text-align: right;
+    }
+
+    /* Developer Badge */
+    .dev-badge {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 18px 8px 10px !important;
+        border-radius: 999px;
+        color: #fff !important;
+        text-decoration: none !important;
+        font-size: 15px !important;
+        font-weight: 600;
+        line-height: 1;
+        white-space: nowrap;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.18),
+            0 8px 20px rgba(0, 0, 0, 0.18);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        transition: all 0.3s ease;
+    }
+
+    .dev-badge:hover {
+        color: #fff !important;
+        text-decoration: none !important;
+        transform: translateY(-2px);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.2),
+            0 12px 28px rgba(0, 0, 0, 0.28);
+    }
+
+    .dev-icon {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .dev-icon i {
+        font-size: 12px;
+    }
+
+    /* Mobile */
+    @media (max-width: 991px) {
         .footer .footer-upper {
             text-align: center;
         }
@@ -170,17 +235,41 @@
             text-align: center;
         }
 
-        /* Improved touch targets for mobile nav links */
         .footer .nav-col a {
-            padding: 8px 0;
             display: block;
+            padding: 8px 0;
         }
 
         .footer .addr-col p,
         .footer .contact-col p {
-            margin-left: auto;
-            margin-right: auto;
+            margin-inline: auto;
             max-width: 400px;
+        }
+
+        .footer-bottom-wrap {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .footer-note {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .footer-bottom-wrap {
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .dev-badge {
+            font-size: 13px !important;
+            padding: 7px 16px !important;
+        }
+
+        .footer-copyright {
+            font-size: 13px !important;
         }
     }
 
@@ -194,11 +283,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-    }
-
-    /* Make sure inline JS variables work */
-    span[data-year]::before {
-        content: attr(data-year);
     }
 </style>
 

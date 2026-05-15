@@ -202,11 +202,11 @@
 
                             {{-- Header --}}
                             <div class="plan-card-header">
-                                <div class="plan-name">{{ $plan->trans->name }}</div>
+                                <div class="plan-name">{{ d_trans($plan->name) }}</div>
                                 <div class="plan-price-wrap">
                                     <span class="plan-price">{{ $plan->getFormatPrice() }}</span>
                                     @if (!$plan->isLifetime())
-                                        <span class="plan-price-interval">/{{ strtolower($plan->getIntervalName()) }}</span>
+                                        <span class="plan-price-interval">/{{ strtolower(d_trans($plan->getIntervalName())) }}</span>
                                     @endif
                                 </div>
                             </div>
@@ -222,7 +222,7 @@
                                             @if (is_null($plan->products_limit))
                                                 {{ d_trans('Unlimited product views') }}
                                             @else
-                                                {{ translate_choice(':count Product View|:count Product Views', $plan->products_limit, ['count' => $plan->products_limit]) }}
+                                                {{ d_trans(':count Product View|:count Product Views', ['count' => $plan->products_limit]) }}
                                             @endif
                                         </span>
                                     </li>
@@ -233,7 +233,7 @@
                                                 <span class="feature-icon">
                                                     <i class="bi bi-check-lg"></i>
                                                 </span>
-                                                <span>{{ $feature }}</span>
+                                                <span>{{ d_trans($feature) }}</span>
                                             </li>
                                         @endforeach
                                     @endif

@@ -18,7 +18,7 @@
                     'categories' => $categories,
                     'subcategories' => $subCategories,
                     'ingredientLibraries' => $ingredientLibraries,
-                    'grades' => $grades
+                    'grades' => $grades,
                 ])
             </form>
         </div>

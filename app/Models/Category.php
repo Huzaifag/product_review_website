@@ -44,7 +44,7 @@ class Category extends Model
             'title' => $this->title ? m_trans($this->title) : null,
             'description' => $this->description ? m_trans($this->description) : null,
             'keywords' => $this->keywords ? m_trans($this->keywords) : null,
-            'guide' => $this->guide,
+            'guide' => $this->guide ? array_map('m_trans', $this->guide) : null,
         ];
     }
 

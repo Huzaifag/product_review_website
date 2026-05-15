@@ -53,8 +53,9 @@
         @if (request()->routeIs('admin.dashboard'))
             <div class="col-auto">
                 <div class="dropdown">
-                    <button class="btn btn-soft dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    <button class="btn quick-access-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
+                        <i class="fa-solid fa-bolt-lightning me-2"></i>
                         {{ d_trans('Quick Access') }}
                     </button>
                     <ul class="dropdown-menu">
@@ -139,3 +140,68 @@
         @endif
     </div>
 </div>
+
+
+<style>
+    .quick-access-btn {
+        position: relative;
+        min-height: 44px;
+        padding: 10px 18px;
+        border: 0;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);
+        color: #991b1b;
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        box-shadow:
+            0 12px 28px rgba(198, 40, 40, 0.16),
+            inset 0 0 0 1px rgba(198, 40, 40, 0.14);
+        transition: all 0.25s ease;
+    }
+
+    .quick-access-btn::before {
+        content: "";
+        position: absolute;
+        inset: 2px;
+        border-radius: inherit;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0));
+        pointer-events: none;
+    }
+
+    .quick-access-btn:hover,
+    .quick-access-btn:focus {
+        color: #ffffff;
+        background: linear-gradient(135deg, rgb(198, 40, 40), #991b1b);
+        box-shadow:
+            0 16px 34px rgba(198, 40, 40, 0.28),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+        transform: translateY(-2px);
+    }
+
+    .quick-access-btn:active {
+        transform: translateY(0) scale(0.98);
+    }
+
+    .quick-access-btn i {
+        position: relative;
+        z-index: 1;
+    }
+
+    .quick-access-btn.dropdown-toggle::after {
+        position: relative;
+        z-index: 1;
+        margin-left: 10px;
+        vertical-align: middle;
+        border-top-color: currentColor;
+    }
+
+    .quick-access-btn {
+        overflow: hidden;
+    }
+
+    .quick-access-btn * {
+        position: relative;
+        z-index: 1;
+    }
+</style>

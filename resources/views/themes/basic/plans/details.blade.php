@@ -631,7 +631,7 @@
 
                     <p class="plan-label">{{ d_trans('Selected Plan') }}</p>
 
-                    <h2 class="plan-name">{{ $plan->trans->name }}</h2>
+                    <h2 class="plan-name">{{ d_trans($plan->name) }}</h2>
 
                     <div class="plan-price-row">
                         <span class="plan-amount">{{ $plan->getFormatPrice() }}</span>
@@ -671,7 +671,7 @@
                                 @if (is_null($plan->products_limit))
                                     <span>{{ d_trans('Unlimited product views') }}</span>
                                 @else
-                                    <span>{{ translate_choice(':count Product View|:count Product Views', $plan->products_limit, ['count' => $plan->products_limit]) }}</span>
+                                    <span>{{ d_trans(':count Product View|:count Product Views', ['count' => $plan->products_limit]) }}</span>
                                 @endif
                             </li>
 
@@ -681,7 +681,7 @@
                                         <span class="feature-icon">
                                             <i class="bi bi-check-lg"></i>
                                         </span>
-                                        <span>{{ $feature }}</span>
+                                        <span>{{ d_trans($feature) }}</span>
                                     </li>
                                 @endforeach
                             @endif

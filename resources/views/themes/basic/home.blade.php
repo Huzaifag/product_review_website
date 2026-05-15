@@ -147,7 +147,7 @@
                         {{ d_trans('Very Good') }}
                     </div>
                     <div class="oeko-float-content">
-                        <p class="oeko-float-name">Weleda Skin Food Body Butter</p>
+                        <p class="oeko-float-name">{{ d_trans('Weleda Skin Food Body Butter') }}</p>
                         <p class="oeko-float-finding">
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
                                 stroke="#1B5E20" stroke-width="2.5">
@@ -175,7 +175,7 @@
                     </div>
                     <p class="oeko-alert-concern">{{ d_trans('Titanium Dioxide detected') }}</p>
                     <div class="oeko-alert-footer">
-                        <span class="oeko-float-product-name">Labello Sun Protect SPF30</span>
+                        <span class="oeko-float-product-name">{{ d_trans('Labello Sun Protect SPF30') }}</span>
                         <div class="oeko-float-badge oeko-grade-poor">{{ d_trans('Poor') }}</div>
                     </div>
                 </div>

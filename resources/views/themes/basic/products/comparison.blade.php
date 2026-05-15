@@ -1,8 +1,8 @@
 @extends('themes.basic.layouts.single')
-@section('title', $product->name)
-@section('header_title', $product->name)
-@section('description', $product->description)
-@section('keywords', $product->brand_name . ',' . $product->name)
+@section('title', d_trans($product->name))
+@section('header_title', d_trans($product->name))
+@section('description', d_trans($product->description))
+@section('keywords', $product->brand_name . ',' . d_trans($product->name))
 @section('breadcrumbs', Breadcrumbs::render('products.show', $product))
 @section('breadcrumbs_schema', Breadcrumbs::view('breadcrumbs::json-ld', 'products.show', $product))
 @section('container', 'container-custom')
@@ -455,15 +455,15 @@
                                 <th>
                                     <img class="comp-prod-img"
                                         src="{{ asset($product->image ?? 'images/placeholder.png') }}"
-                                        alt="{{ $product->name }}">
-                                    <div class="prod-img-label is-primary">{{ $product->name }}</div>
+                                        alt="{{ d_trans($product->name) }}">
+                                    <div class="prod-img-label is-primary">{{ d_trans($product->name) }}</div>
                                 </th>
                                 @foreach ($similarProducts as $sim)
                                     <th>
                                         <img class="comp-prod-img"
                                             src="{{ asset($sim->image ?? 'images/placeholder.png') }}"
-                                            alt="{{ $sim->name }}">
-                                        <div class="prod-img-label">{{ $sim->name }}</div>
+                                            alt="{{ d_trans($sim->name) }}">
+                                        <div class="prod-img-label">{{ d_trans($sim->name) }}</div>
                                     </th>
                                 @endforeach
                             </tr>
@@ -471,9 +471,9 @@
                             {{-- Name/header row --}}
                             <tr class="row-header">
                                 <th>{{ d_trans('Attribute') }}</th>
-                                <th class="is-primary">{{ $product->name }}</th>
+                                <th class="is-primary">{{ d_trans($product->name) }}</th>
                                 @foreach ($similarProducts as $sim)
-                                    <th>{{ $sim->name }}</th>
+                                    <th>{{ d_trans($sim->name) }}</th>
                                 @endforeach
                             </tr>
 
@@ -525,7 +525,7 @@
                                     }
                                 @endphp
                                 <tr>
-                                    <td>{{ $attr->name }}</td>
+                                    <td>{{ d_trans($attr->name) }}</td>
                                     <td class="is-primary">
                                         @php
                                             $val = $mainTest?->data[$attr->id] ?? null;
@@ -535,7 +535,7 @@
                                         @elseif ($attr->type === 'boolean')
                                             {!! $val ? '<span class="bool-y">✓ Yes</span>' : '<span class="bool-n">✗ No</span>' !!}
                                         @else
-                                            {{ $val }}
+                                            {{ d_trans($val) }}
                                         @endif
                                     </td>
                                     @foreach ($similarProducts as $sim)
@@ -548,7 +548,7 @@
                                             @elseif ($attr->type === 'boolean')
                                                 {!! $simVal ? '<span class="bool-y">✓ Yes</span>' : '<span class="bool-n">✗ No</span>' !!}
                                             @else
-                                                {{ $simVal }}
+                                                {{ d_trans($simVal) }}
                                             @endif
                                         </td>
                                     @endforeach

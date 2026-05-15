@@ -1,8 +1,8 @@
 @extends('themes.basic.layouts.single')
-@section('title', $product->name)
-@section('header_title', $product->name)
-@section('description', $product->description)
-@section('keywords', $product->brand_name . ',' . $product->name)
+@section('title', d_trans($product->name))
+@section('header_title', d_trans($product->name))
+@section('description', d_trans($product->description))
+@section('keywords', $product->brand_name . ',' . d_trans($product->name))
 @section('breadcrumbs', Breadcrumbs::render('products.show', $product))
 @section('breadcrumbs_schema', Breadcrumbs::view('breadcrumbs::json-ld', 'products.show', $product))
 @section('container', 'container-custom')
@@ -829,7 +829,7 @@
             <div class="prod-header">
                 <div class="prod-header-left">
                     <span class="prod-eyebrow">{{ d_trans('Lab-Tested Product') }}</span>
-                    <h1 class="prod-name">{{ $product->name }}</h1>
+                    <h1 class="prod-name">{{ d_trans($product->name) }}</h1>
                     <div class="prod-meta-strip">
                         <span>{{ $product->brand?->name ?: d_trans('Unknown Brand') }}</span>
                         <span class="prod-meta-sep">·</span>
@@ -850,7 +850,7 @@
                 <div class="left-col">
                     <div class="img-wrap">
                         <div class="img-main">
-                            <img id="mainProductImage" src="{{ $productImageUrls->first() }}" alt="{{ $product->name }}">
+                            <img id="mainProductImage" src="{{ $productImageUrls->first() }}" alt="{{ d_trans($product->name) }}">
                         </div>
                         @if ($productImageUrls->count() > 1)
                             <div class="thumbs-row">
@@ -947,7 +947,7 @@
                         </div>
                         <div class="stat-cell">
                             <div class="stat-lbl"><i class="fas fa-microscope"></i> {{ d_trans('Test Name') }}</div>
-                            <div class="stat-val">{{ $productTest?->name ?: '—' }}</div>
+                            <div class="stat-val">{{ d_trans($productTest?->name) ?: '—' }}</div>
                         </div>
                         <div class="stat-cell">
                             <div class="stat-lbl"><i class="fas fa-tag"></i> {{ d_trans('Price') }}</div>
@@ -961,9 +961,9 @@
                         </div>
                     </div>
 
-                    @if ($product->description)
+                    @if (d_trans($product->description))
                         <div class="desc-strip">
-                            {{ \Illuminate\Support\Str::limit(strip_tags($product->description), 300) }}
+                            {{ \Illuminate\Support\Str::limit(strip_tags(d_trans($product->description)), 300) }}
                         </div>
                     @endif
 
@@ -978,7 +978,7 @@
                         <div class="lab-rows">
                             <div class="lab-row">
                                 <span class="lab-lbl">{{ d_trans('Test Name') }}</span>
-                                <span class="lab-val">{{ $productTest?->name ?: '—' }}</span>
+                                <span class="lab-val">{{ d_trans($productTest?->name) ?: '—' }}</span>
                             </div>
                             @if ($productTest && $testAttributes->count() > 0)
                                 @foreach ($testAttributes->take(6) as $attr)
@@ -986,8 +986,8 @@
                                         $value = $testData[$attr->id] ?? null;
                                     @endphp
                                     <div class="lab-row">
-                                        <span class="lab-lbl">{{ $attr->name }}</span>
-                                        <span class="lab-val">{{ $value ?: '—' }}</span>
+                                        <span class="lab-lbl">{{ d_trans($attr->name) }}</span>
+                                        <span class="lab-val">{{ d_trans($value) ?: '—' }}</span>
                                     </div>
                                 @endforeach
                             @else
@@ -1004,7 +1004,7 @@
                         <div class="lab-rows">
                             <div class="lab-row">
                                 <span class="lab-lbl">{{ d_trans('Test Name') }}</span>
-                                <span class="lab-val">{{ $productTest?->name ?: '—' }}</span>
+                                <span class="lab-val">{{ d_trans($productTest?->name) ?: '—' }}</span>
                             </div>
                             <div class="lab-row">
                                 <span class="lab-lbl">{{ d_trans('Lab Verified') }}</span>
@@ -1036,8 +1036,8 @@
                                         $value = $testData[$attr->id] ?? null;
                                     @endphp
                                     <div class="lab-row">
-                                        <span class="lab-lbl">{{ $attr->name }}</span>
-                                        <span class="lab-val">{{ $value ?: '—' }}</span>
+                                        <span class="lab-lbl">{{ d_trans($attr->name) }}</span>
+                                        <span class="lab-val">{{ d_trans($value) ?: '—' }}</span>
                                     </div>
                                 @endforeach
                             @endif
@@ -1087,7 +1087,7 @@
                 <div class="modal-grid">
                     @foreach ($productImageUrls as $url)
                         <div class="modal-img" onclick="pickFromModal('{{ $url }}')">
-                            <img src="{{ $url }}" alt="{{ $product->name }}">
+                            <img src="{{ $url }}" alt="{{ d_trans($product->name) }}">
                         </div>
                     @endforeach
                 </div>
@@ -1105,7 +1105,7 @@
                                 $value = $testData[$attr->id] ?? null;
                             @endphp
                             <div class="lab-row" style="padding: 12px 0;">
-                                <span class="lab-lbl">{{ $attr->name }}</span>
+                                <span class="lab-lbl">{{ d_trans($attr->name) }}</span>
                                 <span class="lab-val">{{ $value ?: '—' }}</span>
                             </div>
                         @endforeach

@@ -2,480 +2,592 @@
 @section('title', d_trans('Dashboard'))
 @section('header_title', d_trans('Dashboard'))
 @section('content')
-    {{-- @if (!config('settings.cronjob.last_execution'))
-        <div class="note note-danger p-4 mb-4">
-            <div class="row row-cols-auto g-4">
-                <div class="col">
-                    <i class="bi bi-exclamation-triangle fa-4x"></i>
-                </div>
-                <div class="col">
-                    <h4>{{ d_trans('Cron Job Not Working') }}</h4>
-                    <p class="mb-2">
-                        {{ d_trans("It seems that your Cron Job isn't set up correctly, which might be causing it not to work as expected. Please double-check and ensure that your Cron Job is properly configured.") }}
-                    </p>
-                    <p class="mb-3">
-                        {{ d_trans('Cron Job is required by multiple things to be run (Emails, Refresh businesses, Cache, Sitemap, etc...)') }}
-                    </p>
-                    <a href="{{ route('admin.system.cronjob.index') }}"
-                        class="btn btn-outline-danger">{{ d_trans('Setup Cron Job') }}<i
-                            class="fa-solid fa-arrow-right ms-2"></i></a>
-                </div>
-            </div>
-        </div>
-    @endif --}}
+
     @if (!config('settings.smtp.status'))
-        <div class="alert alert-warning border border-warning p-4 mb-4">
-            <div class="row row-cols-auto g-4">
-                <div class="col">
-                    <i class="bi bi-info-circle fa-4x"></i>
-                </div>
-                <div class="col">
-                    <h4>{{ d_trans('SMTP Is Not Enabled') }}</h4>
-                    <p class="mb-3">
-                        {{ d_trans('SMTP is not enabled, set it now to be able to recover the password and use all the features that needs to send an email.') }}
-                    </p>
-                    <a href="{{ route('admin.settings.smtp.index') }}"
-                        class="btn btn-outline-dark">{{ d_trans('Setup SMTP') }}<i
-                            class="fa-solid fa-arrow-right ms-2"></i></a>
-                </div>
+        <div class="dash-alert dash-alert-warning mb-4">
+            <div class="dash-alert-icon">
+                <i class="bi bi-envelope-exclamation"></i>
             </div>
+            <div class="dash-alert-body">
+                <h5 class="dash-alert-title">{{ d_trans('SMTP Is Not Enabled') }}</h5>
+                <p class="dash-alert-text">{{ d_trans('SMTP is not enabled, set it now to be able to recover the password and use all the features that needs to send an email.') }}</p>
+            </div>
+            <a href="{{ route('admin.settings.smtp.index') }}" class="dash-alert-btn">
+                {{ d_trans('Setup SMTP') }} <i class="bi bi-arrow-right ms-1"></i>
+            </a>
         </div>
     @endif
+
     @if (licenseType(2) && config('settings.subscription.status'))
-        <div class="row g-3 mb-3">
-            <div class="col-12 col-xxl-4">
-                <div class="vironeer-counter-card bg-success">
-                    <div class="vironeer-counter-card-icon">
-                        <i class="bi bi-currency-dollar"></i>
+        <div class="row g-4 my-4">
+            <div class="col-12 col-md-4">
+                <div class="kpi-card kpi-earnings">
+                    <div class="kpi-card-glow"></div>
+                    <div class="kpi-card-inner">
+                        <div class="kpi-icon-wrap">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                        <div class="kpi-meta">
+                            <span class="kpi-label">{{ d_trans('Total Earnings') }}</span>
+                            <h2 class="kpi-value counter" data-target="{{ $counters['earnings'] }}">{{ getAmount($counters['earnings']) }}</h2>
+                        </div>
                     </div>
-                    <div class="vironeer-counter-card-meta">
-                        <p class="vironeer-counter-card-title">{{ d_trans('Earnings') }}</p>
-                        <p class="vironeer-counter-card-number">{{ getAmount($counters['earnings']) }}</p>
-                    </div>
+                    <div class="kpi-badge"><i class="bi bi-graph-up-arrow me-1"></i>Revenue</div>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-xxl-4">
-                <div class="vironeer-counter-card bg-c-56">
-                    <div class="vironeer-counter-card-icon">
-                        <i class="bi bi-gem"></i>
+            <div class="col-12 col-md-4">
+                <div class="kpi-card kpi-subscriptions">
+                    <div class="kpi-card-glow"></div>
+                    <div class="kpi-card-inner">
+                        <div class="kpi-icon-wrap">
+                            <i class="bi bi-gem"></i>
+                        </div>
+                        <div class="kpi-meta">
+                            <span class="kpi-label">{{ d_trans('Subscriptions') }}</span>
+                            <h2 class="kpi-value counter" data-target="{{ $counters['subscriptions'] }}">0</h2>
+                        </div>
                     </div>
-                    <div class="vironeer-counter-card-meta">
-                        <p class="vironeer-counter-card-title">{{ d_trans('Subscriptions') }}</p>
-                        <p class="vironeer-counter-card-number">{{ $counters['subscriptions'] }}</p>
-                    </div>
+                    <div class="kpi-badge"><i class="bi bi-people me-1"></i>Active Plans</div>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-xxl-4">
-                <div class="vironeer-counter-card bg-c-65">
-                    <div class="vironeer-counter-card-icon">
-                        <i class="bi bi-receipt"></i>
+            <div class="col-12 col-md-4">
+                <div class="kpi-card kpi-transactions">
+                    <div class="kpi-card-glow"></div>
+                    <div class="kpi-card-inner">
+                        <div class="kpi-icon-wrap">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+                        <div class="kpi-meta">
+                            <span class="kpi-label">{{ d_trans('Transactions') }}</span>
+                            <h2 class="kpi-value counter" data-target="{{ $counters['transactions'] }}">0</h2>
+                        </div>
                     </div>
-                    <div class="vironeer-counter-card-meta">
-                        <p class="vironeer-counter-card-title">{{ d_trans('Transactions') }}</p>
-                        <p class="vironeer-counter-card-number">{{ $counters['transactions'] }}</p>
-                    </div>
+                    <div class="kpi-badge"><i class="bi bi-credit-card me-1"></i>Payments</div>
                 </div>
             </div>
         </div>
     @endif
-    <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-xxl-4 mb-4">
-        <div class="col">
-            <div class="split-stat-card theme-brand-base">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('Total Products') }}</p>
-                    <h3 class="split-card-number">{{ $counters['products'] }}</h3>
+
+    {{-- Stat Grid --}}
+    <div class="row g-4 mb-4">
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="stat-card stat-blue">
+                <div class="stat-icon"><i class="bi bi-briefcase"></i></div>
+                <div class="stat-body">
+                    <div class="stat-number counter" data-target="{{ $counters['products'] }}">0</div>
+                    <div class="stat-label">{{ d_trans('Total Products') }}</div>
                 </div>
-                <div class="split-card-icon">
-                    <i class="bi bi-briefcase"></i>
-                </div>
+                <div class="stat-wave"></div>
             </div>
         </div>
-
-
-        <div class="col">
-            <div class="split-stat-card theme-brand-mahogany">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('Total Tests') }}</p>
-                    <h3 class="split-card-number">{{ $counters['product_tests'] }}</h3>
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="stat-card stat-violet">
+                <div class="stat-icon"><i class="bi bi-clipboard-data"></i></div>
+                <div class="stat-body">
+                    <div class="stat-number counter" data-target="{{ $counters['product_tests'] }}">0</div>
+                    <div class="stat-label">{{ d_trans('Total Tests') }}</div>
                 </div>
-                <div class="split-card-icon">
-                    <i class="bi bi-clipboard-data"></i>
-                </div>
+                <div class="stat-wave"></div>
             </div>
         </div>
-
-        <div class="col">
-            <div class="split-stat-card theme-brand-copper">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('Total Categories') }}</p>
-                    <h3 class="split-card-number">{{ $counters['categories'] }}</h3>
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="stat-card stat-teal">
+                <div class="stat-icon"><i class="bi bi-grid-3x3-gap"></i></div>
+                <div class="stat-body">
+                    <div class="stat-number counter" data-target="{{ $counters['categories'] }}">0</div>
+                    <div class="stat-label">{{ d_trans('Total Categories') }}</div>
                 </div>
-                <div class="split-card-icon">
-                    <i class="bi bi-star-fill"></i>
-                </div>
+                <div class="stat-wave"></div>
             </div>
         </div>
-
-        <div class="col">
-            <div class="split-stat-card theme-brand-clay">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('Total SubCategories') }}</p>
-                    <h3 class="split-card-number">{{ $counters['subcategories'] }}</h3>
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="stat-card stat-cyan">
+                <div class="stat-icon"><i class="bi bi-diagram-3"></i></div>
+                <div class="stat-body">
+                    <div class="stat-number counter" data-target="{{ $counters['subcategories'] }}">0</div>
+                    <div class="stat-label">{{ d_trans('SubCategories') }}</div>
                 </div>
-                <div class="split-card-icon">
-                    <i class="bi bi-star"></i>
-                </div>
+                <div class="stat-wave"></div>
             </div>
         </div>
-
-        <div class="col">
-            <div class="split-stat-card theme-brand-sienna">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('Brands') }}</p>
-                    <h3 class="split-card-number">{{ $counters['brands'] }}</h3>
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="stat-card stat-orange">
+                <div class="stat-icon"><i class="bi bi-award"></i></div>
+                <div class="stat-body">
+                    <div class="stat-number counter" data-target="{{ $counters['brands'] }}">0</div>
+                    <div class="stat-label">{{ d_trans('Brands') }}</div>
                 </div>
-                <div class="split-card-icon">
-                    <i class="bi bi-flag"></i>
-                </div>
+                <div class="stat-wave"></div>
             </div>
         </div>
-
-        <div class="col">
-            <div class="split-stat-card theme-brand-gold">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('User Reviews') }}</p>
-                    <h3 class="split-card-number">{{ $counters['reviews'] }}</h3>
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="stat-card stat-rose">
+                <div class="stat-icon"><i class="bi bi-chat-square-quote"></i></div>
+                <div class="stat-body">
+                    <div class="stat-number counter" data-target="{{ $counters['reviews'] }}">0</div>
+                    <div class="stat-label">{{ d_trans('User Reviews') }}</div>
                 </div>
-                <div class="split-card-icon">
-                    <i class="bi bi-chat-right-quote"></i>
-                </div>
+                <div class="stat-wave"></div>
             </div>
         </div>
-
-        <div class="col">
-            <div class="split-stat-card theme-brand-sand">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('Users') }}</p>
-                    <h3 class="split-card-number">{{ $counters['users'] }}</h3>
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="stat-card stat-indigo">
+                <div class="stat-icon"><i class="bi bi-people"></i></div>
+                <div class="stat-body">
+                    <div class="stat-number counter" data-target="{{ $counters['users'] }}">0</div>
+                    <div class="stat-label">{{ d_trans('Users') }}</div>
                 </div>
-                <div class="split-card-icon">
-                    <i class="bi bi-people"></i>
-                </div>
+                <div class="stat-wave"></div>
             </div>
         </div>
-
-        
-
-        <div class="col">
-            <div class="split-stat-card theme-brand-brick">
-                <div class="split-card-content">
-                    <p class="split-card-title">{{ d_trans('KYC Verifications') }}</p>
-                    <h3 class="split-card-number">{{ $counters['kyc_verifications'] }}</h3>
+        <div class="col-6 col-md-4 col-xl-3">
+            <div class="stat-card stat-green">
+                <div class="stat-icon"><i class="bi bi-person-check"></i></div>
+                <div class="stat-body">
+                    <div class="stat-number counter" data-target="{{ $counters['kyc_verifications'] }}">0</div>
+                    <div class="stat-label">{{ d_trans('KYC Verified') }}</div>
                 </div>
-                <div class="split-card-icon">
-                    <i class="bi bi-person-check"></i>
-                </div>
+                <div class="stat-wave"></div>
             </div>
         </div>
-
-        
     </div>
-    <div class="row g-3">
-        <div class="col-12 col-lg-7 col-xxl-8">
-            <div class="box h-100">
-                <div class="box-header">
-                    <p class="box-header-title large mb-0">
-                        {{ d_trans('New users registered each day during this month') }}</p>
-                    <div class="box-header-action">
-                        <div class="drop-down" data-dropdown>
-                            <button class="drop-down-title btn btn-reset btn-sm">
-                                <i class="fa fa-ellipsis-v"></i>
-                            </button>
-                            <div class="drop-down-menu">
-                                <a class="drop-down-item"
-                                    href="{{ route('admin.members.users.index') }}">{{ d_trans('View All') }}</a>
-                            </div>
-                        </div>
+
+    {{-- Charts + Lists --}}
+    <div class="row g-4 my-4">
+        <div class="col-12 col-lg-8">
+            <div class="dash-card h-100">
+                <div class="dash-card-header">
+                    <div class="dash-card-title">
+                        <span class="dash-card-dot dot-blue"></span>
+                        {{ d_trans('New Users This Month') }}
                     </div>
+                    <a href="{{ route('admin.members.users.index') }}" class="dash-card-link">{{ d_trans('View All') }} <i class="bi bi-arrow-right"></i></a>
                 </div>
-                <div class="box-body">
-                    <div class="dashboard-chart">
-                        <canvas id="users-chart" class="chart"></canvas>
-                    </div>
+                <div class="dash-card-body">
+                    <canvas id="users-chart" class="chart" style="height:240px"></canvas>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-lg-5 col-xxl-4">
-            <div class="box h-100 p-0">
-                <div class="box-header border-bottom mb-0 cp-2">
-                    <p class="box-header-title large mb-0">{{ d_trans('Recently registered users') }}</p>
-                    <div class="box-header-action">
-                        <div class="drop-down" data-dropdown>
-                            <button class="drop-down-title btn btn-reset btn-sm">
-                                <i class="fa fa-ellipsis-v"></i>
-                            </button>
-                            <div class="drop-down-menu">
-                                <a class="drop-down-item"
-                                    href="{{ route('admin.members.users.index') }}">{{ d_trans('View All') }}</a>
-                            </div>
-                        </div>
+        <div class="col-12 col-lg-4">
+            <div class="dash-card h-100 p-0">
+                <div class="dash-card-header px-4 pt-4">
+                    <div class="dash-card-title">
+                        <span class="dash-card-dot dot-violet"></span>
+                        {{ d_trans('Recent Users') }}
                     </div>
+                    <a href="{{ route('admin.members.users.index') }}" class="dash-card-link">{{ d_trans('View All') }} <i class="bi bi-arrow-right"></i></a>
                 </div>
-                <div class="box-body">
+                <div class="dash-card-body p-0">
                     @if ($users->count() > 0)
-                        <div class="items">
+                        <ul class="dash-list">
                             @foreach ($users as $user)
-                                <div class="item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        <a href="{{ route('admin.members.users.edit', $user->id) }}"
-                                            class="item-img me-3">
-                                            <img src="{{ $user->getAvatar() }}" alt="{{ $user->getName() }}">
-                                        </a>
-                                        <div>
-                                            <a href="{{ route('admin.members.users.edit', $user->id) }}"
-                                                class="item-title d-block fw-500 mb-1">{{ $user->getName() }}</a>
-                                            <p class="item-text text-muted small mb-0">
-                                                {{ $user->created_at->diffforhumans() }}
-                                            </p>
-                                        </div>
+                                <li class="dash-list-item">
+                                    <a href="{{ route('admin.members.users.edit', $user->id) }}" class="dash-list-avatar">
+                                        <img src="{{ $user->getAvatar() }}" alt="{{ $user->getName() }}">
+                                    </a>
+                                    <div class="dash-list-info">
+                                        <a href="{{ route('admin.members.users.edit', $user->id) }}" class="dash-list-name">{{ $user->getName() }}</a>
+                                        <span class="dash-list-meta">{{ $user->created_at->diffforhumans() }}</span>
                                     </div>
-                                    <div class="ms-3">
-                                        <a href="{{ route('admin.members.users.edit', $user->id) }}"
-                                            class="btn btn-primary">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </div>
-                                </div>
+                                    <a href="{{ route('admin.members.users.edit', $user->id) }}" class="dash-list-action">
+                                        <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                </li>
                             @endforeach
-                        </div>
+                        </ul>
                     @else
-                        <div class="p-5">
+                        <div class="p-5 text-center text-muted">
                             @include('admin.partials.empty')
                         </div>
                     @endif
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-5 col-xxl-4">
-            <div class="box h-100 p-0">
-                <div class="box-header border-bottom mb-0 cp-2">
-                    <p class="box-header-title large mb-0">{{ d_trans('Recently added products') }}</p>
-                    <div class="box-header-action">
-                        <div class="drop-down" data-dropdown>
-                            <button class="drop-down-title btn btn-reset btn-sm">
-                                <i class="fa fa-ellipsis-v"></i>
-                            </button>
-                            <div class="drop-down-menu">
-                                <a class="drop-down-item"
-                                    href="{{ route('admin.products.index') }}">{{ d_trans('View All') }}</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="box-body">
-                    @if ($products->count() > 0)
-                        <div class="items">
-                            @foreach ($products as $product)
-                                <div class="item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        <a href="{{ route('admin.products.show', $product->id) }}" class="item-img me-3">
-                                            <img src="{{ asset($product->getImageLink()) }}" alt="{{ $product->name }}">
-                                        </a>
-                                        <div>
-                                            <a href="{{ route('admin.products.show', $product->id) }}"
-                                                class="item-title d-block fw-500 mb-1">{{ $product->name }}</a>
-                                            <p class="item-text text-muted small mb-0">
-                                                {{ $product->created_at->diffforhumans() }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {{-- <div class="ms-3">
-                                        <a href="{{ route('admin.products.show', $product->id) }}">
-                                            <img src="{{ $product->getAvgRatingImageLink() }}"
-                                                alt="{{ $product->avg_rating }}" width="120px" />
-                                        </a>
-                                    </div> --}}
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="p-5">
-                            @include('admin.partials.empty')
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-7 col-xxl-8">
-            <div class="box h-100">
-                <div class="box-header">
-                    <p class="box-header-title large mb-0">{{ d_trans('Products added each day during this month') }}</p>
-                    <div class="box-header-action">
-                        <div class="drop-down" data-dropdown>
-                            <button class="drop-down-title btn btn-reset btn-sm">
-                                <i class="fa fa-ellipsis-v"></i>
-                            </button>
-                            <div class="drop-down-menu">
-                                <a class="drop-down-item"
-                                    href="{{ route('admin.products.index') }}">{{ d_trans('View All') }}</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <div class="dashboard-chart">
-                        <canvas id="products-chart" class="chart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="box h-100">
-                <div class="box-header">
-                    <p class="box-header-title large mb-0">
-                        {{ d_trans('User reviews submitted each day during this month') }}</p>
-                </div>
-                <div class="box-body">
-                    <div class="dashboard-chart">
-                        <canvas id="reviews-chart" class="chart"></canvas>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row g-4 my-4">
+        <div class="col-12 col-lg-4">
+            <div class="dash-card h-100 p-0">
+                <div class="dash-card-header px-4 pt-4">
+                    <div class="dash-card-title">
+                        <span class="dash-card-dot dot-orange"></span>
+                        {{ d_trans('Recent Products') }}
+                    </div>
+                    <a href="{{ route('admin.products.index') }}" class="dash-card-link">{{ d_trans('View All') }} <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="dash-card-body p-0">
+                    @if ($products->count() > 0)
+                        <ul class="dash-list">
+                            @foreach ($products as $product)
+                                <li class="dash-list-item">
+                                    <a href="{{ route('admin.products.show', $product->id) }}" class="dash-list-avatar dash-list-avatar-square">
+                                        <img src="{{ asset($product->getImageLink()) }}" alt="{{ $product->name }}">
+                                    </a>
+                                    <div class="dash-list-info">
+                                        <a href="{{ route('admin.products.show', $product->id) }}" class="dash-list-name">{{ $product->name }}</a>
+                                        <span class="dash-list-meta">{{ $product->created_at->diffforhumans() }}</span>
+                                    </div>
+                                    <a href="{{ route('admin.products.show', $product->id) }}" class="dash-list-action">
+                                        <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <div class="p-5 text-center text-muted">
+                            @include('admin.partials.empty')
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-8">
+            <div class="dash-card h-100">
+                <div class="dash-card-header">
+                    <div class="dash-card-title">
+                        <span class="dash-card-dot dot-orange"></span>
+                        {{ d_trans('Products Added This Month') }}
+                    </div>
+                    <a href="{{ route('admin.products.index') }}" class="dash-card-link">{{ d_trans('View All') }} <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="dash-card-body">
+                    <canvas id="products-chart" class="chart" style="height:240px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="dash-card">
+                <div class="dash-card-header">
+                    <div class="dash-card-title">
+                        <span class="dash-card-dot dot-rose"></span>
+                        {{ d_trans('Reviews Submitted This Month') }}
+                    </div>
+                </div>
+                <div class="dash-card-body">
+                    <canvas id="reviews-chart" class="chart" style="height:220px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @push('top_scripts')
         <script>
             "use strict";
             const chartsConfig = @json($charts);
         </script>
     @endpush
-    @push('styles_libs')
-        <link rel="stylesheet" href="{{ asset('vendor/libs/vironeer/counter-cards.min.css') }}">
-        <style>
-            /* --- Split Layout Stat Cards --- */
 
-            .split-stat-card {
-                position: relative;
+    @push('styles_libs')
+        <style>
+            /* =========================================
+               DASHBOARD — Modern Design System
+            ========================================= */
+
+            /* Alert */
+            .dash-alert {
                 display: flex;
                 align-items: center;
-                border-radius: 8px;
-                padding: 24px 20px;
-                color: #ffffff;
-                overflow: hidden;
-                min-height: 110px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                gap: 16px;
+                padding: 18px 24px;
+                border-radius: 14px;
+                flex-wrap: wrap;
             }
-
-            .split-stat-card:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            .dash-alert-warning {
+                background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+                border: 1px solid #fcd34d;
             }
-
-            /* Left Content */
-            .split-card-content {
-                position: relative;
-                z-index: 2;
-                flex: 1;
+            .dash-alert-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                background: #fbbf24;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                flex-shrink: 0;
             }
-
-            .split-card-title {
+            .dash-alert-body { flex: 1; min-width: 200px; }
+            .dash-alert-title { font-size: 15px; font-weight: 700; color: #92400e; margin: 0 0 4px; }
+            .dash-alert-text { font-size: 13px; color: #78350f; margin: 0; line-height: 1.5; }
+            .dash-alert-btn {
+                padding: 9px 20px;
+                border-radius: 10px;
+                background: #f59e0b;
+                color: #fff;
                 font-size: 13px;
                 font-weight: 600;
+                text-decoration: none;
+                white-space: nowrap;
+                transition: background 0.2s;
+            }
+            .dash-alert-btn:hover { background: #d97706; color: #fff; }
+
+            /* ---- KPI Cards (Earnings/Subscriptions/Transactions) ---- */
+            .kpi-card {
+                position: relative;
+                border-radius: 20px;
+                padding: 28px 24px 24px;
+                overflow: hidden;
+                color: #fff;
+                min-height: 140px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            .kpi-card-glow {
+                position: absolute;
+                top: -40px;
+                right: -40px;
+                width: 160px;
+                height: 160px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.12);
+                pointer-events: none;
+            }
+            .kpi-card-inner { display: flex; align-items: center; gap: 18px; }
+            .kpi-icon-wrap {
+                width: 56px;
+                height: 56px;
+                border-radius: 16px;
+                background: rgba(255,255,255,0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 26px;
+                flex-shrink: 0;
+                backdrop-filter: blur(4px);
+            }
+            .kpi-meta { flex: 1; }
+            .kpi-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.85; display: block; margin-bottom: 6px; }
+            .kpi-value { font-size: 32px; font-weight: 800; margin: 0; line-height: 1; }
+            .kpi-badge {
+                display: inline-flex;
+                align-items: center;
+                padding: 5px 12px;
+                border-radius: 100px;
+                background: rgba(255,255,255,0.18);
+                font-size: 11px;
+                font-weight: 600;
+                width: fit-content;
+                backdrop-filter: blur(4px);
+            }
+            .kpi-earnings  { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 12px 32px rgba(16,185,129,.35); }
+            .kpi-subscriptions { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); box-shadow: 0 12px 32px rgba(99,102,241,.35); }
+            .kpi-transactions  { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); box-shadow: 0 12px 32px rgba(245,158,11,.35); }
+
+            /* ---- Stat Cards ---- */
+            .stat-card {
+                border-radius: 18px;
+                padding: 22px 20px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                position: relative;
+                overflow: hidden;
+                transition: transform 0.25s ease, box-shadow 0.25s ease;
+                cursor: default;
+            }
+            .stat-card:hover { transform: translateY(-5px); }
+            .stat-wave {
+                position: absolute;
+                bottom: -20px;
+                right: -20px;
+                width: 90px;
+                height: 90px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.1);
+                pointer-events: none;
+            }
+            .stat-wave::after {
+                content: '';
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.08);
+            }
+            .stat-icon {
+                width: 52px;
+                height: 52px;
+                border-radius: 14px;
+                background: rgba(255,255,255,0.22);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                color: #fff;
+                flex-shrink: 0;
+            }
+            .stat-body { flex: 1; }
+            .stat-number {
+                font-size: 30px;
+                font-weight: 800;
+                color: #fff;
+                line-height: 1;
+                margin-bottom: 4px;
+                display: block;
+            }
+            .stat-label {
+                font-size: 12px;
+                font-weight: 600;
+                color: rgba(255,255,255,0.82);
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
-                margin: 0 0 8px 0;
-                opacity: 0.95;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
             }
 
-            .split-card-number {
-                font-size: 28px;
-                font-weight: 700;
-                margin: 0;
-                line-height: 1;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            }
+            /* Stat color themes */
+            .stat-blue   { background: linear-gradient(135deg,#3b82f6,#1d4ed8); box-shadow:0 8px 24px rgba(59,130,246,.35); }
+            .stat-violet { background: linear-gradient(135deg,#8b5cf6,#6d28d9); box-shadow:0 8px 24px rgba(139,92,246,.35); }
+            .stat-teal   { background: linear-gradient(135deg,#14b8a6,#0d9488); box-shadow:0 8px 24px rgba(20,184,166,.35); }
+            .stat-cyan   { background: linear-gradient(135deg,#06b6d4,#0891b2); box-shadow:0 8px 24px rgba(6,182,212,.35); }
+            .stat-orange { background: linear-gradient(135deg,#f97316,#ea580c); box-shadow:0 8px 24px rgba(249,115,22,.35); }
+            .stat-rose   { background: linear-gradient(135deg,#f43f5e,#e11d48); box-shadow:0 8px 24px rgba(244,63,94,.35); }
+            .stat-indigo { background: linear-gradient(135deg,#6366f1,#4338ca); box-shadow:0 8px 24px rgba(99,102,241,.35); }
+            .stat-green  { background: linear-gradient(135deg,#22c55e,#16a34a); box-shadow:0 8px 24px rgba(34,197,94,.35); }
 
-            /* Right Curved Shape */
-            .split-card-icon {
-                position: absolute;
-                right: 0;
-                top: 0;
-                height: 100%;
-                width: 35%;
-                /* Adjusts how wide the curve section is */
-                background-color: var(--shape-color);
-                border-top-left-radius: 120px;
-                /* Creates the curve */
-                border-bottom-left-radius: 120px;
-                /* Creates the curve */
+            /* ---- Dash Cards (chart / list panels) ---- */
+            .dash-card {
+                background: #fff;
+                border-radius: 18px;
+                box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+                border: 1px solid rgba(0,0,0,0.05);
+                overflow: hidden;
+            }
+            .dash-card-header {
                 display: flex;
-                justify-content: center;
                 align-items: center;
-                font-size: 32px;
-                z-index: 1;
-                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                justify-content: space-between;
+                padding: 20px 24px 0;
             }
-
-            /* Optional hover effect on the shape */
-            .split-stat-card:hover .split-card-icon {
-                width: 38%;
+            .dash-card-title {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 15px;
+                font-weight: 700;
+                color: #1e293b;
             }
-
-            /* --- 8 Unique Color Themes --- */
-
-            /* 1. Base Brand Color */
-            .theme-brand-base {
-                background: linear-gradient(120deg, #ba511d 0%, #d4724a 100%);
-                --shape-color: #8a3a12;
+            .dash-card-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                flex-shrink: 0;
             }
-
-            /* 2. Soft Blush Copper */
-            .theme-brand-copper {
-                background: linear-gradient(120deg, #c96340 0%, #dea080 100%);
-                --shape-color: #9a4228;
+            .dot-blue   { background: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.2); }
+            .dot-violet { background: #8b5cf6; box-shadow: 0 0 0 3px rgba(139,92,246,.2); }
+            .dot-orange { background: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,.2); }
+            .dot-rose   { background: #f43f5e; box-shadow: 0 0 0 3px rgba(244,63,94,.2); }
+            .dash-card-link {
+                font-size: 13px;
+                font-weight: 600;
+                color: #6366f1;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                transition: gap 0.2s;
             }
+            .dash-card-link:hover { gap: 8px; color: #4f46e5; }
+            .dash-card-body { padding: 20px 24px 24px; }
 
-            /* 3. Warm Peach Clay */
-            .theme-brand-clay {
-                background: linear-gradient(120deg, #d4845a 0%, #e8b595 100%);
-                --shape-color: #ba511d;
+            /* ---- Dash List ---- */
+            .dash-list { list-style: none; margin: 0; padding: 0; }
+            .dash-list-item {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                padding: 14px 20px;
+                border-bottom: 1px solid #f1f5f9;
+                transition: background 0.15s;
             }
+            .dash-list-item:last-child { border-bottom: none; }
+            .dash-list-item:hover { background: #f8fafc; }
+            .dash-list-avatar {
+                width: 42px;
+                height: 42px;
+                border-radius: 50%;
+                overflow: hidden;
+                flex-shrink: 0;
+                display: block;
+            }
+            .dash-list-avatar-square { border-radius: 10px; }
+            .dash-list-avatar img { width: 100%; height: 100%; object-fit: cover; }
+            .dash-list-info { flex: 1; min-width: 0; }
+            .dash-list-name {
+                display: block;
+                font-size: 14px;
+                font-weight: 600;
+                color: #1e293b;
+                text-decoration: none;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-bottom: 2px;
+            }
+            .dash-list-name:hover { color: #6366f1; }
+            .dash-list-meta { font-size: 12px; color: #94a3b8; }
+            .dash-list-action {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                background: #f1f5f9;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #64748b;
+                text-decoration: none;
+                font-size: 14px;
+                transition: background 0.15s, color 0.15s;
+                flex-shrink: 0;
+            }
+            .dash-list-action:hover { background: #6366f1; color: #fff; }
 
-            /* 4. Dusty Rose Sienna */
-            .theme-brand-sienna {
-                background: linear-gradient(120deg, #c05535 0%, #d98870 100%);
-                --shape-color: #8f3820;
+            /* ---- Counter animation ---- */
+            @keyframes fadeSlideUp {
+                from { opacity:0; transform:translateY(18px); }
+                to   { opacity:1; transform:translateY(0); }
             }
-
-            /* 5. Soft Amber Gold */
-            .theme-brand-gold {
-                background: linear-gradient(120deg, #c97a2a 0%, #e0aa6a 100%);
-                --shape-color: #9a5518;
-            }
-
-            /* 6. Linen Sand */
-            .theme-brand-sand {
-                background: linear-gradient(120deg, #d4a07a 0%, #e8c9aa 100%);
-                --shape-color: #b07045;
-            }
-
-            /* 7. Soft Brick */
-            .theme-brand-brick {
-                background: linear-gradient(120deg, #b84535 0%, #d08070 100%);
-                --shape-color: #8a2e20;
-            }
-
-            /* 8. Warm Mist Mahogany */
-            .theme-brand-mahogany {
-                background: linear-gradient(120deg, #9a4020 0%, #c07a5a 100%);
-                --shape-color: #6e2a12;
-            }
+            .stat-card { animation: fadeSlideUp 0.5s ease both; }
+            .stat-card:nth-child(1) { animation-delay:.05s }
+            .stat-card:nth-child(2) { animation-delay:.10s }
+            .stat-card:nth-child(3) { animation-delay:.15s }
+            .stat-card:nth-child(4) { animation-delay:.20s }
+            .stat-card:nth-child(5) { animation-delay:.25s }
+            .stat-card:nth-child(6) { animation-delay:.30s }
+            .stat-card:nth-child(7) { animation-delay:.35s }
+            .stat-card:nth-child(8) { animation-delay:.40s }
         </style>
     @endpush
+
     @push('scripts_libs')
         <script src="{{ asset('vendor/libs/chartjs/chart.min.js') }}"></script>
         <script src="{{ asset_with_version('vendor/admin/js/charts.js') }}"></script>
+        <script>
+            (function () {
+                "use strict";
+                // Animated counter
+                document.querySelectorAll('.counter[data-target]').forEach(function (el) {
+                    var target = parseInt(el.getAttribute('data-target')) || 0;
+                    if (target === 0) { el.textContent = '0'; return; }
+                    var duration = 1200;
+                    var start = performance.now();
+                    function tick(now) {
+                        var elapsed = now - start;
+                        var progress = Math.min(elapsed / duration, 1);
+                        var ease = 1 - Math.pow(1 - progress, 3);
+                        el.textContent = Math.round(ease * target).toLocaleString();
+                        if (progress < 1) requestAnimationFrame(tick);
+                    }
+                    requestAnimationFrame(tick);
+                });
+            })();
+        </script>
     @endpush
 @endsection

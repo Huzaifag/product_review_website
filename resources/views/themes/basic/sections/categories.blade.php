@@ -51,17 +51,17 @@
     <div class="section-inner" id="mag-interactive-section">
         <div class="mag-header container container-custom">
             <div class="container mag-header-left">
-                <span class="mag-label">Browse by Topic</span>
-                <h2 class="mag-title">{{ $homeSection->trans->name }}</h2>
+                <span class="mag-label">{{ d_trans('Browse by Topic') }}</span>
+                <h2 class="mag-title">{{ d_trans('Explore by Category') }}</h2>
                 @if ($homeSection->description)
-                    <p class="mag-desc">{{ $homeSection->trans->description }}</p>
+                    <p class="mag-desc">{{ d_trans($homeSection->trans->description) }}</p>
                 @endif
             </div>
             
             @if ($categories->count() > 5)
             <div class="mag-header-meta d-none d-md-flex">
-                <span class="mag-meta-pill">Editor's Selection</span>
-                <span class="mag-meta-count">{{ $categories->count() }} Topics</span>
+                <span class="mag-meta-pill">{{ d_trans('Editor\'s Selection') }}</span>
+                <span class="mag-meta-count">{{ $categories->count() }} {{ d_trans('Topics') }}</span>
             </div>
             @endif
         </div>
@@ -76,7 +76,7 @@
                                     src="{{ $category->getImageLink() }}"
                                     alt="{{ $category->slug }}" />
                             </div>
-                            <span class="mag-card-name">{{ $category->trans->name }}</span>
+                            <span class="mag-card-name">{{ d_trans($category->name )}}</span>
                         </a>
                     </div>
                 @endforeach

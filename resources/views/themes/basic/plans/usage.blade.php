@@ -73,7 +73,7 @@
                         <div>
                             <h5 class="fw-bold mb-0">{{ d_trans('Active Plans') }}</h5>
                         </div>
-                        <span class="badge bg-{{ $statusColor }} fs-6">{{ $subscriptionStatus }}</span>
+                        <span class="badge bg-{{ $statusColor }} fs-6">{{ d_trans($subscriptionStatus) }}</span>
                     </div>
                     <div class="row g-3">
                         @foreach ($activeSubscriptions as $sub)
@@ -81,8 +81,8 @@
                                 <div class="premium-plan-box">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <div>
-                                            <h6 class="fw-bold mb-1">{{ $sub->plan->trans->name ?? 'Plan' }}</h6>
-                                            <small class="text-muted">{{ $sub->plan->getIntervalName() ?? 'N/A' }}</small>
+                                            <h6 class="fw-bold mb-1">{{ d_trans($sub->plan->name) ?? 'Plan' }}</h6>
+                                            <small class="text-muted">{{ d_trans($sub->plan->getIntervalName()) ?? 'N/A' }}</small>
                                         </div>
                                         <div class="d-flex align-items-center gap-2">
                                             @if ($subscription && $subscription->id === $sub->id)
@@ -109,7 +109,7 @@
                                                 @if (is_null($sub->plan?->products_limit))
                                                     {{ d_trans('Unlimited') }}
                                                 @else
-                                                    {{ $sub->plan->products_limit }}
+                                                    {{ d_trans(':count Product View|:count Product Views', ['count' => $sub->plan->products_limit]) }}
                                                 @endif
                                             </strong>
                                         </div>
@@ -177,7 +177,7 @@
                                             @if (is_null($plan->products_limit))
                                                 {{ d_trans('Unlimited') }}
                                             @else
-                                                {{ $plan->products_limit }}
+                                                {{ d_trans(':count Product View|:count Product Views', ['count' => $plan->products_limit]) }}
                                             @endif
                                         </strong>
                                     </div>

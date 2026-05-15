@@ -23,7 +23,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <h5 class="fw-bold mb-1 text-dark text-truncate" style="max-width: 200px;">
-                                    {{ $category->trans->name }}
+                                    {{ d_trans($category->name) }}
                                 </h5>
                                 <span class="badge rounded-pill bg-primary-soft text-primary px-3 py-1 fw-medium">
                                     {{ translate_choice(':count Product|:count Products', optional($category->products)->count() ?? 0, ['count' => optional($category->products)->count() ?? 0]) }}

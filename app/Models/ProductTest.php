@@ -19,6 +19,14 @@ class ProductTest extends Model
         'data' => 'array',
     ];
 
+    public function getTransAttribute()
+    {
+        return (object) [
+            'name' => m_trans($this->name),
+            'data' => $this->data ? collect($this->data)->map(fn($value) => m_trans($value))->all() : null,
+        ];
+    }
+
     // ── Scopes ──────────────────────────────────────────────────────────────
 
     public function scopeActive($query)
