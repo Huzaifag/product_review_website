@@ -67,7 +67,7 @@
                     <span class="dev-icon">
                         <i class="fa-solid fa-code"></i>
                     </span>
-                    <span>{{ d_trans('Developed by') }} <strong>Bitlogicx</strong></span>
+                    <span>{{ d_trans('Developed by') }} <strong style="font-weight: 600;">Bitlogicx</strong></span>
                 </a>
 
                 <p class="footer-copyright mb-0 footer-note">

@@ -12,7 +12,7 @@
             </div>
             @if (!isset($language_simple))
                 <span class="me-2 text-primary">{{ $currentLanguage->trans->name }}</span>
-                <i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-chevron-down ms-auto" style="color: #C62828;"></i>
             @endif
         </div>
         <div class="drop-down-menu">

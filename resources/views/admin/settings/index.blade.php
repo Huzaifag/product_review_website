@@ -230,6 +230,28 @@
                 </a>
             </div>
 
+            <!-- Gemini Settings -->
+            <div class="col page-search-element">
+                <a href="{{ route('admin.settings.gemini.index') }}" class="premium-card">
+                    <div class="card-glow"></div>
+
+                    <div class="premium-card-body">
+                        <div class="icon-wrapper bg-soft-primary">
+                            <i class="bi bi-robot"></i>
+                        </div>
+
+                        <div class="content-wrapper">
+                            <h6 class="card-title">{{ d_trans('Gemini Settings') }}</h6>
+                            <p class="card-description">
+                                {{ d_trans('Manage Gemini API key and AI configuration settings.') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <i class="bi bi-chevron-right arrow-hint"></i>
+                </a>
+            </div>
+
             <!-- Captcha Providers -->
             <div class="col page-search-element">
                 <a href="{{ route('admin.settings.captcha-providers.index') }}" class="premium-card">
@@ -263,6 +285,8 @@
                     <i class="bi bi-chevron-right arrow-hint"></i>
                 </a>
             </div> --}}
+
+            
 
             @if (licenseType(2) && config('settings.subscription.status'))
                 <!-- Tax Settings -->
@@ -302,128 +326,128 @@
         </div>
     </div>
 
-@push('styles')
+    @push('styles')
         <style>
-        :root {
-            --card-bg: #ffffff;
-            --card-radius: 16px;
-            --primary-color: #4361ee;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+            :root {
+                --card-bg: #ffffff;
+                --card-radius: 16px;
+                --primary-color: #4361ee;
+                --text-main: #1e293b;
+                --text-muted: #64748b;
+                --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
 
-        .sys-settings-wrapper {
-            padding: 10px 0;
-        }
+            .sys-settings-wrapper {
+                padding: 10px 0;
+            }
 
-        .premium-card {
-            position: relative;
-            display: block;
-            background: var(--card-bg);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            border-radius: var(--card-radius);
-            padding: 1.5rem;
-            text-decoration: none !important;
-            overflow: hidden;
-            height: 100%;
-            transition: var(--transition);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
-        }
+            .premium-card {
+                position: relative;
+                display: block;
+                background: var(--card-bg);
+                border: 1px solid rgba(0, 0, 0, 0.05);
+                border-radius: var(--card-radius);
+                padding: 1.5rem;
+                text-decoration: none !important;
+                overflow: hidden;
+                height: 100%;
+                transition: var(--transition);
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+            }
 
-        .premium-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
-            border-color: rgba(67, 97, 238, 0.2);
-        }
+            .premium-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+                border-color: rgba(67, 97, 238, 0.2);
+            }
 
-        .premium-card-body {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-            position: relative;
-            z-index: 2;
-        }
+            .premium-card-body {
+                display: flex;
+                align-items: center;
+                gap: 1.25rem;
+                position: relative;
+                z-index: 2;
+            }
 
-        /* Icon Styling */
-        .icon-wrapper {
-            width: 56px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-            transition: var(--transition);
-        }
+            /* Icon Styling */
+            .icon-wrapper {
+                width: 56px;
+                height: 56px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px;
+                font-size: 1.5rem;
+                flex-shrink: 0;
+                transition: var(--transition);
+            }
 
-        .premium-card:hover .icon-wrapper {
-            transform: scale(1.1) rotate(-5deg);
-        }
+            .premium-card:hover .icon-wrapper {
+                transform: scale(1.1) rotate(-5deg);
+            }
 
-        /* Color Variations */
-        .bg-soft-primary {
-            background: #eef2ff;
-            color: #4361ee;
-        }
+            /* Color Variations */
+            .bg-soft-primary {
+                background: #eef2ff;
+                color: #4361ee;
+            }
 
-        .bg-soft-success {
-            background: #ecfdf5;
-            color: #10b981;
-        }
+            .bg-soft-success {
+                background: #ecfdf5;
+                color: #10b981;
+            }
 
-        .bg-soft-info {
-            background: #f0f9ff;
-            color: #0ea5e9;
-        }
+            .bg-soft-info {
+                background: #f0f9ff;
+                color: #0ea5e9;
+            }
 
-        .bg-soft-warning {
-            background: #fffbeb;
-            color: #f59e0b;
-        }
+            .bg-soft-warning {
+                background: #fffbeb;
+                color: #f59e0b;
+            }
 
-        /* Text Content */
-        .card-title {
-            color: var(--text-main);
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-            font-size: 1.05rem;
-        }
+            /* Text Content */
+            .card-title {
+                color: var(--text-main);
+                font-weight: 700;
+                margin-bottom: 0.25rem;
+                font-size: 1.05rem;
+            }
 
-        .card-description {
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            margin-bottom: 0;
-            line-height: 1.4;
-        }
+            .card-description {
+                color: var(--text-muted);
+                font-size: 0.875rem;
+                margin-bottom: 0;
+                line-height: 1.4;
+            }
 
-        /* Decorative Arrow */
-        .arrow-hint {
-            position: absolute;
-            right: 1.5rem;
-            top: 50%;
-            transform: translateY(-50%) translateX(10px);
-            opacity: 0;
-            color: var(--primary-color);
-            transition: var(--transition);
-        }
+            /* Decorative Arrow */
+            .arrow-hint {
+                position: absolute;
+                right: 1.5rem;
+                top: 50%;
+                transform: translateY(-50%) translateX(10px);
+                opacity: 0;
+                color: var(--primary-color);
+                transition: var(--transition);
+            }
 
-        .premium-card:hover .arrow-hint {
-            opacity: 1;
-            transform: translateY(-50%) translateX(0);
-        }
+            .premium-card:hover .arrow-hint {
+                opacity: 1;
+                transform: translateY(-50%) translateX(0);
+            }
 
-        /* The "Glow" Effect */
-        .card-glow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at top right, rgba(67, 97, 238, 0.05), transparent);
-            pointer-events: none;
-        }
-    </style>
-@endpush
+            /* The "Glow" Effect */
+            .card-glow {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle at top right, rgba(67, 97, 238, 0.05), transparent);
+                pointer-events: none;
+            }
+        </style>
+    @endpush
 @endsection

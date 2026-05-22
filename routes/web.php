@@ -109,6 +109,7 @@ Route::middleware('maintenance')->group(function () {
             Route::post('{slug}', 'GeneralController@blogComment')->name('article')->middleware('auth');
         });
         Route::name('products.')->prefix('products')->group(function () {
+            Route::post('image-search', 'ProductImageAnalysisController@analyze')->name('image-search');
             Route::post('reviews/{review}/helpful', 'ProductController@reviewHelpful')
                 ->name('reviews.helpful')->middleware('auth');
             Route::post('{slug}/review', 'ProductController@reviewStore')->name('reviews.store')->middleware('auth');

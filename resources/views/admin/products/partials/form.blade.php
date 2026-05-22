@@ -45,7 +45,7 @@
     <div class="col-lg-6">
         <label class="lab-label">{{ d_trans('Name') }}</label>
         <input id="slugTitle" type="text" name="name" class="lab-input"
-            value="{{ old('name', $product->name ?? '') }}" required>
+            value="{{ old('name', d_trans($product->name ?? '') ?? '') }}" required>
     </div>
     <div class="col-lg-6">
         <label class="lab-label">{{ d_trans('Slug') }}</label>
@@ -150,7 +150,7 @@
     {{-- Description --}}
     <div class="col-12">
         <label class="lab-label">{{ d_trans('Description') }}</label>
-        <textarea name="description" class="lab-input lab-textarea" rows="4">{{ old('description', $product->description ?? '') }}</textarea>
+        <textarea name="description" class="lab-input lab-textarea" rows="4">{{ old('description', d_trans($product->description ?? '') ?? '') }}</textarea>
     </div>
 
     {{-- Ingredients INCI --}}

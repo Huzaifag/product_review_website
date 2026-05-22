@@ -18,6 +18,7 @@ use App\Models\Product;
 use App\Models\NavbarLink;
 use App\Rules\BlockPatterns;
 use App\Rules\Username;
+use App\Services\TranslationService;
 use Carbon\Carbon;
 use Config;
 use Illuminate\Pagination\Paginator;
@@ -35,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerBladeDirectives();
+        $this->app->singleton(TranslationService::class);
     }
 
     public function boot()
@@ -59,13 +61,13 @@ class AppServiceProvider extends ServiceProvider
             $this->adminViewComposers();
         }
 
-        if (config('app.env') === 'production' || request()->isSecure()) {
-            \URL::forceScheme('https');
-        }
+        // if (config('app.env') === 'production' || request()->isSecure()) {
+        //     \URL::forceScheme('https');
+        // }
 
 
 
-        \URL::forceScheme('https');
+        // \URL::forceScheme('https');
 
     }
 

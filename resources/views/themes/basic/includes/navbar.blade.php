@@ -20,7 +20,7 @@
                                 <div class="drop-down" data-dropdown>
                                     <div class="drop-down-btn">
                                         <span class="me-2">{{ $navbarLink->name }}</span>
-                                        <i class="bi bi-chevron-down ms-auto"></i>
+                                        <i class="bi bi-chevron-down ms-auto" style="color:#C62828;"></i>
                                     </div>
                                     <div class="drop-down-menu">
                                         @foreach ($navbarLink->children as $child)

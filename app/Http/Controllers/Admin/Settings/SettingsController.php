@@ -329,6 +329,36 @@ class SettingsController extends Controller
         return back();
     }
 
+    public function gemini()
+    {
+        return view('admin.settings.gemini.index');
+    }
+
+    public function geminiUpdate(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'gemini.api_key' => ['required', 'string', 'block_patterns'],
+            'gemini.model'   => ['required', 'string', 'block_patterns'],
+        ]);
+
+        if ($validator->fails()) {
+            foreach ($validator->errors()->all() as $error) {
+                toastr()->error($error);
+            }
+            return back();
+        }
+
+        $update = Setting::updateSettings('gemini', $request->gemini);
+
+        if ($update) {
+            toastr()->success(d_trans('Updated Successfully'));
+            return back();
+        }
+
+        toastr()->error(d_trans('Updated Error'));
+        return back();
+    }
+
     public function kyc()
     {
         return view('admin.settings.kyc');

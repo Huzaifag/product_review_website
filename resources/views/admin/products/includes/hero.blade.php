@@ -12,7 +12,7 @@
     <div class="prod-hero-info">
         <div class="d-flex align-items-start gap-3 flex-wrap">
             <div class="flex-grow-1">
-                <h4 class="prod-hero-name">{{ $product->name }}</h4>
+                <h4 class="prod-hero-name">{{ d_trans($product->name ?? '') }}</h4>
                 <span class="prod-hero-slug">{{ $product->slug }}</span>
             </div>
             <div class="d-flex gap-2 flex-wrap">

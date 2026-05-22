@@ -1,7 +1,7 @@
 <div class="mb-4">
     <div class="row g-3 align-items-center">
         <div class="col">
-            <h3 class="mb-0 capitalize">@yield('header_title')</h3>
+            <h3 class="mb-0 capitalize">@yield( d_trans('header_title') )</h3>
             @include('admin.partials.breadcrumb')
         </div>
         @hasSection('search')

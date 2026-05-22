@@ -1028,7 +1028,8 @@ INSERT INTO `settings` (`id`, `key`, `value`) VALUES
 (16, 'business', '{\"actions\":{\"owners_registration\":1,\"owners_email_verification\":0,\"owners_kyc_required\":1,\"convert_logo_to_webp\":1,\"reviews_require_login\":0,\"reviews_require_reviewing\":0},\"default\":{\"businesses\":\"2\",\"employees\":1,\"categories\":1},\"media\":{\"default_logo\":\"images\\/businesses\\/default-logo.jpg\"},\"trending_number\":\"20\",\"best_rating_number\":\"20\"}'),
 (17, 'user', '{\"actions\":{\"registration\":1,\"email_verification\":0,\"kyc_required\":0,\"adding_none_exists_business\":1}}'),
 (18, 'kyc', '{\"actions\":{\"status\":1,\"selfie_verification\":1},\"media\":{\"id_front_image\":\"images\\/kyc\\/9VZjc94l68or4Ej_1745331575.svg\",\"id_back_image\":\"images\\/kyc\\/ETx2fq86HF2ynAT_1745331575.svg\",\"passport_image\":\"images\\/kyc\\/NeUp9BEGw1gIXVf_1745331575.svg\",\"selfie_image\":\"images\\/kyc\\/i3pbyVwv0cn0i9U_1745331575.svg\"}}'),
-(19, 'subscription', '{\"status\":1,\"data_delete_days\":\"7\",\"before_expiring_reminder_days\":\"3\",\"after_expiring_reminder_days\":\"3\"}');
+(19, 'subscription', '{\"status\":1,\"data_delete_days\":\"7\",\"before_expiring_reminder_days\":\"3\",\"after_expiring_reminder_days\":\"3\"}'),
+(20, 'openai', '{\"api_key\":\"\",\"model\":\"gpt-4o\"}');
 
 -- --------------------------------------------------------
 

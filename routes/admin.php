@@ -359,5 +359,11 @@ Route::middleware(['auth:admin', '2fa:admin'])->group(function () {
             Route::post('2fa/enable', 'AccountController@twoFactorEnable')->name('2fa.enable');
             Route::post('2fa/disable', 'AccountController@twoFactorDisable')->name('2fa.disable');
         });
+
+        // settings.gemini.index
+        Route::name('settings.gemini.')->prefix('settings/gemini')->middleware(['demo'])->group(function () {
+            Route::get('/', 'Settings\SettingsController@gemini')->name('index');
+            Route::post('/', 'Settings\SettingsController@geminiUpdate')->name('update');
+        });
     });
 });

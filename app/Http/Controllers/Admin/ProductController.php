@@ -15,9 +15,15 @@ use App\Models\TestAttribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Str;
+use App\Services\TranslationService;
+use App\Models\Translate;
 
 class ProductController extends Controller
 {
+    //call constructor for TranslationService
+    public function __construct(protected TranslationService $translationService)
+    {
+    }
     /**
      * Display a listing of the resource.
      */
@@ -142,12 +148,23 @@ class ProductController extends Controller
             $data['slug'] = Str::slug($data['name']);
         }
 
+        $toTranslate = array_filter([
+            'name'        => $data['name'],
+            'description' => $data['description'] ?? null,
+        ]);
+
+        $allTranslations = $this->translationService->detectAndTranslateMany($toTranslate);
+
+        if (!empty($allTranslations['name']['en'])) {
+            $data['name'] = $allTranslations['name']['en'];
+        }
+        if (!empty($allTranslations['description']['en'])) {
+            $data['description'] = $allTranslations['description']['en'];
+        }
+
         $product = Product::create($data);
 
-        // brands , categories, subcategories
-        $brands = Brand::select('id', 'name')->get();
-        $categories = Category::select('id', 'name')->get();
-        $subCategories = SubCategory::select('id', 'name')->get();
+        $this->storeTranslations($allTranslations);
 
         $this->storeProductImages($product, $uploadedImages);
 
@@ -442,6 +459,25 @@ class ProductController extends Controller
         }
 
         return $uploadedImages;
+    }
+
+    private function storeTranslations(array $allTranslations): void
+    {
+        $rows = [];
+
+        foreach ($allTranslations as $translations) {
+            $enKey = $translations['en'] ?? null;
+            if (!$enKey) continue;
+
+            foreach ($translations as $lang => $value) {
+                if ($lang === 'en' || $value === null) continue;
+                $rows[] = ['key' => $enKey, 'lang' => $lang, 'value' => $value, 'type' => Translate::TYPE_DYNAMIC];
+            }
+        }
+
+        if (!empty($rows)) {
+            Translate::upsert($rows, ['key', 'lang'], ['value', 'type']);
+        }
     }
 
     private function storeProductImages(Product $product, array $uploadedImages): void

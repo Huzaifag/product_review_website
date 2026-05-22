@@ -547,7 +547,7 @@
             .prod-thumb {
                 width: 42px;
                 height: 42px;
-                object-fit: cover;
+                object-fit: contain;
                 border-radius: 8px;
                 border: 1px solid var(--prod-border);
             }
