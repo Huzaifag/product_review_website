@@ -169,4 +169,9 @@ class Product extends Model
     {
         return $this->hasOne(ProductTest::class);
     }
+
+    public function ingredientLibraries()
+    {
+        return $this->belongsToMany(IngredientLibrary::class, 'ingredient_library_product');
+    }
 }

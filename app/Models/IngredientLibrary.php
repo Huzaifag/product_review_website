@@ -62,4 +62,9 @@ class IngredientLibrary extends Model
     {
         return $this->hasMany(IngredientConcern::class);
     }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'ingredient_library_product');
+    }
 }
