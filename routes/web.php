@@ -137,6 +137,7 @@ Route::middleware('maintenance')->group(function () {
         });
         Route::get('faqs', 'GeneralController@faqs')->name('faqs');
         Route::get('ingredients', 'GeneralController@ingredients')->name('ingredients');
+        Route::get('ingredients/{slug}', 'GeneralController@ingredientShow')->name('ingredients.show');
         Route::middleware(['contact.disable', 'smtp'])->group(function () {
             Route::get('contact-us', 'GeneralController@contact');
             Route::post('contact-us', 'GeneralController@contactSend')->name('contact');

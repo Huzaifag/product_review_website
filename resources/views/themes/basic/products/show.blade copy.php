@@ -1524,8 +1524,8 @@
                                         class="cert-stamp">
                                     <div class="cert-copy">
                                         <p>{{ d_trans('This product carries the OKO Verified mark, indicating that its formula has undergone an independent safety and quality review by OKO scientists.
-                                                                                                                                                                
-                                                                                                                                                                The brand has shown that the ingredients used in this product align with OKO’s high standards for safety, quality, and responsible formulation.') }}
+                                                                                
+                                                                                The brand has shown that the ingredients used in this product align with OKO’s high standards for safety, quality, and responsible formulation.') }}
                                         </p>
                                         <p>{{ d_trans('At the time of verification, the product’s ingredients were assessed using the latest available scientific understanding and were not found to present major concerns for human health.') }}
                                         </p>
@@ -1728,7 +1728,7 @@
                                 /* Function row */
                                 .ilacc-fn {
                                     padding: 12px 0 10px;
-
+                                    border-bottom: 1px solid rgba(0, 0, 0, .06);
                                 }
 
                                 .ilacc-fn-lbl {
@@ -1742,7 +1742,6 @@
                                     align-items: center;
                                     gap: 7px;
                                 }
-
                                 .ilacc-fn-lbl::after {
                                     content: '';
                                     flex: 1;
@@ -1766,14 +1765,13 @@
                                     border-radius: 999px;
                                     padding: 4px 13px;
                                     letter-spacing: .01em;
-                                    box-shadow: 0 1px 3px rgba(0, 0, 0, .06), 0 1px 2px rgba(0, 0, 0, .04);
+                                    box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
                                     transition: background .14s, box-shadow .14s, transform .14s;
                                     cursor: default;
                                 }
-
                                 .ilacc-fn-pill:hover {
                                     background: var(--cr);
-                                    box-shadow: 0 3px 8px rgba(0, 0, 0, .1);
+                                    box-shadow: 0 3px 8px rgba(0,0,0,.1);
                                     transform: translateY(-1px);
                                 }
 
@@ -1868,40 +1866,6 @@
                                     color: var(--tl);
                                     line-height: 1.6;
                                     max-width: 340px;
-                                }
-
-                                .ilacc-readmore {
-                                    padding-top: 12px;
-                                    margin-top: 4px;
-                                }
-
-                                .ilacc-readmore-btn {
-                                    display: inline-flex;
-                                    align-items: center;
-                                    gap: 7px;
-                                    font-size: .74rem;
-                                    font-weight: 700;
-                                    color: var(--oko-red-dark, #8F1D1D);
-                                    text-decoration: none;
-                                    padding: 8px 16px;
-                                    border: 1.5px solid rgba(143, 29, 29, .25);
-                                    border-radius: 999px;
-                                    background: #fff;
-                                    transition: all .15s;
-                                    letter-spacing: .02em;
-                                    box-shadow: 0 1px 4px rgba(0,0,0,.06);
-                                }
-
-                                .ilacc-readmore-btn:hover {
-                                    background: #8F1D1D;
-                                    color: #fff;
-                                    border-color: #8F1D1D;
-                                    box-shadow: 0 4px 14px rgba(143,29,29,.28);
-                                    transform: translateY(-1px);
-                                }
-
-                                .ilacc-readmore-btn i {
-                                    font-size: .72rem;
                                 }
                             </style>
                         @endpush
@@ -2038,15 +2002,6 @@
                                                     <strong>INCI:</strong> {{ strtoupper($lib->inci_name) }}
                                                 </div>
                                             @endif
-
-                                            {{-- Read more link --}}
-                                            <div class="ilacc-readmore">
-                                                <a href="{{ route('ingredients.show', $lib->slug) }}" class="ilacc-readmore-btn" target="_blank">
-                                                    <i class="fas fa-flask"></i>
-                                                    {{ d_trans('Full Ingredient Profile') }}
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                                </a>
-                                            </div>
 
                                         </div>
                                     </div>

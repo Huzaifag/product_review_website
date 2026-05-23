@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(php artisan *)",
-      "Bash(php -l app/Http/Controllers/Admin/IngredientLibraryController.php)"
+      "Bash(php -l app/Http/Controllers/Admin/IngredientLibraryController.php)",
+      "Bash(mkdir -p \"e:\\\\bitlogicx\\\\Oko-review\\\\Script\\\\resources\\\\views\\\\themes\\\\basic\\\\ingredients\")"
+    ],
+    "additionalDirectories": [
+      "e:\\bitlogicx\\Oko-review\\Script\\resources\\views\\themes\\basic"
     ]
   }
 }

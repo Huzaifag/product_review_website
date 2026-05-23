@@ -1,7 +1,7 @@
 {
     ".gitignore": "25420fab518dfd63009584069b3285e7",
     "app/Http/Controllers/Admin/IngredientLibraryController.php": "cc472d17828e8578a81547ca61b89a98",
-    "app/Http/Controllers/Admin/ProductController.php": "a1ae615f6041bed5e21ea3c9726a3bfb",
+    "app/Http/Controllers/Admin/ProductController.php": "f27411d3b685845214b78269dcbd2cb6",
     "app/Http/Controllers/ProductImageAnalysisController.php": "2dca2d5bd2387ba0749b3dbcce65caaf",
     "app/Models/IngredientLibrary.php": "821e6883799f3777a5d12c257b72efb3",
     "app/Models/Product.php": "7ddb091401d0b109a82243447b7ba7dd",
@@ -14,10 +14,10 @@
     "resources/views/admin/ingredients-library/index.blade.php": "5db238d6d703fdc689c4886d7c9c17d5",
     "resources/views/admin/ingredients-library/show.blade.php": "4c1f5bfd02d3f25ec75c96a6937442c2",
     "resources/views/admin/products/index.blade.php": "6fe39ca5281c65017b876ceda91e182b",
-    "resources/views/admin/products/partials/form.blade.php": "7e2fbc0e14f9b586f70be6880e266133",
+    "resources/views/admin/products/partials/form.blade.php": "a56a1771739c12aaa6a690be5f8b188d",
     "resources/views/themes/basic/auth/login.blade.php": "8a7a9d076424759c94b48cd5232da498",
     "resources/views/themes/basic/partials/product.blade.php": "a69d7c51a65b4f1bf353de9a7a61cc9f",
-    "resources/views/themes/basic/products/show.blade.php": "c837d8b44490cfda514b5b76edba42b6",
+    "resources/views/themes/basic/products/show.blade.php": "f9ba3989c4d8f95b621d2af4d3ef32e0",
     "resources/views/themes/basic/sections/featured.blade.php": "2ca7fa3c2a99e088c89a2dd11344d16c",
     "database/migrations/2026_05_22_080300_add_oko_verified_column_to_products_table.php": "eaa4eaa5b5d155c5dceb94e56a7c0659",
     "database/migrations/2026_05_22_120000_add_hazard_score_to_products_table.php": "51493a33cbc50a2b1e89df99114aa13f",
@@ -27,5 +27,11 @@
     "public/images/auth-cover-pic.webp": "4bacecb3feb61c7a1a6f163e419a8d1e",
     "public/images/auth-cover.jpg": "8e67cf9284c3d268fd13da1a04263db9",
     "public/images/oko-logo.png": "633164a43b2393f0827e573250e0676f",
-    "database/migrations/2026_05_23_033113_create_ingredient_library_product_table.php": "d8fdb320829243abb0785afc99c2f30c"
+    "database/migrations/2026_05_23_033113_create_ingredient_library_product_table.php": "bbfdad8bbb18a59f9f93b7769f41b66b",
+    "app/Http/Controllers/ProductController.php": "396102771f50a4e13669f7f19eb7383f",
+    "resources/views/admin/products/create.blade.php": "7cc5def254e7d1a4f509b988abaff3cd",
+    "resources/views/admin/products/edit.blade.php": "96fc205b86022879e35b41fb5e2c682e",
+    "app/Http/Controllers/GeneralController.php": "03c4fb0a8ca5f689424c244c4f653f62",
+    "routes/breadcrumbs.php": "b2b74a084cfdd5fb6d86a69ce4e63817",
+    "routes/web.php": "b564a722a476360dd38bf700f4a7943a"
 }

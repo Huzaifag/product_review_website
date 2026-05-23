@@ -205,12 +205,11 @@ class ProductController extends Controller
     {
         $product = Product::active()
             ->where(fn($q) => $q->where('slug', $slug)->orWhere('id', $slug))
-            ->with(['brand', 'category', 'subCategory', 'ingredientConcerns', 'images', 'productTest'])
+            ->with(['brand', 'category', 'subCategory', 'ingredientConcerns', 'images', 'productTest', 'ingredientLibraries'])
             ->withCount([
                 'userReviews as approved_reviews_count' => fn($q) => $q->approved(),
             ])
             ->firstOrFail();
-
         Product::where('id', $product->id)->update([
             'view_count' => DB::raw('view_count + 1')
         ]);

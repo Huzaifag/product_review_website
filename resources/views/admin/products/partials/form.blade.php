@@ -165,6 +165,20 @@
         <textarea name="ingredients_inci" class="lab-input lab-textarea" rows="4">{{ old('ingredients_inci', $product->ingredients_inci ?? '') }}</textarea>
     </div>
 
+    {{-- Ingredient Library --}}
+    <div class="col-12">
+        <label class="lab-label">{{ d_trans('Ingredient Library') }}</label>
+        <select name="ingredient_library_ids[]" class="select2-ingredient-library lab-select" multiple>
+            @foreach ($ingredientLibraries as $lib)
+                <option value="{{ $lib->id }}"
+                    @selected(in_array($lib->id, old('ingredient_library_ids', $selectedIngredientIds ?? [])))>
+                    {{ $lib->name }}
+                </option>
+            @endforeach
+        </select>
+        <small class="lab-hint d-block mt-1">{{ d_trans('Link ingredients from the library to this product. These will appear in the ingredient breakdown on the product page.') }}</small>
+    </div>
+
     {{-- Toggles --}}
     <div class="col-12">
         <div class="lab-toggles-row">
@@ -466,6 +480,42 @@
                 border-color: var(--prod-red) !important;
                 box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
             }
+
+            /* Multi-select overrides */
+            .select2-container--default .select2-selection--multiple {
+                border: 1px solid var(--prod-border) !important;
+                border-radius: 8px !important;
+                min-height: 38px !important;
+                padding: 2px 6px !important;
+            }
+
+            .select2-container--default.select2-container--focus .select2-selection--multiple {
+                border-color: var(--prod-red) !important;
+                box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+            }
+
+            .select2-container--default .select2-selection--multiple .select2-selection__choice {
+                background: rgba(220, 38, 38, 0.08) !important;
+                border: 1px solid rgba(220, 38, 38, 0.25) !important;
+                color: var(--prod-red) !important;
+                border-radius: 5px !important;
+                font-size: 0.78rem !important;
+                font-weight: 600 !important;
+                padding: 1px 6px !important;
+            }
+
+            .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+                color: var(--prod-red) !important;
+                margin-right: 4px !important;
+                text-decoration: none !important;
+                border: none !important;
+                background: none !important;
+                font-weight: 700 !important;
+            }
+
+            .select2-container--default .select2-selection--multiple .select2-selection__choice {
+                text-decoration: none !important;
+            }
         </style>
     @endpush
 
@@ -493,6 +543,11 @@
                 });
                 $('.select2-sub-category').select2({
                     placeholder: "{{ d_trans('None') }}",
+                    allowClear: true,
+                    width: '100%'
+                });
+                $('.select2-ingredient-library').select2({
+                    placeholder: "{{ d_trans('Search and select ingredients...') }}",
                     allowClear: true,
                     width: '100%'
                 });

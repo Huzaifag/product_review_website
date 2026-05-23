@@ -56,6 +56,13 @@ class GeneralController extends Controller
         return theme_view('ingredients', ['ingredients' => $ingredients]);
     }
 
+    public function ingredientShow($slug)
+    {
+        $ingredient = IngredientLibrary::where('slug', $slug)->where('is_published', true)->firstOrFail();
+        $relatedProducts = $ingredient->products()->with(['brand', 'category'])->where('is_active', 1)->take(6)->get();
+        return theme_view('ingredients.show', compact('ingredient', 'relatedProducts'));
+    }
+
     public function contact()
     {
         return theme_view('contact');

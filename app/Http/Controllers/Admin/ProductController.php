@@ -170,6 +170,8 @@ class ProductController extends Controller
 
         $this->storeProductImages($product, $uploadedImages);
 
+        $product->ingredientLibraries()->sync($request->input('ingredient_library_ids', []));
+
         toastr()->success(d_trans('Created Successfully'));
 
         return redirect()->route('admin.products.show', $product->id);
@@ -201,11 +203,12 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $product->load(['images']);
+        $product->load(['images', 'ingredientLibraries']);
         $categories = Category::select('id', 'name')->get();
         $subCategories = SubCategory::select('id', 'name')->get();
         $brands = Brand::select('id', 'name')->get();
         $ingredientLibraries = IngredientLibrary::select('id', 'name')->orderBy('name')->get();
+        $selectedIngredientIds = $product->ingredientLibraries->pluck('id')->toArray();
 
         return view('admin.products.edit', [
             'product' => $product,
@@ -213,6 +216,7 @@ class ProductController extends Controller
             'subCategories' => $subCategories,
             'brands' => $brands,
             'ingredientLibraries' => $ingredientLibraries,
+            'selectedIngredientIds' => $selectedIngredientIds,
             'grades' => $this->availableGrades(),
         ]);
     }
@@ -268,6 +272,8 @@ class ProductController extends Controller
         $product->update($data);
 
         $this->storeProductImages($product, $uploadedImages);
+
+        $product->ingredientLibraries()->sync($request->input('ingredient_library_ids', []));
 
         toastr()->success(d_trans('Updated Successfully'));
 

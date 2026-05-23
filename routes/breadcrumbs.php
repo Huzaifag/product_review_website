@@ -94,6 +94,11 @@ Breadcrumbs::for('ingredients', function (BreadcrumbTrail $trail) {
     $trail->push(d_trans('Ingredient Guide'), route('ingredients'));
 });
 
+Breadcrumbs::for('ingredients.show', function (BreadcrumbTrail $trail, $ingredient) {
+    $trail->parent('ingredients');
+    $trail->push($ingredient->name, route('ingredients.show', $ingredient->slug));
+});
+
 Breadcrumbs::for('contact', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push(d_trans('Contact US'), route('contact'));

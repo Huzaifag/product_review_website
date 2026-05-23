@@ -24,6 +24,7 @@
                     'categories' => $categories,
                     'subCategories' => $subCategories,
                     'ingredientLibraries' => $ingredientLibraries,
+                    'selectedIngredientIds' => $selectedIngredientIds,
                     'grades' => $grades,
                 ])
             </form>
