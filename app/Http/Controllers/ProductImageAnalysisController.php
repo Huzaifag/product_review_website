@@ -60,6 +60,7 @@ class ProductImageAnalysisController extends Controller
             $subCategoryName = trim((string) ($analysis['matched_subcategory'] ?? $analysis['subcategory'] ?? ''));
             $brandName = trim((string) ($analysis['brand'] ?? ''));
             $productName = trim((string) ($analysis['product_name'] ?? ''));
+            $productNameTranslated = trim((string) ($analysis['product_name_translated'] ?? ''));
 
             $category = $categoryName !== ''
                 ? Category::query()
@@ -93,55 +94,81 @@ class ProductImageAnalysisController extends Controller
 
             $exactProduct = null;
 
-            if ($productName !== '') {
+            // Build list of names to try: translated name first, then original
+            $namesToTry = array_values(array_unique(array_filter(
+                [$productNameTranslated, $productName],
+                fn($n) => $n !== ''
+            )));
+
+            $stripPunct = fn(string $s): string =>
+                preg_replace('/\s+/', ' ', trim(strtolower(preg_replace('/[^a-z0-9\s]+/i', '', $s))));
+
+            $tokenize = fn(string $s): array =>
+                array_values(array_unique(array_filter(
+                    preg_split('/\s+/', $stripPunct($s)),
+                    fn($w) => strlen($w) >= 3
+                )));
+
+            $jaccard = function (array $a, array $b): float {
+                $intersection = count(array_intersect($a, $b));
+                $union        = count(array_unique(array_merge($a, $b)));
+                return $union > 0 ? $intersection / $union : 0.0;
+            };
+
+            foreach ($namesToTry as $nameAttempt) {
+                // Stage 1: exact case-insensitive DB match
                 $exactProduct = Product::query()
                     ->with(['category', 'subCategory', 'brand'])
                     ->active()
-                    ->when($brand, function ($query) use ($brand) {
-                        $query->where('brand_id', $brand->id);
-                    })
-                    ->when($category, function ($query) use ($category) {
-                        $query->where('category_id', $category->id);
-                    })
-                    ->when($subCategory, function ($query) use ($subCategory) {
-                        $query->where('sub_category_id', $subCategory->id);
-                    })
-                    ->whereRaw('LOWER(name) = ?', [Str::lower($productName)])
+                    ->when($brand,       fn($q) => $q->where('brand_id',        $brand->id))
+                    ->when($category,    fn($q) => $q->where('category_id',     $category->id))
+                    ->when($subCategory, fn($q) => $q->where('sub_category_id', $subCategory->id))
+                    ->whereRaw('LOWER(TRIM(name)) = ?', [strtolower(trim($nameAttempt))])
                     ->first();
 
-                if (!$exactProduct) {
-                    $normalized = strtolower(preg_replace('/[^a-z0-9]+/i', ' ', $productName));
-                    $tokens = array_filter(explode(' ', $normalized), function ($token) {
-                        return strlen($token) >= 4;
-                    });
-                    $tokens = array_slice(array_values($tokens), 0, 4);
+                if ($exactProduct) break;
 
-                    if (!empty($tokens)) {
-                        $candidates = Product::query()
+                // Fetch candidates once for stages 2 & 3
+                $candidates = Product::query()
+                    ->active()
+                    ->when($brand,       fn($q) => $q->where('brand_id',        $brand->id))
+                    ->when($category,    fn($q) => $q->where('category_id',     $category->id))
+                    ->when($subCategory, fn($q) => $q->where('sub_category_id', $subCategory->id))
+                    ->get(['id', 'name']);
+
+                // Stage 2: normalized exact match (punctuation stripped, whitespace collapsed)
+                $normalizedAttempt = $stripPunct($nameAttempt);
+                foreach ($candidates as $candidate) {
+                    if ($stripPunct($candidate->name) === $normalizedAttempt) {
+                        $exactProduct = Product::query()
                             ->with(['category', 'subCategory', 'brand'])
-                            ->active()
-                            ->when($brand, function ($query) use ($brand) {
-                                $query->where('brand_id', $brand->id);
-                            })
-                            ->when($category, function ($query) use ($category) {
-                                $query->where('category_id', $category->id);
-                            })
-                            ->when($subCategory, function ($query) use ($subCategory) {
-                                $query->where('sub_category_id', $subCategory->id);
-                            })
-                            ->where(function ($query) use ($tokens) {
-                                foreach ($tokens as $token) {
-                                    $query->orWhere('name', 'like', '%'.$token.'%');
-                                }
-                            })
-                            ->limit(5)
-                            ->get();
-
-                        if ($candidates->count() === 1) {
-                            $exactProduct = $candidates->first();
-                        }
+                            ->find($candidate->id);
+                        break;
                     }
                 }
+
+                if ($exactProduct) break;
+
+                // Stage 3: word-overlap similarity — Jaccard >= 0.5 on meaningful words (3+ chars)
+                $attemptTokens = $tokenize($nameAttempt);
+                $bestScore     = 0.0;
+                $bestId        = null;
+
+                foreach ($candidates as $candidate) {
+                    $score = $jaccard($attemptTokens, $tokenize($candidate->name));
+                    if ($score > $bestScore) {
+                        $bestScore = $score;
+                        $bestId    = $candidate->id;
+                    }
+                }
+
+                if ($bestScore >= 0.5 && $bestId) {
+                    $exactProduct = Product::query()
+                        ->with(['category', 'subCategory', 'brand'])
+                        ->find($bestId);
+                }
+
+                if ($exactProduct) break;
             }
 
             $matchedProducts = collect();

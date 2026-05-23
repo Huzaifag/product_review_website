@@ -68,6 +68,7 @@ class ProductController extends Controller
         $counters['inactive'] = $filteredProducts->where('is_active', false)->count();
         $counters['featured'] = $filteredProducts->where('is_featured', true)->count();
         $counters['lab_verified'] = ProductTest::whereIn('product_id', $filteredProducts->pluck('id'))->where('status', 'active')->count();
+        $counters['oko_verified'] = $filteredProducts->where('oko_verified', true)->count();
 
         $products = $products->orderbyDesc('id')->paginate(50);
         $products->appends(request()->only(['search', 'category', 'sub_category', 'brand', 'status', 'featured']));
@@ -131,6 +132,7 @@ class ProductController extends Controller
         $data['lab_verified'] = $request->boolean('lab_verified');
         $data['is_featured'] = $request->boolean('is_featured');
         $data['is_active'] = $request->boolean('is_active', true);
+        $data['oko_verified'] = $request->boolean('oko_verified');
         $data['view_count'] = $data['view_count'] ?? 0;
 
         if (empty($data['slug'] ?? null)) {
@@ -241,7 +243,7 @@ class ProductController extends Controller
         $data = $validator->validated();
 
         // Booleans
-        foreach (['organic_certified', 'lab_verified', 'is_featured', 'is_active'] as $bool) {
+        foreach (['organic_certified', 'lab_verified', 'is_featured', 'is_active', 'oko_verified'] as $bool) {
             $data[$bool] = $request->boolean($bool);
         }
 
@@ -415,6 +417,8 @@ class ProductController extends Controller
             'test_edition' => ['nullable', 'string', 'max:255'],
             'magazine_page' => ['nullable', 'integer', 'min:1'],
             'view_count' => ['nullable', 'integer', 'min:0'],
+            'oko_verified' => ['nullable', 'boolean'],
+            'hazard_score' => ['nullable', 'integer', 'min:0', 'max:10'],
         ];
     }
 

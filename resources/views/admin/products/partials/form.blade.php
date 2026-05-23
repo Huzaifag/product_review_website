@@ -95,18 +95,18 @@
         </select>
     </div>
 
-    {{-- Price, Currency, Grade --}}
-    <div class="col-lg-4">
+    {{-- Price, Currency, Grade, Hazard Score --}}
+    <div class="col-lg-3">
         <label class="lab-label">{{ d_trans('Price') }}</label>
         <input type="number" step="0.01" min="0" name="price" class="lab-input"
             value="{{ old('price', $product->price ?? '') }}">
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <label class="lab-label">{{ d_trans('Currency') }}</label>
         <input type="text" maxlength="3" name="currency" class="lab-input"
             value="{{ old('currency', $product->currency ?? 'GBP') }}">
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <label class="lab-label">{{ d_trans('Overall Grade') }}</label>
         <select name="overall_grade" class="lab-select">
             <option value="">{{ d_trans('None') }}</option>
@@ -116,6 +116,12 @@
                 </option>
             @endforeach
         </select>
+    </div>
+    <div class="col-lg-3">
+        <label class="lab-label">{{ d_trans('Hazard Score') }} <span class="lab-hint">(0 – 10)</span></label>
+        <input type="number" min="0" max="10" name="hazard_score" class="lab-input"
+            value="{{ old('hazard_score', $product->hazard_score ?? '') }}"
+            placeholder="0 = safest, 10 = most hazardous">
     </div>
 
     {{-- Test Date, Year, Edition --}}
@@ -189,6 +195,13 @@
                     <input class="form-check-input lab-switch" type="checkbox" role="switch" id="is_active"
                         name="is_active" value="1" @checked(old('is_active', $product->is_active ?? true))>
                     <label class="lab-toggle-label" for="is_active">{{ d_trans('Active') }}</label>
+                </div>
+            </div>
+            <div class="lab-toggle-item">
+                <div class="form-check form-switch mb-0">
+                    <input class="form-check-input lab-switch" type="checkbox" role="switch" id="oko_verified"
+                        name="oko_verified" value="1" @checked(old('oko_verified', $product->oko_verified ?? false))>
+                    <label class="lab-toggle-label" for="oko_verified">{{ d_trans('OKO Verified') }}</label>
                 </div>
             </div>
         </div>

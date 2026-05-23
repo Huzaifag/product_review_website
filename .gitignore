@@ -12,6 +12,7 @@
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
+deploy.php
 auth.json
 npm-debug.log
 yarn-error.log
@@ -19,4 +20,4 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
-*.zip
+*.zip.deploy-state.json

@@ -92,6 +92,20 @@
                 flex-shrink: 0;
             }
 
+            .prod-name-row {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+            }
+
+            .prod-oko-stamp {
+                width: 72px;
+                height: auto;
+                flex-shrink: 0;
+                object-fit: contain;
+                filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+            }
+
             .prod-name {
                 font-size: 1.55rem;
                 font-weight: 800;
@@ -436,7 +450,7 @@
             /* Stat bar */
             .stat-bar {
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(5, 1fr);
                 border-bottom: 1px solid var(--bd);
                 background: #fff;
             }
@@ -574,6 +588,239 @@
                 font-size: .84rem;
                 color: var(--tm);
                 line-height: 1.65;
+            }
+
+            /* ─── Tab count badge ────────────────────────────────── */
+            .tab-count-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 18px;
+                height: 18px;
+                padding: 0 5px;
+                border-radius: 999px;
+                background: var(--gr);
+                color: #fff;
+                font-size: .62rem;
+                font-weight: 700;
+                line-height: 1;
+                margin-left: 5px;
+            }
+
+            /* ─── Ingredient Concerns tab ────────────────────────── */
+            .concerns-panel {
+                padding: 20px 22px 28px;
+            }
+
+            .concerns-summary {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 18px;
+                padding-bottom: 16px;
+                border-bottom: 1px solid var(--bd);
+            }
+
+            .concerns-summary-chip {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                padding: 4px 10px;
+                border-radius: 999px;
+                font-size: .72rem;
+                font-weight: 700;
+            }
+
+            .chip-dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: currentColor;
+                opacity: .7;
+                flex-shrink: 0;
+            }
+
+            .chip-high   { background: var(--grb); color: var(--gr); }
+            .chip-medium { background: var(--gob); color: var(--go); }
+            .chip-low    { background: var(--ggb); color: var(--gg); }
+
+            .concerns-total {
+                margin-left: auto;
+                font-size: .75rem;
+                color: var(--tl);
+                font-weight: 500;
+            }
+
+            .concerns-list {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .concern-card {
+                background: #fff;
+                border: 1px solid var(--bd);
+                border-left: 4px solid var(--gr);
+                border-radius: 10px;
+                padding: 14px 16px;
+                box-shadow: var(--s1);
+            }
+
+            .concern-card.lv-medium { border-left-color: var(--go); }
+            .concern-card.lv-low    { border-left-color: var(--gg); }
+
+            .concern-card-head {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+                margin-bottom: 6px;
+            }
+
+            .concern-card-name {
+                font-size: .88rem;
+                font-weight: 700;
+                color: var(--td);
+            }
+
+            .concern-card-desc {
+                font-size: .8rem;
+                color: var(--tm);
+                line-height: 1.6;
+                margin-bottom: 6px;
+            }
+
+            .concern-card-meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                font-size: .74rem;
+                color: var(--tl);
+                margin-top: 4px;
+            }
+
+            .concerns-empty {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 36px 16px;
+                gap: 10px;
+            }
+
+            .concerns-empty-icon {
+                font-size: 2rem;
+                color: var(--gg);
+                margin-bottom: 4px;
+            }
+
+            .concerns-empty-title {
+                font-size: .95rem;
+                font-weight: 700;
+                color: var(--td);
+            }
+
+            .concerns-empty-sub {
+                font-size: .82rem;
+                color: var(--tl);
+                line-height: 1.6;
+                max-width: 340px;
+            }
+
+            /* ─── Certifications tab ─────────────────────────────── */
+            .cert-panel {
+                padding: 24px 22px 28px;
+            }
+
+            .cert-title {
+                font-size: .65rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: .12em;
+                color: var(--tl);
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .cert-title::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: var(--bd);
+            }
+
+            .cert-body {
+                display: flex;
+                align-items: flex-start;
+                gap: 24px;
+            }
+
+            .cert-stamp {
+                width: 110px;
+                height: auto;
+                flex-shrink: 0;
+                object-fit: contain;
+            }
+
+            .cert-copy {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .cert-copy p {
+                font-size: .88rem;
+                line-height: 1.72;
+                color: var(--tm);
+                margin: 0;
+            }
+
+            .cert-empty {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 32px 16px;
+                gap: 10px;
+            }
+
+            .cert-empty-icon {
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: #f1f5f9;
+                border: 1px solid var(--bd);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.3rem;
+                color: #94a3b8;
+                margin-bottom: 4px;
+            }
+
+            .cert-empty-title {
+                font-size: .95rem;
+                font-weight: 700;
+                color: var(--td);
+            }
+
+            .cert-empty-sub {
+                font-size: .82rem;
+                color: var(--tl);
+                line-height: 1.6;
+                max-width: 360px;
+            }
+
+            @media (max-width: 560px) {
+                .cert-body {
+                    flex-direction: column;
+                    align-items: center;
+                }
             }
 
             /* Comparison */
@@ -770,10 +1017,10 @@
                 }
 
                 .stat-bar {
-                    grid-template-columns: repeat(2, 1fr);
+                    grid-template-columns: repeat(3, 1fr);
                 }
 
-                .stat-cell:nth-child(2) {
+                .stat-cell:nth-child(3) {
                     border-right: none;
                 }
             }
@@ -792,6 +1039,131 @@
                 .prod-name {
                     font-size: 1.25rem;
                 }
+            }
+
+            /* ─── Hazard Score Bar ───────────────────────────── */
+            .hazard-row {
+                background: #f8f9f4;
+                border-bottom: 1px solid var(--bd);
+                padding: 16px 26px;
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .hazard-left {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                flex-shrink: 0;
+            }
+
+            .hazard-stamp {
+                width: 46px;
+                height: auto;
+                object-fit: contain;
+            }
+
+            .hazard-stamp-lbl {
+                font-size: .55rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: .07em;
+                color: var(--gd);
+                text-align: center;
+                line-height: 1.25;
+            }
+
+            .hazard-divider {
+                width: 1px;
+                height: 52px;
+                background: var(--bd);
+                flex-shrink: 0;
+            }
+
+            .hazard-scale {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex: 1;
+                min-width: 0;
+            }
+
+            .hazard-edge {
+                font-size: .68rem;
+                font-weight: 700;
+                color: var(--tl);
+                flex-shrink: 0;
+                text-transform: uppercase;
+                letter-spacing: .05em;
+            }
+
+            .hazard-nums {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+
+            .hazard-num {
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                background: var(--hc);
+                color: #fff;
+                font-size: .8rem;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                user-select: none;
+                transition: transform .15s;
+            }
+
+            .hazard-num.hazard-active {
+                width: 52px;
+                height: 52px;
+                font-size: 1.15rem;
+                font-weight: 800;
+                box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--hc), 0 6px 18px rgba(0,0,0,.2);
+                position: relative;
+                z-index: 1;
+            }
+
+            .hazard-legend {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                flex-shrink: 0;
+                padding-left: 20px;
+                border-left: 1px solid var(--bd);
+            }
+
+            .hazard-legend-item {
+                display: flex;
+                align-items: center;
+                gap: 7px;
+                font-size: .72rem;
+                font-weight: 600;
+                color: var(--tm);
+            }
+
+            .hazard-dot {
+                width: 9px;
+                height: 9px;
+                border-radius: 50%;
+                background: var(--hc);
+                flex-shrink: 0;
+            }
+
+            @media (max-width: 760px) {
+                .hazard-row { gap: 12px; padding: 12px 16px; }
+                .hazard-divider { display: none; }
+                .hazard-legend { border-left: none; padding-left: 0; flex-direction: row; flex-wrap: wrap; gap: 8px; }
+                .hazard-num { width: 28px; height: 28px; font-size: .72rem; }
+                .hazard-num.hazard-active { width: 40px; height: 40px; font-size: .95rem; }
             }
         </style>
     @endpush
@@ -825,11 +1197,65 @@
     @if ($canSeeDetails)
         <div class="shell">
 
+            {{-- HAZARD SCORE BAR --}}
+            @if (!is_null($product->hazard_score))
+            @php
+                $hs = $product->hazard_score;
+                $hsActiveColor = $hs <= 2 ? '#16a34a' : ($hs <= 6 ? '#ea580c' : '#dc2626');
+                $hsConcernLabel = $hs <= 2
+                    ? d_trans('Low Concern — Safer Choice')
+                    : ($hs <= 6 ? d_trans('Medium Concern') : d_trans('High Concern'));
+            @endphp
+            <div class="hazard-row">
+                <div class="hazard-left">
+                    <img src="{{ asset('images/oko/stamp-verification.webp') }}" class="hazard-stamp" alt="OKO">
+                    <span class="hazard-stamp-lbl">OKO<br>VERIFIED</span>
+                </div>
+
+                <div class="hazard-divider"></div>
+
+                <div class="hazard-scale">
+                    <span class="hazard-edge">{{ d_trans('Best') }}</span>
+                    <div class="hazard-nums">
+                        @for ($i = 1; $i <= 10; $i++)
+                            @php
+                                $iColor = $i <= 2 ? '#16a34a' : ($i <= 6 ? '#ea580c' : '#dc2626');
+                            @endphp
+                            <div class="hazard-num {{ $hs == $i ? 'hazard-active' : '' }}"
+                                 style="--hc: {{ $iColor }}">{{ $i }}</div>
+                        @endfor
+                    </div>
+                    <span class="hazard-edge">{{ d_trans('Worst') }}</span>
+                </div>
+
+                <div class="hazard-legend">
+                    <div class="hazard-legend-item" style="--hc: #16a34a">
+                        <span class="hazard-dot"></span>
+                        {{ d_trans('1–2 Low Concern / Safer') }}
+                    </div>
+                    <div class="hazard-legend-item" style="--hc: #ea580c">
+                        <span class="hazard-dot"></span>
+                        {{ d_trans('3–6 Medium Concern') }}
+                    </div>
+                    <div class="hazard-legend-item" style="--hc: #dc2626">
+                        <span class="hazard-dot"></span>
+                        {{ d_trans('7–10 High Concern') }}
+                    </div>
+                </div>
+            </div>
+            @endif
+
             {{-- HEADER --}}
             <div class="prod-header">
                 <div class="prod-header-left">
                     <span class="prod-eyebrow">{{ d_trans('Lab-Tested Product') }}</span>
-                    <h1 class="prod-name">{{ d_trans($product->name) }}</h1>
+                    <div class="prod-name-row">
+                        {{-- @if ($product->oko_verified)
+                            <img src="{{ asset('images/oko/stamp-verification.webp') }}" alt="OKO Verified"
+                                class="prod-oko-stamp">
+                        @endif --}}
+                        <h1 class="prod-name">{{ d_trans($product->name) }}</h1>
+                    </div>
                     <div class="prod-meta-strip">
                         <span>{{ $product->brand?->name ?: d_trans('Unknown Brand') }}</span>
                         <span class="prod-meta-sep">·</span>
@@ -850,7 +1276,8 @@
                 <div class="left-col">
                     <div class="img-wrap">
                         <div class="img-main">
-                            <img id="mainProductImage" src="{{ $productImageUrls->first() }}" alt="{{ d_trans($product->name) }}">
+                            <img id="mainProductImage" src="{{ $productImageUrls->first() }}"
+                                alt="{{ d_trans($product->name) }}">
                         </div>
                         @if ($productImageUrls->count() > 1)
                             <div class="thumbs-row">
@@ -905,35 +1332,6 @@
                         </div>
                     </div>
 
-                    {{-- Concerns --}}
-                    @if ($concerns->count() > 0)
-                        <div class="left-section">
-                            <div class="section-label">⚠ {{ d_trans('Ingredient Concerns') }}</div>
-                            <div class="concern-list">
-                                @foreach ($concerns as $concern)
-                                    <div class="concern-item lv-{{ strtolower($concern->severity) }}">
-                                        <div class="concern-name">
-                                            {{ $concern->ingredient_name }}
-                                            <span
-                                                class="sev-badge sev-{{ strtolower($concern->severity) }}">{{ ucfirst($concern->severity) }}</span>
-                                        </div>
-                                        <div class="concern-desc">
-                                            {{ $concern->description ?: d_trans('No description provided.') }}</div>
-                                        @if ($concern->inci_name || $concern->concentration)
-                                            <div class="concern-meta">
-                                                @if ($concern->inci_name)
-                                                    <span>INCI: {{ $concern->inci_name }}</span>
-                                                @endif
-                                                @if ($concern->concentration)
-                                                    <span>{{ number_format((float) $concern->concentration, 4) }}%</span>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
                 </div>{{-- /left-col --}}
 
                 {{-- RIGHT --}}
@@ -959,6 +1357,16 @@
                             <div class="stat-lbl"><i class="fas fa-weight-hanging"></i> {{ d_trans('Size') }}</div>
                             <div class="stat-val">{{ $product->product_size ?: '—' }}</div>
                         </div>
+                        <div class="stat-cell">
+                            <div class="stat-lbl"><i class="fas fa-biohazard"></i> {{ d_trans('Hazard Score') }}</div>
+                            @php
+                                $hs = $product->hazard_score;
+                                $hsColor = is_null($hs) ? 'var(--tl)' : ($hs <= 3 ? 'var(--gg)' : ($hs <= 6 ? 'var(--go)' : 'var(--gr)'));
+                            @endphp
+                            <div class="stat-val" style="color: {{ $hsColor }}">
+                                {{ is_null($hs) ? '—' : $hs . ' / 10' }}
+                            </div>
+                        </div>
                     </div>
 
                     @if (d_trans($product->description))
@@ -968,13 +1376,22 @@
                     @endif
 
                     <div class="tab-bar">
-                        <button class="tab-btn active" onclick="switchTab(this,'tab-snap')"><i
+                        <button class="tab-btn active" onclick="switchTab(this,'tab-concerns')">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            {{ d_trans('Ingredient Concerns') }}
+                            @if ($concerns->count() > 0)
+                                <span class="tab-count-badge">{{ $concerns->count() }}</span>
+                            @endif
+                        </button>
+                        <button class="tab-btn" onclick="switchTab(this,'tab-snap')"><i
                                 class="fas fa-microscope"></i> {{ d_trans('Lab Snapshot') }}</button>
                         <button class="tab-btn" onclick="switchTab(this,'tab-full')"><i class="fas fa-file-alt"></i>
                             {{ d_trans('Full Details') }}</button>
+                        <button class="tab-btn" onclick="switchTab(this,'tab-cert')"><i class="fas fa-certificate"></i>
+                            {{ d_trans('Certifications') }}</button>
                     </div>
 
-                    <div class="tab-panel active" id="tab-snap">
+                    <div class="tab-panel" id="tab-snap">
                         <div class="lab-rows">
                             <div class="lab-row">
                                 <span class="lab-lbl">{{ d_trans('Test Name') }}</span>
@@ -1044,6 +1461,97 @@
                         </div>
                     </div>
 
+                    {{-- Certifications tab --}}
+                    <div class="tab-panel" id="tab-cert">
+                        <div class="cert-panel">
+                            @if ($product->oko_verified)
+                                <div class="cert-title">{{ d_trans('OKO Verified') }}</div>
+                                <div class="cert-body">
+                                    <img src="{{ asset('images/oko/stamp-verification.webp') }}" alt="OKO Verified"
+                                        class="cert-stamp">
+                                    <div class="cert-copy">
+                                        <p>{{ d_trans('This product carries the OKO Verified mark, indicating that its formula has undergone an independent safety and quality review by OKO scientists.
+                                        
+                                        The brand has shown that the ingredients used in this product align with OKO’s high standards for safety, quality, and responsible formulation.') }}
+                                        </p>
+                                        <p>{{ d_trans('At the time of verification, the product’s ingredients were assessed using the latest available scientific understanding and were not found to present major concerns for human health.') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="cert-empty">
+                                    <div class="cert-empty-icon">
+                                        <i class="fas fa-certificate"></i>
+                                    </div>
+                                    <div class="cert-empty-title">{{ d_trans('Not Yet Certified') }}</div>
+                                    <div class="cert-empty-sub">
+                                        {{ d_trans('This product has not yet received OKO Verified certification. Certification requires an independent safety review of all formulation ingredients.') }}
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Ingredient Concerns tab --}}
+                    <div class="tab-panel active" id="tab-concerns">
+                        <div class="concerns-panel">
+                            @if ($concerns->count() > 0)
+                                @php
+                                    $highCount   = $concerns->where('severity', 'high')->count();
+                                    $mediumCount = $concerns->where('severity', 'medium')->count();
+                                    $lowCount    = $concerns->where('severity', 'low')->count();
+                                @endphp
+                                <div class="concerns-summary">
+                                    @if ($highCount)
+                                        <div class="concerns-summary-chip chip-high">
+                                            <span class="chip-dot"></span>{{ $highCount }} {{ d_trans('High') }}
+                                        </div>
+                                    @endif
+                                    @if ($mediumCount)
+                                        <div class="concerns-summary-chip chip-medium">
+                                            <span class="chip-dot"></span>{{ $mediumCount }} {{ d_trans('Medium') }}
+                                        </div>
+                                    @endif
+                                    @if ($lowCount)
+                                        <div class="concerns-summary-chip chip-low">
+                                            <span class="chip-dot"></span>{{ $lowCount }} {{ d_trans('Low') }}
+                                        </div>
+                                    @endif
+                                    <span class="concerns-total">{{ $concerns->count() }} {{ d_trans('total concerns found') }}</span>
+                                </div>
+                                <div class="concerns-list">
+                                    @foreach ($concerns as $concern)
+                                        <div class="concern-card lv-{{ strtolower($concern->severity) }}">
+                                            <div class="concern-card-head">
+                                                <span class="concern-card-name">{{ $concern->ingredient_name }}</span>
+                                                <span class="sev-badge sev-{{ strtolower($concern->severity) }}">{{ ucfirst($concern->severity) }}</span>
+                                            </div>
+                                            @if ($concern->description)
+                                                <div class="concern-card-desc">{{ $concern->description }}</div>
+                                            @endif
+                                            @if ($concern->inci_name || $concern->concentration)
+                                                <div class="concern-card-meta">
+                                                    @if ($concern->inci_name)
+                                                        <span><strong>INCI:</strong> {{ $concern->inci_name }}</span>
+                                                    @endif
+                                                    @if ($concern->concentration)
+                                                        <span><strong>{{ d_trans('Concentration') }}:</strong> {{ number_format((float) $concern->concentration, 4) }}%</span>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="concerns-empty">
+                                    <div class="concerns-empty-icon"><i class="fas fa-check-circle"></i></div>
+                                    <div class="concerns-empty-title">{{ d_trans('No Ingredient Concerns') }}</div>
+                                    <div class="concerns-empty-sub">{{ d_trans('No flagged or concerning ingredients were identified in this product\'s formulation.') }}</div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
                     <div class="cmp-strip">
                         <div>
                             <div class="cmp-badge">
@@ -1071,6 +1579,247 @@
                 </div>{{-- /right-col --}}
             </div>{{-- /prod-body --}}
         </div>{{-- /shell --}}
+
+        {{-- Hazard Score Info + OKO Verification Info --}}
+        <div class="hsi-grid mt-4">
+
+            {{-- Left: Hazard Score Explained --}}
+            <div class="hsi-card">
+                <h2 class="hsi-title">{{ d_trans('Hazard Score') }}</h2>
+                <p class="hsi-lead">
+                    {{ d_trans('Our ingredient hazard score runs from 1 to 10 and reflects the level of known and potential health concerns associated with a product\'s ingredients. A lower number signals a safer formulation, while a higher number indicates greater cause for caution. An OKO Verified mark alongside the score means the product has additionally satisfied our strictest standards for ingredient transparency and consumer safety.') }}
+                </p>
+
+                <div class="hsi-scale-wrap">
+                    <div class="hsi-scale-inner">
+                        <div class="hsi-scale-left">
+                            <img src="{{ asset('images/oko/stamp-verification.webp') }}" class="hsi-mini-stamp" alt="OKO">
+                            <span class="hsi-mini-lbl">OKO<br>VERIFIED</span>
+                        </div>
+                        <span class="hsi-edge">{{ d_trans('Best') }}</span>
+                        <div class="hsi-nums">
+                            @for ($i = 1; $i <= 10; $i++)
+                                @php $iColor = $i <= 2 ? '#16a34a' : ($i <= 6 ? '#ea580c' : '#dc2626'); @endphp
+                                <div class="hsi-num" style="--hc: {{ $iColor }}">{{ $i }}</div>
+                            @endfor
+                        </div>
+                        <span class="hsi-edge">{{ d_trans('Worst') }}</span>
+                    </div>
+                </div>
+
+                <div class="hsi-approach">
+                    <div class="hsi-approach-title">{{ d_trans('Evidence-Based Scoring') }}</div>
+                    <p class="hsi-approach-text">
+                        {{ d_trans('A product\'s hazard score is not a straight average of its ingredients\' individual scores. Instead, it is determined through a weight-of-evidence evaluation that considers all identified health hazards, potential exposure risks, and available toxicological data linked to the full ingredient list.') }}
+                    </p>
+                </div>
+            </div>
+
+            {{-- Right: OKO Verification Process --}}
+            <div class="hsi-card">
+                <h2 class="hsi-title">{{ d_trans('OKO Verification Process') }}</h2>
+
+                <div class="hsi-verify-head">
+                    <img src="{{ asset('images/oko/stamp-verification.webp') }}" class="hsi-verify-stamp" alt="OKO Verified">
+                    <div>
+                        <p class="hsi-verify-desc">
+                            {{ d_trans('The OKO Verified mark on a product confirms that the brand\'s complete ingredient disclosures have undergone an independent review by OKO scientists. Products bearing this mark have demonstrated full compliance with our safety criteria, protecting the health and trust of every consumer.') }}
+                        </p>
+                    </div>
+                </div>
+                <div class="hsi-verify-label-lbl">{{ d_trans('OKO VERIFIED') }}</div>
+
+                <div class="hsi-approach">
+                    <div class="hsi-approach-title">{{ d_trans('A Product Qualifies for OKO Verification If It:') }}</div>
+                    <ul class="hsi-criteria">
+                        <li>{{ d_trans('Achieves an overall hazard score that meets OKO\'s established safety threshold') }}</li>
+                        <li>{{ d_trans('Contains no ingredients appearing on OKO\'s Restricted Substances list') }}</li>
+                        <li>{{ d_trans('Provides full ingredient disclosure, including all fragrance and preservative components') }}</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        @push('styles')
+        <style>
+            .hsi-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+
+            .hsi-card {
+                background: #f8faf5;
+                border: 1px solid #d6e8d0;
+                border-radius: 16px;
+                padding: 28px 30px;
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+                font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            }
+
+            .hsi-title {
+                font-size: 1.2rem;
+                font-weight: 800;
+                color: #1a2e1c;
+                text-align: center;
+                letter-spacing: -.015em;
+                margin: 0;
+            }
+
+            .hsi-lead {
+                font-size: .84rem;
+                color: #3d5440;
+                line-height: 1.72;
+                text-align: center;
+                margin: 0;
+            }
+
+            .hsi-scale-wrap {
+                background: #fff;
+                border: 1px solid #d6e8d0;
+                border-radius: 10px;
+                padding: 12px 16px;
+            }
+
+            .hsi-scale-inner {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: nowrap;
+            }
+
+            .hsi-scale-left {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 3px;
+                flex-shrink: 0;
+                margin-right: 4px;
+            }
+
+            .hsi-mini-stamp {
+                width: 32px;
+                height: auto;
+                object-fit: contain;
+            }
+
+            .hsi-mini-lbl {
+                font-size: .48rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: .06em;
+                color: #1a2e1c;
+                text-align: center;
+                line-height: 1.2;
+            }
+
+            .hsi-edge {
+                font-size: .65rem;
+                font-weight: 700;
+                color: #6b7566;
+                flex-shrink: 0;
+                text-transform: uppercase;
+                letter-spacing: .04em;
+            }
+
+            .hsi-nums {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                flex: 1;
+                justify-content: center;
+            }
+
+            .hsi-num {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background: var(--hc);
+                color: #fff;
+                font-size: .75rem;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                user-select: none;
+            }
+
+            .hsi-approach {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .hsi-approach-title {
+                font-size: .72rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: .08em;
+                color: #1a2e1c;
+            }
+
+            .hsi-approach-text {
+                font-size: .82rem;
+                color: #3d5440;
+                line-height: 1.7;
+                margin: 0;
+            }
+
+            .hsi-verify-head {
+                display: flex;
+                align-items: flex-start;
+                gap: 18px;
+            }
+
+            .hsi-verify-stamp {
+                width: 90px;
+                height: auto;
+                flex-shrink: 0;
+                object-fit: contain;
+            }
+
+            .hsi-verify-desc {
+                font-size: .84rem;
+                color: #3d5440;
+                line-height: 1.72;
+                margin: 0;
+            }
+
+            .hsi-verify-label-lbl {
+                font-size: .7rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: .1em;
+                color: #1a2e1c;
+                text-align: center;
+                margin-top: -10px;
+            }
+
+            .hsi-criteria {
+                margin: 0;
+                padding-left: 18px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .hsi-criteria li {
+                font-size: .82rem;
+                color: #3d5440;
+                line-height: 1.6;
+            }
+
+            @media (max-width: 760px) {
+                .hsi-grid { grid-template-columns: 1fr; }
+                .hsi-verify-head { flex-direction: column; align-items: center; }
+                .hsi-verify-label-lbl { margin-top: 0; }
+            }
+        </style>
+        @endpush
 
         <div class="mt-4">
             @include('themes.basic.partials.user-reviews', [

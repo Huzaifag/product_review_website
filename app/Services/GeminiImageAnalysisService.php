@@ -86,6 +86,7 @@ The JSON structure must be exactly:
 {
   "is_product": false,
   "product_name": "",
+  "product_name_translated": "",
   "category": "",
   "subcategory": "",
   "matched_category": "",
@@ -118,8 +119,9 @@ Product validation rules:
 - If "is_product" is false, all string fields must be empty strings and "confidence" must be 0.
 
 Field rules:
-- "product_name" must be the actual product name, not the package type.
+- "product_name" must be the actual product name exactly as it appears on the packaging label (keep the original language of the label).
   Example: "Dove Intensive Repair Shampoo", not "white bottle".
+- "product_name_translated" must be the same product name translated into {$languageName}. If the product name is already in {$languageName}, copy it exactly. This field is used for database matching so translate accurately and naturally.
 - "category" should be the broad product category, for example Cosmetics, Grocery, Electronics, Fashion, Medicine, Home.
 - "subcategory" should describe the actual product type, for example Shampoo, Hair Conditioner, Lip Balm, Face Cream, Chips, Juice, Perfume, Medicine.
 - "matched_category" must be the closest value from the provided category list only. If none fit, return empty string.
@@ -168,6 +170,7 @@ PROMPT;
 
         return [
             'product_name' => $data['product_name'] ?? null,
+            'product_name_translated' => $data['product_name_translated'] ?? null,
             'category' => $data['category'] ?? null,
             'subcategory' => $data['subcategory'] ?? null,
             'matched_category' => $data['matched_category'] ?? null,

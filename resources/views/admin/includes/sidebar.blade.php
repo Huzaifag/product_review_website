@@ -377,7 +377,7 @@
         font-weight: 400;
         line-height: 1.4;
         padding: 0.55rem 0.9rem;
-        color: rgba(185, 28, 28, 0.72);
+        color: #070707;
         cursor: pointer;
         border-radius: 10px;
         transition: background 0.18s ease, color 0.18s ease;
@@ -454,7 +454,7 @@
     /* ─── Hover ──────────────────────────────────────────────────── */
     .dashboard-sidebar .dashboard-sidebar-menu .dashboard-sidebar-links .dashboard-sidebar-links-cont .dashboard-sidebar-link .dashboard-sidebar-link-title:hover {
         background: rgba(220, 38, 38, 0.06);
-        color: #b91c1c;
+        color: #070707;
     }
 
     .dashboard-sidebar .dashboard-sidebar-menu .dashboard-sidebar-links .dashboard-sidebar-links-cont .dashboard-sidebar-link .dashboard-sidebar-link-title:hover .sb-icon {
@@ -464,7 +464,7 @@
     /* ─── Active / current state ─────────────────────────────────── */
     .dashboard-sidebar .dashboard-sidebar-menu .dashboard-sidebar-links .dashboard-sidebar-links-cont .dashboard-sidebar-link.current>.dashboard-sidebar-link-title {
         background: rgba(220, 38, 38, 0.1);
-        color: #dc2626;
+        color: #070707;
         font-weight: 600;
         font-size:14px;
     }

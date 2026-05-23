@@ -69,6 +69,17 @@
                 </div>
             </div>
         </div>
+        <div class="col-6 col-lg-3">
+            <div class="prod-stat-card">
+                <div class="prod-stat-icon prod-icon-orange">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="prod-stat-body">
+                    <div class="prod-stat-number">{{ $counters['oko_verified'] }}</div>
+                    <div class="prod-stat-label">{{ d_trans('OKO Verified') }}</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     {{-- Main Card --}}
@@ -140,6 +151,7 @@
                         <th class="text-center">{{ d_trans('Category') }}</th>
                         <th class="text-center">{{ d_trans('Sub Category') }}</th>
                         <th class="text-center">{{ d_trans('Grade') }}</th>
+                        <th class="text-center">{{ d_trans('OKO Verified') }}</th>
                         <th class="text-center">{{ d_trans('Status') }}</th>
                         <th class="text-center">{{ d_trans('Added') }}</th>
                         <th></th>
@@ -182,6 +194,13 @@
                                     <span class="prod-badge prod-badge-grade">
                                         {{ str_replace('_', ' ', ucfirst($product->overall_grade)) }}
                                     </span>
+                                @else
+                                    <span class="prod-meta">--</span>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if ($product->oko_verified)
+                                    <span class="prod-badge prod-badge-oko-verified">{{ d_trans('Yes') }}</span>
                                 @else
                                     <span class="prod-meta">--</span>
                                 @endif
@@ -237,7 +256,7 @@
                             </td>
                         </tr>
                     @empty
-                        @include('admin.partials.empty-table', ['colspan' => 11])
+                        @include('admin.partials.empty-table', ['colspan' => 12])
                     @endforelse
                 </tbody>
             </table>
@@ -375,6 +394,11 @@
             .prod-icon-teal {
                 background: rgba(20, 184, 166, 0.12);
                 color: #0d9488;
+            }
+
+            .prod-icon-orange {
+                background: rgba(234, 88, 12, 0.12);
+                color: #ea580c;
             }
 
             .prod-stat-number {
@@ -614,6 +638,11 @@
                 background: rgba(220, 38, 38, 0.08);
                 color: #b91c1c;
                 border: 1px solid rgba(220, 38, 38, 0.2);
+            }
+
+            .prod-badge-oko-verified {
+                background: rgba(234, 88, 12, 0.1);
+                color: #ea580c;
             }
 
             /* Action Button */

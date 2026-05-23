@@ -1,559 +1,853 @@
-@extends('themes.basic.auth.layout')
-@section('title', d_trans('Sign In'))
+<!DOCTYPE html>
+<html lang="{{ getLocale() }}" dir="{{ getDirection() }}">
 
-@push('styles_libs')
-    <link rel="stylesheet" href="https://unpkg.com/@tabler/icons-webfont@latest/tabler-icons.min.css">
-@endpush
+<head>
+    @include('themes.basic.includes.head')
 
-@push('styles')
     <style>
-        .sign {
-            max-width: none !important;
+        :root {
+            --auth-primary: #C62828;
+            --auth-primary-rgb: 198, 40, 40;
+            --auth-ink: #1a1f36;
+            --auth-muted: #6b7394;
+            --auth-glow: rgba(198, 40, 40, .28);
+        }
+
+        html,
+        body {
+            height: 100% !important;
+            margin: 0 !important;
             padding: 0 !important;
+            overflow: hidden !important;
+            background:
+                radial-gradient(1200px 600px at 12% -10%, rgba(var(--auth-primary-rgb), .07) 0%, transparent 55%),
+                radial-gradient(1000px 700px at 110% 110%, rgba(var(--auth-primary-rgb), .06) 0%, transparent 50%),
+                linear-gradient(180deg, #fbfcff 0%, #f4f6fd 100%) !important;
         }
 
-        .section-body {
-            display: flex;
-            justify-content: center;
-        }
-
-        .login-wrap {
-            display: flex;
-            width: 100%;
-            max-width: 1020px;
-            min-height: 480px;
-            border-radius: 18px;
-            overflow: hidden;
-            border: 0.5px solid #e0e0e0;
-            box-shadow: 0 8px 40px rgba(198, 40, 40, 0.08);
-            background: #fff;
-        }
-
-        .lp-left {
-            flex: 1;
-            padding: 2.5rem 2.5rem 2rem;
-            display: flex;
-            flex-direction: column;
-            background: #fff;
-        }
-
-        .lp-right {
-            flex: 1;
-            background: linear-gradient(135deg, #C62828 0%, #8B0000 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            padding: 2rem;
-        }
-
-        @media (max-width: 768px) {
-            .lp-right {
-                display: none;
-            }
-
-            .lp-left {
-                padding: 2rem 1.5rem;
-            }
-        }
-
-        .lp-brand {
-            display: inline-block;
-            margin-bottom: 1.6rem;
-        }
-
-        .lp-brand img {
-            height: 40px;
-            width: auto;
-            display: block;
-        }
-
-        .lp-title {
-            font-size: 22px;
-            font-weight: 500;
-            color: #1a1a1a;
-            margin-bottom: 4px;
-        }
-
-        .lp-subtitle {
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 1.8rem;
-            line-height: 1.5;
-        }
-
-        .lp-field {
-            margin-bottom: 1rem;
-            position: relative;
-        }
-
-        .lp-input {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 13px;
-            color: #333;
-            background: #fafafa;
-            outline: none;
-            transition: border 0.2s;
-            box-shadow: none;
-        }
-
-        .lp-input:focus {
-            border-color: #C62828 !important;
-            background: #fff;
-            box-shadow: none !important;
-        }
-
-        .lp-input::placeholder {
-            color: #bbb;
-        }
-
-        .lp-eye {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #bbb;
-            font-size: 17px;
-            padding: 0;
-            line-height: 1;
-        }
-
-        .lp-eye:hover {
-            color: #C62828;
-        }
-
-        .lp-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            font-size: 12px;
-        }
-
-        .lp-meta .form-check {
-            margin: 0;
-        }
-
-        .lp-meta .form-check-input {
-            width: 14px;
-            height: 14px;
-        }
-
-        .lp-meta .form-check-label {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .lp-meta a {
-            color: #C62828;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 12px;
-        }
-
-        .lp-meta a:hover {
-            text-decoration: underline;
-        }
-
-        .lp-submit {
-            width: 100%;
-            background: #C62828;
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            padding: 11px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.15s;
-            margin-bottom: 0.25rem;
-        }
-
-        .lp-submit:hover {
-            background: #a31e1e;
-            transform: translateY(-1px);
-        }
-
-        .lp-submit:active {
-            transform: scale(0.98);
-        }
-
-        /* OAuth component overrides */
-        .login-wrap .login-with {
-            margin-top: 0.5rem;
-        }
-
-        .login-wrap .login-with-divider {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 0.8rem;
-            font-size: 12px;
-            color: #bbb;
-        }
-
-        .login-wrap .login-with-divider::before,
-        .login-wrap .login-with-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #ebebeb;
-        }
-
-        .login-wrap .login-with-divider span {
-            background: none;
-            padding: 0;
-        }
-
-        .login-wrap .btn-social {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 8px;
-            border: 1px solid #e0e0e0 !important;
-            border-radius: 10px !important;
-            padding: 9px 12px !important;
-            background: #fff !important;
-            font-size: 13px !important;
-            color: #333 !important;
-            transition: border 0.2s, background 0.2s;
-        }
-
-        .login-wrap .btn-social:hover {
-            border-color: #C62828 !important;
-            background: #fff5f5 !important;
-            color: #333 !important;
-        }
-
-        .lp-signup {
-            font-size: 12px;
-            color: #999;
-            margin-top: 0.8rem;
-        }
-
-        .lp-signup a {
-            color: #C62828;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .lp-signup a:hover {
-            text-decoration: underline;
-        }
-
-        /* Right panel */
-        .rp-tagline {
-            color: #fff;
-            font-size: 20px;
-            font-weight: 500;
-            text-align: center;
-            line-height: 1.4;
-            margin-bottom: 1.2rem;
-            z-index: 2;
-            transition: opacity 0.4s;
-        }
-
-        .rp-slides {
-            width: 260px;
-            height: 230px;
-            border-radius: 18px;
-            overflow: hidden;
-            position: relative;
-            z-index: 2;
-            margin-bottom: 1.2rem;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .rp-track {
-            display: flex;
-            width: 300%;
-            height: 100%;
-            transition: transform 0.6s cubic-bezier(.77, 0, .18, 1);
-        }
-
-        .rp-slide {
-            width: 33.33%;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .rp-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.6s ease;
-        }
-
-        .rp-slide:hover img {
-            transform: scale(1.04);
-        }
-
-        .rp-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(139, 0, 0, 0.82));
-            color: #fff;
-            font-size: 12px;
-            font-weight: 500;
-            padding: 28px 12px 10px;
-            text-align: center;
-        }
-
-        .rp-overlay {
-            position: absolute;
+        /* ===== Animated background ===== */
+        .auth-bg {
+            position: fixed;
             inset: 0;
-            background: rgba(198, 40, 40, 0.15);
+            z-index: 0;
+            overflow: hidden;
             pointer-events: none;
         }
 
-        .rp-dots {
-            display: flex;
-            gap: 7px;
+        .auth-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: .4;
+            background-image:
+                linear-gradient(rgba(var(--auth-primary-rgb), .05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(var(--auth-primary-rgb), .05) 1px, transparent 1px);
+            background-size: 48px 48px;
+            -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+            mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+        }
+
+        .auth-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(45px);
+            opacity: .5;
+            animation: authFloat 18s ease-in-out infinite;
+        }
+
+        .auth-orb.a {
+            width: 420px;
+            height: 420px;
+            left: -120px;
+            top: -80px;
+            background: radial-gradient(circle at 30% 30%, rgba(var(--auth-primary-rgb), .9), rgba(var(--auth-primary-rgb), .55));
+        }
+
+        .auth-orb.b {
+            width: 360px;
+            height: 360px;
+            right: -100px;
+            top: 18%;
+            background: radial-gradient(circle at 30% 30%, #ff8a80, #C62828);
+            animation-delay: -6s;
+        }
+
+        .auth-orb.c {
+            width: 300px;
+            height: 300px;
+            left: 16%;
+            bottom: -120px;
+            background: radial-gradient(circle at 30% 30%, #ffcdd2, #8B0000);
+            animation-delay: -11s;
+        }
+
+        @keyframes authFloat {
+            0%,  100% { transform: translate(0, 0) scale(1); }
+            33%        { transform: translate(40px, -30px) scale(1.08); }
+            66%        { transform: translate(-30px, 25px) scale(.95); }
+        }
+
+        .auth-shape {
+            position: absolute;
+            opacity: .5;
+            animation: authDrift 24s linear infinite;
+        }
+
+        .auth-shape.s1 { top: 14%; left: 8%;  animation-duration: 26s; }
+        .auth-shape.s2 { top: 66%; left: 12%; animation-duration: 30s; animation-delay: -8s; }
+        .auth-shape.s3 { top: 20%; right: 10%; animation-duration: 24s; animation-delay: -4s; }
+        .auth-shape.s4 { top: 76%; right: 14%; animation-duration: 28s; animation-delay: -12s; }
+        .auth-shape.s5 { top: 46%; left: 46%; animation-duration: 34s; animation-delay: -6s; }
+
+        @keyframes authDrift {
+            0%   { transform: translateY(0) rotate(0); }
+            50%  { transform: translateY(-26px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+
+        /* ===== Layout ===== */
+        .sign {
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 1000 !important;
+            height: 100% !important;
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex !important;
+            flex-direction: row !important;
+            overflow: hidden !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        /* ===== Background slideshow ===== */
+        .sign-bg-show {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .sign-bg-slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            opacity: 0;
+            z-index: 1;
+            transition: opacity 2s cubic-bezier(.45, 0, .55, 1);
+        }
+
+        .sign-bg-slide.active {
+            opacity: 1;
             z-index: 2;
         }
 
-        .rp-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
+        .sign-bg-slide.leaving {
+            opacity: 0;
+            z-index: 2;
         }
 
-        .rp-dot.active {
-            background: #fff;
-            transform: scale(1.2);
+        /* Left panel */
+        .sign-left {
+            flex: 0 0 50% !important;
+            width: 50% !important;
+            max-width: 50% !important;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 48px 40px;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, .55);
+            backdrop-filter: blur(18px) saturate(140%);
+            -webkit-backdrop-filter: blur(18px) saturate(140%);
         }
 
-        .rp-circle {
+        /* Right panel */
+        .sign-right {
+            flex: 0 0 50% !important;
+            width: 50% !important;
+            max-width: 50% !important;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            background: transparent;
+        }
+
+        .sign-right-overlay {
             position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.06);
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, .55) 0%, rgba(0, 0, 0, .25) 50%, rgba(0, 0, 0, .15) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px;
+            text-align: center;
+            color: #fff;
         }
 
-        .rp-circle-1 {
-            width: 220px;
-            height: 220px;
-            bottom: -60px;
-            right: -60px;
+        .sign-right-overlay p {
+            font-size: 1.5rem;
+            opacity: .9;
+            text-shadow: 0 1px 6px rgba(0, 0, 0, .3);
+            margin-bottom: 0;
         }
 
-        .rp-circle-2 {
-            width: 140px;
-            height: 140px;
-            top: -40px;
-            left: -40px;
+        /* Mobile */
+        @media (max-width: 767px) {
+            html, body { height: auto !important; overflow: auto !important; }
+            .sign { position: relative !important; inset: auto !important; flex-direction: column !important; height: auto !important; min-height: 100vh !important; overflow: visible !important; }
+            .sign-left { flex: none !important; width: 100% !important; max-width: none !important; padding: 32px 20px !important; min-height: 100vh !important; overflow-y: auto !important; align-items: center !important; }
+            .sign-right { display: none !important; }
+            .sign-body .logo { justify-content: center !important; display: flex !important; width: 100% !important; }
         }
 
-        /* Entry animations */
-        .lp-left>* {
-            animation: lpUp 0.5s ease both;
+        /* Sign body */
+        .sign-body {
+            width: 100%;
+            max-width: 440px;
+            animation: authRise .7s cubic-bezier(.22, 1, .36, 1) both;
         }
 
-        .lp-left>*:nth-child(2) {
-            animation-delay: 0.05s;
+        @keyframes authRise {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: none; }
         }
 
-        .lp-left>*:nth-child(3) {
-            animation-delay: 0.10s;
+        .sign-body .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 22px;
         }
 
-        .lp-left>*:nth-child(4) {
-            animation-delay: 0.15s;
+        .sign-body .logo img {
+            height: 44px;
+            width: auto;
         }
 
-        .lp-left>*:nth-child(5) {
-            animation-delay: 0.20s;
+        /* Sign box */
+        .sign-box {
+            position: relative;
+            background: rgba(255, 255, 255, .72);
+            backdrop-filter: blur(22px) saturate(160%);
+            -webkit-backdrop-filter: blur(22px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, .7);
+            border-radius: 24px;
+            padding: 38px 36px 34px;
+            box-shadow:
+                0 30px 70px -25px rgba(31, 41, 80, .35),
+                0 4px 14px rgba(31, 41, 80, .06),
+                inset 0 1px 0 rgba(255, 255, 255, .8);
         }
 
-        .lp-left>*:nth-child(6) {
-            animation-delay: 0.25s;
+        .sign-box::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            pointer-events: none;
+            background: linear-gradient(135deg, var(--auth-glow), rgba(var(--auth-primary-rgb), .1) 40%, transparent 70%);
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
         }
 
-        .lp-left>*:nth-child(7) {
-            animation-delay: 0.30s;
+        .auth-head { text-align: start; }
+
+        .auth-head h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -.02em;
         }
 
-        @keyframes lpUp {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .auth-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 14px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: .72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: var(--auth-primary);
+            background: rgba(var(--auth-primary-rgb), .1);
         }
 
-        .wave {
-            /* animation: wave 2s infinite; */
-            transform-origin: 70% 70%;
-            display: inline-block;
+        /* Inputs */
+        .input-icon-wrap { position: relative; }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            inset-inline-start: 15px;
+            color: var(--auth-muted);
+            font-size: 1.05rem;
+            pointer-events: none;
+            transition: color .25s;
+            z-index: 2;
         }
 
-        /* @keyframes wave {
-                0% {
-                    transform: rotate(0deg);
-                }
+        .form-control.has-icon { padding-inline-start: 44px; }
 
-                25% {
-                    transform: rotate(-10deg);
-                }
+        .input-icon-wrap:focus-within .input-icon { color: var(--auth-primary); }
 
-                50% {
-                    transform: rotate(10deg);
-                }
+        .sign-box .form-control {
+            border: 1.5px solid var(--bs-border-color, #e7e9f3);
+            border-radius: 13px;
+            transition: .25s;
+        }
 
-                75% {
-                    transform: rotate(-10deg);
-                }
+        .sign-box .form-control:focus {
+            border-color: var(--auth-primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px var(--auth-glow);
+        }
 
-                100% {
-                    transform: rotate(0deg);
-                }
-            } */
+        .toggle-pass {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            inset-inline-end: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--auth-muted);
+            font-size: 1.05rem;
+            padding: 4px;
+            line-height: 0;
+            transition: color .2s;
+            z-index: 2;
+        }
+
+        .toggle-pass:hover { color: var(--auth-primary); }
+
+        .auth-link {
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--auth-primary);
+        }
+
+        .auth-link:hover { text-decoration: underline; }
+
+        /* Button */
+        .btn-auth {
+            position: relative;
+            overflow: hidden;
+            font-weight: 700;
+            padding: 13px;
+            border-radius: 13px;
+            box-shadow: 0 14px 30px -8px var(--auth-glow);
+            transition: transform .2s, box-shadow .2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--auth-primary);
+            border-color: var(--auth-primary);
+        }
+
+        .btn-auth::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            inset-inline-start: -120%;
+            width: 60%;
+            height: 100%;
+            transform: skewX(-20deg);
+            transition: .6s;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .35), transparent);
+        }
+
+        .btn-auth:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -10px var(--auth-glow);
+            background: #a31e1e;
+            border-color: #a31e1e;
+        }
+
+        .btn-auth:hover::after { inset-inline-start: 130%; }
+        .btn-auth:active { transform: translateY(0); }
+
+        .btn-auth i { transition: transform .2s; }
+        .btn-auth:hover i { transform: translateX(3px); }
+        html[dir="rtl"] .btn-auth:hover i { transform: translateX(-3px); }
+
+        /* Staggered reveal */
+        .field-anim {
+            animation: authRise .6s cubic-bezier(.22, 1, .36, 1) both;
+            animation-delay: var(--d, 0s);
+        }
+
+        /* ===== Tagline animation ===== */
+        .tagline-text {
+            background: linear-gradient(
+                100deg,
+                rgba(255, 255, 255, .92) 0%,
+                rgba(255, 255, 255, .92) 30%,
+                rgba(255, 255, 255, 1)   48%,
+                rgba(255, 255, 255, 1)   52%,
+                rgba(255, 255, 255, .92) 70%,
+                rgba(255, 255, 255, .92) 100%
+            );
+            background-size: 250% auto;
+            background-position: 200% center;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, .6));
+            animation:
+                taglineRise   .9s cubic-bezier(.22, 1, .36, 1) .4s both,
+                taglineShimmer 3.6s ease-in-out 1.8s infinite;
+            transition: opacity .35s;
+        }
+
+        @keyframes taglineRise {
+            from { opacity: 0; transform: translateY(18px); letter-spacing: .06em; }
+            to   { opacity: 1; transform: none; letter-spacing: normal; }
+        }
+
+        @keyframes taglineShimmer {
+            0%   { background-position:  200% center; }
+            50%  { background-position: -200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        /* ===== Back to home button ===== */
+        .btn-back-home {
+            position: absolute;
+            top: 22px;
+            inset-inline-start: 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 14px 7px 10px;
+            border-radius: 10px;
+            border: 1.5px solid rgba(var(--auth-primary-rgb), .18);
+            background: rgba(var(--auth-primary-rgb), .05);
+            color: var(--auth-primary);
+            font-size: .8rem;
+            font-weight: 600;
+            text-decoration: none;
+            letter-spacing: .01em;
+            transition: background .2s, border-color .2s, transform .2s;
+            z-index: 10;
+        }
+
+        .btn-back-home:hover {
+            background: rgba(var(--auth-primary-rgb), .12);
+            border-color: rgba(var(--auth-primary-rgb), .40);
+            color: var(--auth-primary);
+            transform: translateX(-3px);
+        }
+
+        html[dir="rtl"] .btn-back-home:hover { transform: translateX(3px); }
+
+        .btn-back-home i { font-size: .95rem; }
+
+        /* ===== Right footer ===== */
+        .sign-right-footer {
+            position: absolute;
+            bottom: 28px;
+            right: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        /* ===== Glass language picker ===== */
+        .lang-picker { position: relative; }
+
+        .lang-picker-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .30);
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(14px) saturate(160%);
+            -webkit-backdrop-filter: blur(14px) saturate(160%);
+            color: #fff;
+            font-size: .82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s, border-color .2s, box-shadow .2s;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .18);
+            white-space: nowrap;
+            letter-spacing: .01em;
+        }
+
+        .lang-picker-btn:hover {
+            background: rgba(255, 255, 255, .22);
+            border-color: rgba(255, 255, 255, .55);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .25);
+        }
+
+        .lang-picker-btn .flag-img {
+            width: 20px;
+            height: 14px;
+            border-radius: 3px;
+            object-fit: cover;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .25);
+        }
+
+        .lang-picker-btn .chevron-icon {
+            font-size: .72rem;
+            opacity: .8;
+            transition: transform .25s;
+            margin-inline-start: 2px;
+        }
+
+        .lang-picker.open .lang-picker-btn .chevron-icon { transform: rotate(180deg); }
+
+        .lang-picker-menu {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            right: 0;
+            min-width: 180px;
+            background: rgba(20, 22, 40, .82);
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, .14);
+            border-radius: 16px;
+            padding: 6px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, .45),
+                0 2px 8px rgba(0, 0, 0, .2),
+                inset 0 1px 0 rgba(255, 255, 255, .08);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px) scale(.97);
+            transform-origin: bottom right;
+            transition: opacity .22s, transform .22s, visibility .22s;
+            z-index: 999;
+        }
+
+        .lang-picker.open .lang-picker-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .lang-picker-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, .85);
+            font-size: .83rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background .18s, color .18s;
+            white-space: nowrap;
+        }
+
+        .lang-picker-item:hover { background: rgba(255, 255, 255, .1); color: #fff; }
+
+        .lang-picker-item.active {
+            background: rgba(var(--auth-primary-rgb), .3);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .lang-picker-item .flag-img {
+            width: 22px;
+            height: 15px;
+            border-radius: 3px;
+            object-fit: cover;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .3);
+        }
+
+        /* ===== Credit block ===== */
+        .sign-right-credit { text-align: right; }
+
+        .src-divider {
+            height: 1px;
+            background: linear-gradient(to left, rgba(255, 255, 255, .40), rgba(255, 255, 255, .04));
+            margin-bottom: 10px;
+        }
+
+        .src-dev {
+            display: block;
+            font-size: .78rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, .55);
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            margin-bottom: 5px;
+        }
+
+        .src-brand {
+            background: linear-gradient(90deg, #c084fc 0%, #818cf8 45%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            letter-spacing: .05em;
+            font-style: italic;
+        }
+
+        .src-copy {
+            font-size: .88rem;
+            color: rgba(255, 255, 255, .6);
+            letter-spacing: .015em;
+            line-height: 1.5;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .auth-orb, .auth-shape, .field-anim, .sign-body { animation: none !important; }
+            .tagline-text { animation: none !important; -webkit-text-fill-color: rgba(255, 255, 255, .9); }
+        }
     </style>
-@endpush
+</head>
 
-@section('content')
-    <div class="login-wrap">
-
-        {{-- Left: login form --}}
-        <div class="lp-left">
-            <a href="{{ url('/') }}" class="lp-brand">
-                <img src="{{ asset(config('theme.settings.general.logo_light')) }}"
-                    alt="{{ m_trans(config('settings.general.site_name')) }}" />
-            </a>
-
-            <div class="lp-title">{{ d_trans('Sign In') }}
-                <img src="{{ asset('images/frontend/hello.png') }}" alt="Hello" class="wave"
-                    style="width:24px; height:24px; margin-left:6px;" />
-            </div>
-            <div class="lp-subtitle">{{ d_trans('Enter your account details to sign in') }}</div>
-
-            <form action="{{ route('login') }}" method="POST">
-                @csrf
-                <div class="lp-field">
-                    <input type="text" name="email_or_username" class="lp-input"
-                        placeholder="{{ d_trans('Email or Username') }}" value="{{ old('email_or_username') }}"
-                        autocomplete="off" required />
-                </div>
-                <div class="lp-field">
-                    <input type="password" name="password" id="lp-pass" class="lp-input"
-                        placeholder="{{ d_trans('Password') }}" style="padding-right:38px;" required />
-                    <button type="button" class="lp-eye" onclick="lpTogglePass()"
-                        aria-label="{{ d_trans('Toggle password visibility') }}">
-                        <i class="ti ti-eye" id="lp-eye-icon"></i>
-                    </button>
-                </div>
-
-                <div class="lp-meta">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                            {{ old('remember') ? 'checked' : '' }}>
-                        <label class="form-check-label" for="remember">{{ d_trans('Remember Me') }}</label>
-                    </div>
-                    <a href="{{ route('password.request') }}">{{ d_trans('Forgot Password?') }}</a>
-                </div>
-
-                <x-captcha />
-                <button type="submit" class="lp-submit">{{ d_trans('Sign In') }}</button>
-            </form>
-
-            <x-oauth-buttons />
-
-            @if (config('settings.user.actions.registration'))
-                <div class="lp-signup">
-                    {{ d_trans("Don't have an account?") }} <a
-                        href="{{ route('register') }}">{{ d_trans('Sign Up') }}</a>
-                </div>
-            @endif
-        </div>
-
-        {{-- Right: image slider --}}
-        <div class="lp-right">
-            <div class="rp-circle rp-circle-1"></div>
-            <div class="rp-circle rp-circle-2"></div>
-            <div class="rp-tagline" id="rp-tagline">Discover beauty,<br>test before you glow</div>
-            <div class="rp-slides">
-                <div class="rp-track" id="rp-track">
-                    <div class="rp-slide">
-                        <img src="{{ asset('images/frontend/slider1.webp') }}" />
-                        <div class="rp-overlay"></div>
-                        <div class="rp-caption">Know what's really inside your cosmetics</div>
-                    </div>
-                    <div class="rp-slide">
-                        <img src="{{ asset('images/frontend/slider2.webp') }}"
-                            alt="Makeup products" />
-                        <div class="rp-overlay"></div>
-                        <div class="rp-caption">Review lipsticks, blush &amp; more</div>
-                    </div>
-                    <div class="rp-slide">
-                        <img src="{{ asset('images/frontend/slider3.webp') }}"
-                            alt="Beauty model" />
-                        <div class="rp-overlay"></div>
-                        <div class="rp-caption">Share your glow with the world</div>
-                    </div>
-                </div>
-            </div>
-            <div class="rp-dots">
-                <div class="rp-dot active" onclick="rpGoSlide(0)"></div>
-                <div class="rp-dot" onclick="rpGoSlide(1)"></div>
-                <div class="rp-dot" onclick="rpGoSlide(2)"></div>
-            </div>
-        </div>
-
+<body>
+    {{-- Animated background --}}
+    <div class="auth-grid"></div>
+    <div class="auth-bg" aria-hidden="true">
+        <div class="auth-orb a"></div>
+        <div class="auth-orb b"></div>
+        <div class="auth-orb c"></div>
+        <div class="auth-shape s1"><svg width="60" height="60" viewBox="0 0 60 60">
+                <rect x="6" y="6" width="48" height="48" rx="12" fill="none" stroke="var(--auth-primary)" stroke-width="2" opacity=".6" />
+            </svg></div>
+        <div class="auth-shape s2"><svg width="46" height="46" viewBox="0 0 46 46">
+                <circle cx="23" cy="23" r="20" fill="none" stroke="#C62828" stroke-width="2" opacity=".55" />
+            </svg></div>
+        <div class="auth-shape s3"><svg width="54" height="54" viewBox="0 0 54 54">
+                <polygon points="27,4 50,46 4,46" fill="none" stroke="#8B0000" stroke-width="2" opacity=".55" />
+            </svg></div>
+        <div class="auth-shape s4"><svg width="40" height="40" viewBox="0 0 40 40">
+                <rect x="8" y="8" width="24" height="24" rx="6" fill="var(--auth-primary)" opacity=".3" />
+            </svg></div>
+        <div class="auth-shape s5"><svg width="50" height="50" viewBox="0 0 50 50">
+                <path d="M25 4 L46 25 L25 46 L4 25 Z" fill="none" stroke="#C62828" stroke-width="2" opacity=".5" />
+            </svg></div>
     </div>
-@endsection
 
-@push('scripts')
+    <div class="sign">
+        <div class="sign-bg-show" aria-hidden="true">
+            <img class="sign-bg-slide active" src="{{ asset('images/auth-cover.jpg') }}" alt="">
+            <img class="sign-bg-slide" src="{{ asset('images/auth-cover-1.webp') }}" alt="">
+            <img class="sign-bg-slide" src="{{ asset('images/auth-cover-2.jpeg') }}" alt="">
+        </div>
+
+        {{-- Left: form panel --}}
+        <div class="sign-left">
+            <a href="{{ url('/') }}" class="btn-back-home">
+                <i class="bi bi-arrow-left"></i>
+                {{ d_trans('Back to Home') }}
+            </a>
+            <div class="sign-body">
+                <a href="{{ url('/') }}" class="logo">
+                    <img src="{{ asset(config('theme.settings.general.logo_light')) }}"
+                        alt="{{ m_trans(config('settings.general.site_name')) }}">
+                </a>
+                <div class="sign-box">
+                    <div class="auth-head mb-4">
+                        <span class="auth-badge">
+                            <i class="bi bi-person-circle"></i>
+                            {{ d_trans('Welcome Back') }}
+                        </span>
+                        <h2>{{ d_trans('Sign In') }} </h2>
+                        <p class="text-muted mb-0" style="font-size:.9rem;">{{ d_trans('Enter your account details to sign in') }}</p>
+                    </div>
+
+                    <form action="{{ route('login') }}" method="POST">
+                        @csrf
+                        <div class="mb-3 field-anim input-icon-wrap" style="--d:.05s">
+                            <span class="input-icon"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" name="email_or_username" class="form-control has-icon"
+                                placeholder="{{ d_trans('Email or Username') }}"
+                                value="{{ old('email_or_username') }}" autocomplete="off" required />
+                        </div>
+                        <div class="mb-3 field-anim input-icon-wrap" style="--d:.10s">
+                            <span class="input-icon"><i class="bi bi-lock-fill"></i></span>
+                            <input type="password" name="password" id="lp-pass" class="form-control has-icon"
+                                placeholder="{{ d_trans('Password') }}" style="padding-inline-end:44px;" required />
+                            <button type="button" class="toggle-pass" onclick="lpTogglePass()"
+                                aria-label="{{ d_trans('Toggle password visibility') }}">
+                                <i class="bi bi-eye" id="lp-eye-icon"></i>
+                            </button>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mb-3 field-anim" style="--d:.15s">
+                            <div class="form-check mb-0">
+                                <input class="form-check-input" type="checkbox" name="remember" id="remember"
+                                    {{ old('remember') ? 'checked' : '' }}>
+                                <label class="form-check-label small" for="remember">{{ d_trans('Remember Me') }}</label>
+                            </div>
+                            <a href="{{ route('password.request') }}" class="auth-link small">{{ d_trans('Forgot Password?') }}</a>
+                        </div>
+
+                        <div class="field-anim" style="--d:.18s">
+                            <x-captcha />
+                        </div>
+
+                        <div class="field-anim" style="--d:.22s">
+                            <button type="submit" class="btn btn-primary btn-auth w-100">
+                                {{ d_trans('Sign In') }} <i class="bi bi-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <x-oauth-buttons />
+
+                    @if (config('settings.user.actions.registration'))
+                        <p class="text-center text-muted small mt-3 mb-0">
+                            {{ d_trans("Don't have an account?") }}
+                            <a href="{{ route('register') }}" class="auth-link">{{ d_trans('Sign Up') }}</a>
+                        </p>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        {{-- Right: transparent panel — image shows through --}}
+        <div class="sign-right">
+            <div class="sign-right-overlay">
+                <img src="{{ asset('images/oko-logo.png') }}" alt="{{ m_trans(config('settings.general.site_name')) }}" height="130">
+                <p class="tagline-text" id="rp-tagline">{{ d_trans('Discover beauty,') }}<br>{{ d_trans('test before you glow') }}</p>
+            </div>
+
+            {{-- Language picker + credit --}}
+            @php $languages = languages(); $currentLanguage = languages(getLocale()); @endphp
+            <div class="sign-right-footer">
+                @if ($languages->count() > 1)
+                    <div class="lang-picker" id="authLangPicker">
+                        <button class="lang-picker-btn" type="button" aria-haspopup="true" aria-expanded="false">
+                            <img class="flag-img" src="{{ $currentLanguage->getLogoLink() }}" alt="{{ $currentLanguage->trans->name }}">
+                            <span>{{ $currentLanguage->trans->name }}</span>
+                            <i class="bi bi-chevron-down chevron-icon"></i>
+                        </button>
+                        <div class="lang-picker-menu" role="menu">
+                            @foreach ($languages as $navLanguage)
+                                <a href="{{ $navLanguage->getLocalizeUrl() }}"
+                                   class="lang-picker-item {{ $navLanguage->code == getLocale() ? 'active' : '' }}"
+                                   role="menuitem">
+                                    <img class="flag-img" src="{{ $navLanguage->getLogoLink() }}" alt="{{ $navLanguage->trans->name }}">
+                                    <span>{{ $navLanguage->trans->name }}</span>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+                <div class="sign-right-credit">
+                    <div class="src-divider"></div>
+                    <span class="src-dev">{{ d_trans('Developed by') }} <strong class="src-brand">Bitlogicx</strong></span>
+                    <p class="src-copy mb-0">
+                        &copy; <span data-year></span>
+                        {{ m_trans(config('settings.general.site_name')) }} &mdash; {{ d_trans('All rights reserved') }}.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @include('themes.basic.includes.scripts')
+
+    @if ($errors->any())
+        <script>
+            @foreach ($errors->all() as $error)
+                toastr.error('{{ $error }}')
+            @endforeach
+        </script>
+    @elseif(session('status'))
+        <script>
+            toastr.success('{{ session('status') }}')
+        </script>
+    @elseif(session('resent'))
+        <script>
+            toastr.success('{{ d_trans('Link has been resend Successfully') }}')
+        </script>
+    @endif
+
     <script>
-        (function() {
-            let cur = 0;
+        /* Background slideshow + synced taglines */
+        (function () {
+            const slides = document.querySelectorAll('.sign-bg-slide');
             const taglines = [
+                'Discover beauty,<br>test before you glow',
                 'Know what\'s really<br>inside your cosmetics',
                 'The truth your<br>label won\'t tell you',
                 'Independent labs,<br>honest verdicts'
             ];
+            const taglineEl = document.getElementById('rp-tagline');
+            if (!slides.length) return;
+            let current = 0;
 
-            window.rpGoSlide = function(n) {
-                cur = n;
-                document.getElementById('rp-track').style.transform = 'translateX(-' + (n * 33.333) + '%)';
-                const tEl = document.getElementById('rp-tagline');
-                tEl.style.opacity = '0';
-                setTimeout(function() {
-                    tEl.innerHTML = taglines[n];
-                    tEl.style.opacity = '1';
-                }, 220);
-                document.querySelectorAll('.rp-dot').forEach(function(d, i) {
-                    d.classList.toggle('active', i === n);
-                });
-            };
+            setInterval(function () {
+                const outgoing = slides[current];
+                current = (current + 1) % slides.length;
+                const incoming = slides[current];
 
-            setInterval(function() {
-                rpGoSlide((cur + 1) % 3);
-            }, 3500);
+                incoming.style.zIndex = '1';
+                incoming.style.opacity = '1';
+                outgoing.style.zIndex = '2';
+                outgoing.style.opacity = '0';
 
-            window.lpTogglePass = function() {
-                var inp = document.getElementById('lp-pass');
-                var icon = document.getElementById('lp-eye-icon');
-                inp.type = inp.type === 'password' ? 'text' : 'password';
-                icon.className = inp.type === 'password' ? 'ti ti-eye' : 'ti ti-eye-off';
-            };
+                setTimeout(function () {
+                    outgoing.classList.remove('active');
+                    outgoing.style.zIndex = '';
+                    outgoing.style.opacity = '';
+                    incoming.classList.add('active');
+                    incoming.style.zIndex = '';
+                    incoming.style.opacity = '';
+                }, 2000);
+
+                if (taglineEl) {
+                    taglineEl.style.opacity = '0';
+                    setTimeout(function () {
+                        taglineEl.innerHTML = taglines[current % taglines.length];
+                        taglineEl.style.opacity = '1';
+                    }, 350);
+                }
+            }, 4500);
         })();
+
+        /* Year */
+        document.querySelectorAll('[data-year]').forEach(function(el) {
+            el.textContent = new Date().getFullYear();
+        });
+
+        /* Language picker */
+        (function() {
+            const picker = document.getElementById('authLangPicker');
+            if (!picker) return;
+            const btn = picker.querySelector('.lang-picker-btn');
+            function close() { picker.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isOpen = picker.classList.toggle('open');
+                btn.setAttribute('aria-expanded', isOpen);
+            });
+            document.addEventListener('click', close);
+            document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close(); });
+        })();
+
+        /* Password toggle */
+        window.lpTogglePass = function() {
+            var inp = document.getElementById('lp-pass');
+            var icon = document.getElementById('lp-eye-icon');
+            inp.type = inp.type === 'password' ? 'text' : 'password';
+            icon.className = inp.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+        };
     </script>
-@endpush
+</body>
+
+</html>

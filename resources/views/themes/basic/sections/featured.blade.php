@@ -13,7 +13,7 @@
                             @endif
                         </div>
                         <div class="col-auto d-none d-lg-flex align-items-center gap-3">
-                            <span class="featured-luxe-count">{{ d_trans('Curated') }} {{ d_trans('Products') }}: {{ $featuredProducts->count() }}</span>
+                            {{-- <span class="featured-luxe-count">{{ d_trans('Curated') }} {{ d_trans('Products') }}: {{ $featuredProducts->count() }}</span> --}}
                             <a href="#featured-products" class=" featured-luxe-btn">
                                 {{ d_trans('Explore Products') }}<i class="fa-solid fa-arrow-right icon-rtl ms-2"></i>
                             </a>

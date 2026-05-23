@@ -49,6 +49,8 @@ class Product extends Model
         'is_featured',
         'is_active',
         'view_count',
+        'oko_verified',
+        'hazard_score',
     ];
 
     protected function casts(): array
@@ -62,6 +64,8 @@ class Product extends Model
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
             'view_count' => 'integer',
+            'oko_verified' => 'boolean',
+            'hazard_score' => 'integer',
         ];
     }
 
