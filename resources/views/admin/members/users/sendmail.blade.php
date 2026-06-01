@@ -44,4 +44,5 @@
     @push('scripts_libs')
         <script src="{{ asset('vendor/libs/nicEdit/nicEdit.min.js') }}"></script>
     @endpush
+    @include('admin.members.users.includes.styles')
 @endsection

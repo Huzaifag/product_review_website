@@ -16,7 +16,9 @@ class ReviewController extends Controller
     public function index(Request $request)
     {
         
-        $query = UserReview::with(['user', 'product'])->latest();
+        $query = UserReview::whereHas('product')
+            ->with(['user', 'product'])
+            ->latest();
 
         // Search (by review text, user name, product name)
         if ($request->filled('search')) {
@@ -58,6 +60,8 @@ class ReviewController extends Controller
 
     public function show(UserReview $review)
     {
+        abort_if(!$review->product, 404);
+
         return view('admin.reviews.show', compact('review'));
     }
 

@@ -75,4 +75,5 @@
             </div>
         </div>
     </div>
+    @include('admin.members.users.includes.styles')
 @endsection

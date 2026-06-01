@@ -237,6 +237,7 @@
         </div>
     </div>
     {{ $users->links() }}
+    @include('admin.members.users.includes.styles')
     @push('styles_libs')
         <link rel="stylesheet" href="{{ asset('vendor/libs/vironeer/counter-cards.min.css') }}">
         <link rel="stylesheet" href="{{ asset('vendor/libs/bootstrap/select/bootstrap-select.min.css') }}">

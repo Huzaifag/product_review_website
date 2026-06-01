@@ -58,4 +58,5 @@
     @push('scripts_libs')
         <script src="{{ asset('vendor/libs/toggle-master/bootstrap-toggle.min.js') }}"></script>
     @endpush
+    @include('admin.members.users.includes.styles')
 @endsection

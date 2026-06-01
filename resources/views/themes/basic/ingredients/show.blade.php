@@ -1,7 +1,7 @@
 @extends('themes.basic.layouts.single')
 @section('title', d_trans($ingredient->name) . ' — OKO Ingredient Profile')
 @section('header_title', d_trans($ingredient->name))
-@section('description', d_trans($ingredient->description ?? $ingredient->concern_description ?? ''))
+@section('description', d_trans($ingredient->description ?? ($ingredient->concern_description ?? '')))
 @section('breadcrumbs', Breadcrumbs::render('ingredients.show', $ingredient))
 @section('breadcrumbs_schema', Breadcrumbs::view('breadcrumbs::json-ld', 'ingredients.show', $ingredient))
 @section('container', 'container-custom')
@@ -25,12 +25,18 @@
                 --ig-gold: #B88746;
                 --ig-amber: #D97706;
                 --ig-warning: #D99A21;
-                --ig-s1: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-                --ig-s2: 0 4px 16px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.05);
-                --ig-s3: 0 20px 60px rgba(0,0,0,.12), 0 4px 16px rgba(0,0,0,.07);
+                --ig-s1: 0 1px 3px rgba(0, 0, 0, .06), 0 1px 2px rgba(0, 0, 0, .04);
+                --ig-s2: 0 4px 16px rgba(0, 0, 0, .08), 0 2px 6px rgba(0, 0, 0, .05);
+                --ig-s3: 0 20px 60px rgba(0, 0, 0, .12), 0 4px 16px rgba(0, 0, 0, .07);
             }
 
-            *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
 
             .ig-shell {
                 font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -41,18 +47,61 @@
 
             /* ── HERO CARD ──────────────────────────────── */
             .ig-hero {
-                background: #1a1a1a;
+                /* 1. Base color and Rich Gradients */
+                background-color: #ba1a1a;
                 background-image:
-                    radial-gradient(ellipse at 85% 30%, rgba(184,147,90,.18) 0%, transparent 55%),
-                    radial-gradient(ellipse at 5% 90%, rgba(198,40,40,.1) 0%, transparent 50%);
+                    /* Primary directional lighting */
+                    linear-gradient(135deg, rgba(198, 40, 40, 0.9) 0%, rgba(142, 12, 12, 0.95) 100%),
+                    /* Top-right soft highlight */
+                    radial-gradient(ellipse at 85% 0%, rgba(255, 255, 255, 0.12) 0%, transparent 60%),
+                    /* Bottom-left grounding shadow */
+                    radial-gradient(ellipse at 5% 100%, rgba(0, 0, 0, 0.2) 0%, transparent 50%);
+
+                /* 2. Shape and Spacing */
                 border-radius: 24px;
-                padding: 36px 40px;
+                padding: 36px 48px;
+                /* Slightly increased horizontal padding for balance */
                 display: flex;
                 align-items: flex-start;
+                justify-content: space-between;
+                /* Ensures the score pushes to the right */
                 gap: 32px;
-                box-shadow: var(--ig-s3), 0 0 0 1px rgba(255,255,255,.06);
-                overflow: hidden;
+
+                /* 3. Premium Depth (Layered Shadows & Inner Highlight) */
+                box-shadow:
+                    /* Soft, wide ambient shadow colored like the background */
+                    0 24px 48px -12px rgba(142, 12, 12, 0.4),
+                    /* Tighter, darker shadow for grounding */
+                    0 8px 16px -4px rgba(0, 0, 0, 0.15),
+                    /* Crisp inner top highlight to create a subtle bevel/glass effect */
+                    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+
+                /* Subtle outer border */
+                border: 1px solid rgba(255, 255, 255, 0.08);
+
                 position: relative;
+                overflow: hidden;
+                color: #ffffff;
+                /* Ensures text pops against the dark red */
+            }
+
+            /* Optional: Recreate the subtle faint pattern seen in the original image */
+            .ig-hero::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                /* Creates a subtle dot/cross pattern */
+                background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+                background-size: 24px 24px;
+                pointer-events: none;
+                /* Ensures the pattern doesn't block text selection */
+                z-index: 0;
+            }
+
+            /* Ensure child elements sit above the background pattern */
+            .ig-hero>* {
+                position: relative;
+                z-index: 1;
             }
 
             .ig-hero::before {
@@ -102,7 +151,7 @@
 
             .ig-hero-inci {
                 font-size: .82rem;
-                color: rgba(255,255,255,.45);
+                color: rgba(255, 255, 255, .45);
                 font-weight: 500;
                 letter-spacing: .04em;
                 text-transform: uppercase;
@@ -135,10 +184,29 @@
                 opacity: .7;
             }
 
-            .ig-sev-avoid   { background: rgba(198,40,40,.15); color: #FF6B6B; border: 1px solid rgba(198,40,40,.3); }
-            .ig-sev-concern { background: rgba(217,119,6,.15);  color: #FBB040; border: 1px solid rgba(217,119,6,.3); }
-            .ig-sev-caution { background: rgba(217,154,33,.15); color: #F9D46C; border: 1px solid rgba(217,154,33,.3); }
-            .ig-sev-none    { background: rgba(22,163,74,.15);  color: #4ADE80; border: 1px solid rgba(22,163,74,.3); }
+            .ig-sev-avoid {
+                background: rgba(198, 40, 40, .15);
+                color: #FF6B6B;
+                border: 1px solid rgba(198, 40, 40, .3);
+            }
+
+            .ig-sev-concern {
+                background: rgba(217, 119, 6, .15);
+                color: #FBB040;
+                border: 1px solid rgba(217, 119, 6, .3);
+            }
+
+            .ig-sev-caution {
+                background: rgba(217, 154, 33, .15);
+                color: #F9D46C;
+                border: 1px solid rgba(217, 154, 33, .3);
+            }
+
+            .ig-sev-none {
+                background: rgba(22, 163, 74, .15);
+                color: #4ADE80;
+                border: 1px solid rgba(22, 163, 74, .3);
+            }
 
             .ig-hero-right {
                 display: flex;
@@ -161,7 +229,7 @@
                 width: 80px;
                 height: auto;
                 object-fit: contain;
-                filter: drop-shadow(0 4px 12px rgba(0,0,0,.35));
+                filter: drop-shadow(0 4px 12px rgba(0, 0, 0, .35));
             }
 
             .ig-stamp-lbl {
@@ -169,12 +237,14 @@
                 font-weight: 800;
                 text-transform: uppercase;
                 letter-spacing: .1em;
-                color: rgba(255,255,255,.6);
+                color: rgba(255, 255, 255, .6);
                 text-align: center;
                 line-height: 1.3;
             }
 
-            .ig-stamp-verified .ig-stamp-lbl { color: var(--ig-gold); }
+            .ig-stamp-verified .ig-stamp-lbl {
+                color: var(--ig-gold);
+            }
 
             /* Hazard score circle in hero */
             .ig-hero-score {
@@ -195,7 +265,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 0 0 0 3px rgba(255,255,255,.15), 0 0 0 6px var(--score-color, #374151), 0 8px 24px rgba(0,0,0,.3);
+                box-shadow: 0 0 0 3px rgba(255, 255, 255, .15), 0 0 0 6px var(--score-color, #374151), 0 8px 24px rgba(0, 0, 0, .3);
                 letter-spacing: -.03em;
             }
 
@@ -204,7 +274,7 @@
                 font-weight: 700;
                 text-transform: uppercase;
                 letter-spacing: .1em;
-                color: rgba(255,255,255,.5);
+                color: rgba(255, 255, 255, .5);
                 text-align: center;
             }
 
@@ -282,16 +352,16 @@
             .ig-meter-scale {
                 display: flex;
                 align-items: center;
-                gap: 6px;
+                gap: 18px;
                 justify-content: center;
                 flex-wrap: nowrap;
                 overflow-x: auto;
-                padding: 6px 8px 4px;
+                padding: 20px 8px 20px;
             }
 
             .ig-meter-num {
-                width: 26px;
-                height: 26px;
+                width: 40px;
+                height: 40px;
                 border-radius: 50%;
                 background: var(--hc);
                 color: #fff;
@@ -308,7 +378,7 @@
             .ig-meter-num.ig-meter-active {
                 font-size: 1rem;
                 font-weight: 800;
-                box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--hc), 0 6px 18px rgba(0,0,0,.2);
+                box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--hc), 0 6px 18px rgba(0, 0, 0, .2);
                 position: relative;
                 transform: scale(1.45);
                 z-index: 2;
@@ -337,10 +407,25 @@
                 border-radius: 8px;
             }
 
-            .ig-meter-concern.mc-low    { background: #DCFCE7; color: var(--ig-green); }
-            .ig-meter-concern.mc-medium { background: #FEF3C7; color: var(--ig-amber); }
-            .ig-meter-concern.mc-high   { background: #FEE2E2; color: var(--ig-red); }
-            .ig-meter-concern.mc-na     { background: var(--ig-soft); color: var(--ig-muted); }
+            .ig-meter-concern.mc-low {
+                background: #DCFCE7;
+                color: var(--ig-green);
+            }
+
+            .ig-meter-concern.mc-medium {
+                background: #FEF3C7;
+                color: var(--ig-amber);
+            }
+
+            .ig-meter-concern.mc-high {
+                background: #FEE2E2;
+                color: var(--ig-red);
+            }
+
+            .ig-meter-concern.mc-na {
+                background: var(--ig-soft);
+                color: var(--ig-muted);
+            }
 
             /* Meta rows */
             .ig-meta-row {
@@ -348,11 +433,13 @@
                 justify-content: space-between;
                 align-items: flex-start;
                 padding: 10px 0;
-                border-bottom: 1px solid rgba(0,0,0,.06);
+                border-bottom: 1px solid rgba(0, 0, 0, .06);
                 gap: 12px;
             }
 
-            .ig-meta-row:last-child { border-bottom: none; }
+            .ig-meta-row:last-child {
+                border-bottom: none;
+            }
 
             .ig-meta-lbl {
                 font-size: .76rem;
@@ -418,16 +505,16 @@
                 font-weight: 600;
                 color: var(--ig-red-dark);
                 background: #fff;
-                border: 1px solid rgba(143,29,29,.22);
+                border: 1px solid rgba(143, 29, 29, .22);
                 border-radius: 999px;
                 padding: 6px 16px;
-                box-shadow: 0 1px 3px rgba(0,0,0,.06);
+                box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
                 transition: background .14s, box-shadow .14s, transform .14s;
             }
 
             .ig-fn-pill:hover {
                 background: #FFF0F0;
-                box-shadow: 0 3px 10px rgba(0,0,0,.1);
+                box-shadow: 0 3px 10px rgba(0, 0, 0, .1);
                 transform: translateY(-1px);
             }
 
@@ -457,7 +544,10 @@
                 min-height: 32px;
             }
 
-            .ig-concern-body { flex: 1; min-width: 0; }
+            .ig-concern-body {
+                flex: 1;
+                min-width: 0;
+            }
 
             .ig-concern-cat {
                 font-size: .72rem;
@@ -535,11 +625,27 @@
                 border: 1px solid currentColor;
             }
 
-            .ig-flag-chip i { font-size: .72rem; }
+            .ig-flag-chip i {
+                font-size: .72rem;
+            }
 
-            .ig-flag-warn  { color: var(--ig-amber); background: #FEF3C7; border-color: #FDE68A; }
-            .ig-flag-safe  { color: var(--ig-green); background: #DCFCE7; border-color: #BBF7D0; }
-            .ig-flag-info  { color: #3B82F6; background: #EFF6FF; border-color: #BFDBFE; }
+            .ig-flag-warn {
+                color: var(--ig-amber);
+                background: #FEF3C7;
+                border-color: #FDE68A;
+            }
+
+            .ig-flag-safe {
+                color: var(--ig-green);
+                background: #DCFCE7;
+                border-color: #BBF7D0;
+            }
+
+            .ig-flag-info {
+                color: #3B82F6;
+                background: #EFF6FF;
+                border-color: #BFDBFE;
+            }
 
             /* Related products */
             .ig-products-grid {
@@ -593,35 +699,59 @@
 
             /* Responsive */
             @media (max-width: 900px) {
-                .ig-grid { grid-template-columns: 1fr; }
-                .ig-hero { flex-direction: column; padding: 28px 24px; }
-                .ig-hero-right { flex-direction: row; justify-content: flex-start; }
-                .ig-products-grid { grid-template-columns: repeat(2, 1fr); }
+                .ig-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .ig-hero {
+                    flex-direction: column;
+                    padding: 28px 24px;
+                }
+
+                .ig-hero-right {
+                    flex-direction: row;
+                    justify-content: flex-start;
+                }
+
+                .ig-products-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
             }
 
             @media (max-width: 560px) {
-                .ig-hero { padding: 22px 20px; }
-                .ig-hero-name { font-size: 1.5rem; }
-                .ig-products-grid { grid-template-columns: 1fr 1fr; }
+                .ig-hero {
+                    padding: 22px 20px;
+                }
+
+                .ig-hero-name {
+                    font-size: 1.5rem;
+                }
+
+                .ig-products-grid {
+                    grid-template-columns: 1fr 1fr;
+                }
             }
         </style>
     @endpush
 
     @php
         $hs = $ingredient->hazard_score;
-        $hsColor = is_null($hs) ? '#6B7280'
-            : ($hs <= 2 ? '#16A34A' : ($hs <= 6 ? '#D97706' : '#C62828'));
-        $hsConcernLabel = is_null($hs) ? d_trans('Not Rated')
-            : ($hs <= 2 ? d_trans('Low Concern') : ($hs <= 6 ? d_trans('Medium Concern') : d_trans('High Concern')));
-        $hsConcernClass = is_null($hs) ? 'mc-na'
-            : ($hs <= 2 ? 'mc-low' : ($hs <= 6 ? 'mc-medium' : 'mc-high'));
+        $hsColor = is_null($hs) ? '#6B7280' : ($hs <= 2 ? '#16A34A' : ($hs <= 6 ? '#D97706' : '#C62828'));
+        $hsConcernLabel = is_null($hs)
+            ? d_trans('Not Rated')
+            : ($hs <= 2
+                ? d_trans('Low Concern')
+                : ($hs <= 6
+                    ? d_trans('Medium Concern')
+                    : d_trans('High Concern')));
+        $hsConcernClass = is_null($hs) ? 'mc-na' : ($hs <= 2 ? 'mc-low' : ($hs <= 6 ? 'mc-medium' : 'mc-high'));
 
         $sev = $ingredient->severity ?? 'none';
-        $sevLabel = match($sev) {
-            'avoid'   => d_trans('Avoid'),
+        $sevLabel = match ($sev) {
+            'avoid' => d_trans('Avoid'),
             'concern' => d_trans('Concern'),
             'caution' => d_trans('Caution'),
-            default   => d_trans('Generally Safe'),
+            default => d_trans('Generally Safe'),
         };
         $sevClass = 'ig-sev-' . ($sev ?: 'none');
     @endphp
@@ -641,13 +771,15 @@
                 <div class="ig-hero-meta">
                     <span class="{{ $sevClass }} ig-sev-badge">{{ $sevLabel }}</span>
                     @if ($ingredient->oko_verified)
-                        <span class="ig-sev-badge" style="background:rgba(184,147,90,.18);color:#F0C060;border:1px solid rgba(184,147,90,.35);">
+                        <span class="ig-sev-badge"
+                            style="background:rgba(184,147,90,.18);color:#F0C060;border:1px solid rgba(184,147,90,.35);">
                             <i class="fas fa-check-circle" style="font-size:.7rem;margin-right:2px;"></i>
                             {{ d_trans('OKO Verified') }}
                         </span>
                     @endif
                     @if ($ingredient->cas_number)
-                        <span class="ig-sev-badge" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.12);font-size:.68rem;">
+                        <span class="ig-sev-badge"
+                            style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.12);font-size:.68rem;">
                             CAS: {{ $ingredient->cas_number }}
                         </span>
                     @endif
@@ -658,8 +790,9 @@
                 {{-- OKO stamp --}}
                 <div class="ig-stamp-wrap {{ $ingredient->oko_verified ? 'ig-stamp-verified' : '' }}">
                     <img src="{{ asset('images/oko/stamp-verification.webp') }}" alt="OKO" class="ig-stamp-img"
-                         style="{{ !$ingredient->oko_verified ? 'filter:grayscale(1) opacity(.4) drop-shadow(0 2px 8px rgba(0,0,0,.35))' : 'filter:drop-shadow(0 4px 12px rgba(0,0,0,.35))' }}">
-                    <span class="ig-stamp-lbl">{{ $ingredient->oko_verified ? d_trans("OKO\nVERIFIED") : d_trans("NOT\nVERIFIED") }}</span>
+                        style="{{ !$ingredient->oko_verified ? 'filter:grayscale(1) opacity(.4) drop-shadow(0 2px 8px rgba(0,0,0,.35))' : 'filter:drop-shadow(0 4px 12px rgba(0,0,0,.35))' }}">
+                    <span
+                        class="ig-stamp-lbl">{{ $ingredient->oko_verified ? d_trans("OKO\nVERIFIED") : d_trans("NOT\nVERIFIED") }}</span>
                 </div>
 
                 {{-- Hazard score circle --}}
@@ -681,22 +814,15 @@
                 {{-- Hazard Meter --}}
                 <div class="ig-card ig-meter-card">
                     <div class="ig-meter-wrap">
-                        <div class="ig-meter-label">{{ d_trans('Hazard Score') }}</div>
-                        @if (!is_null($hs))
+                        @if (!is_null($ingredient->image_url))
                             <div class="ig-meter-scale">
-                                @for ($i = 1; $i <= 10; $i++)
-                                    @php $iColor = $i <= 2 ? '#16a34a' : ($i <= 6 ? '#ea580c' : '#dc2626'); @endphp
-                                    <div class="ig-meter-num {{ $hs == $i ? 'ig-meter-active' : '' }}"
-                                         style="--hc: {{ $iColor }}">{{ $i }}</div>
-                                @endfor
+                                <img src="{{ asset($ingredient->image_url) }}" alt="{{ d_trans('Ingredient Image') }}"
+                                    style="width:100%;border-radius:10px;object-fit:contain;border:1px solid var(--ig-border);padding:8px;background:var(--ig-soft);" class="ig-meter-img">
                             </div>
-                            <div class="ig-meter-edges">
-                                <span class="ig-meter-edge">{{ d_trans('Best') }}</span>
-                                <span class="ig-meter-edge">{{ d_trans('Worst') }}</span>
-                            </div>
-                            <div class="ig-meter-concern {{ $hsConcernClass }}">{{ $hsConcernLabel }}</div>
+                            <div class="ig-meter-concern">Source: {{ $ingredient->source }}</div>
                         @else
-                            <div class="ig-meter-concern mc-na" style="text-align:center;">{{ d_trans('No hazard score available') }}</div>
+                            <div class="ig-meter-concern mc-na" style="text-align:center;">
+                                {{ d_trans('No image available') }}</div>
                         @endif
                     </div>
                 </div>
@@ -722,12 +848,14 @@
                         @if ($ingredient->found_in_count)
                             <div class="ig-meta-row">
                                 <span class="ig-meta-lbl">{{ d_trans('Found In') }}</span>
-                                <span class="ig-meta-val">{{ $ingredient->found_in_count }} {{ d_trans('products') }}</span>
+                                <span class="ig-meta-val">{{ $ingredient->found_in_count }}
+                                    {{ d_trans('products') }}</span>
                             </div>
                         @endif
                         <div class="ig-meta-row">
                             <span class="ig-meta-lbl">{{ d_trans('OKO Verified') }}</span>
-                            <span class="ig-meta-val" style="color:{{ $ingredient->oko_verified ? 'var(--ig-green)' : 'var(--ig-muted)' }}">
+                            <span class="ig-meta-val"
+                                style="color:{{ $ingredient->oko_verified ? 'var(--ig-green)' : 'var(--ig-muted)' }}">
                                 {{ $ingredient->oko_verified ? '✓ ' . d_trans('Yes') : '✗ ' . d_trans('No') }}
                             </span>
                         </div>
@@ -795,6 +923,30 @@
                     </div>
                 @endif
 
+                 {{-- Hazard Meter --}}
+                <div class="ig-card ig-meter-card">
+                    <div class="ig-meter-wrap">
+                        <div class="ig-meter-label">{{ d_trans('Hazard Score') }}</div>
+                        @if (!is_null($hs))
+                            <div class="ig-meter-scale">
+                                @for ($i = 1; $i <= 10; $i++)
+                                    @php $iColor = $i <= 2 ? '#16a34a' : ($i <= 6 ? '#ea580c' : '#dc2626'); @endphp
+                                    <div class="ig-meter-num {{ $hs == $i ? 'ig-meter-active' : '' }}"
+                                        style="--hc: {{ $iColor }}">{{ $i }}</div>
+                                @endfor
+                            </div>
+                            <div class="ig-meter-edges">
+                                <span class="ig-meter-edge">{{ d_trans('Best') }}</span>
+                                <span class="ig-meter-edge">{{ d_trans('Worst') }}</span>
+                            </div>
+                            <div class="ig-meter-concern {{ $hsConcernClass }}">{{ $hsConcernLabel }}</div>
+                        @else
+                            <div class="ig-meter-concern mc-na" style="text-align:center;">
+                                {{ d_trans('No hazard score available') }}</div>
+                        @endif
+                    </div>
+                </div>
+
                 {{-- Functions --}}
                 @if (!empty($ingredient->functions))
                     <div class="ig-card">
@@ -823,12 +975,22 @@
                                     @foreach ($ingredient->concerns as $c)
                                         @if (!empty($c['concern_text']))
                                             @php
-                                                $cleanText = preg_replace('/^(low|medium|high|moderate|none)\s+concern[.:,]?\s*/i', '', $c['concern_text']);
+                                                $cleanText = preg_replace(
+                                                    '/^(low|medium|high|moderate|none)\s+concern[.:,]?\s*/i',
+                                                    '',
+                                                    $c['concern_text'],
+                                                );
                                                 $cSev = strtolower($c['severity'] ?? '');
-                                                $stripeColor = $cSev === 'high' ? 'var(--ig-red)' : ($cSev === 'medium' ? 'var(--ig-amber)' : 'var(--ig-green)');
+                                                $stripeColor =
+                                                    $cSev === 'high'
+                                                        ? 'var(--ig-red)'
+                                                        : ($cSev === 'medium'
+                                                            ? 'var(--ig-amber)'
+                                                            : 'var(--ig-green)');
                                             @endphp
                                             <div class="ig-concern-card">
-                                                <div class="ig-concern-stripe" style="background:{{ $stripeColor }}"></div>
+                                                <div class="ig-concern-stripe" style="background:{{ $stripeColor }}">
+                                                </div>
                                                 <div class="ig-concern-body">
                                                     @if (!empty($c['category']))
                                                         <div class="ig-concern-cat">{{ $c['category'] }}</div>
@@ -845,7 +1007,8 @@
                                     <div class="ig-concern-card">
                                         <div class="ig-concern-stripe" style="background:var(--ig-amber)"></div>
                                         <div class="ig-concern-body">
-                                            <div class="ig-concern-text">{{ d_trans($ingredient->concern_description) }}</div>
+                                            <div class="ig-concern-text">{{ d_trans($ingredient->concern_description) }}
+                                            </div>
                                         </div>
                                     </div>
                                 @endif
@@ -870,7 +1033,8 @@
                 @if ($ingredient->regulatory_status)
                     <div class="ig-card">
                         <div class="ig-card-header">
-                            <span class="ig-card-header-title"><i class="fas fa-gavel" style="font-size:.7rem;margin-right:4px;"></i>{{ d_trans('Regulatory Status') }}</span>
+                            <span class="ig-card-header-title"><i class="fas fa-gavel"
+                                    style="font-size:.7rem;margin-right:4px;"></i>{{ d_trans('Regulatory Status') }}</span>
                         </div>
                         <div class="ig-card-body ig-info-section">
                             <p>{{ d_trans($ingredient->regulatory_status) }}</p>
@@ -889,8 +1053,8 @@
                                 @foreach ($relatedProducts as $rp)
                                     <a href="{{ $rp->getLink() }}" class="ig-product-card">
                                         <img class="ig-product-img"
-                                             src="{{ $rp->image ? (\Illuminate\Support\Str::startsWith($rp->image, ['http://', 'https://']) ? $rp->image : asset($rp->image)) : $rp->getImageLink() }}"
-                                             alt="{{ d_trans($rp->name) }}">
+                                            src="{{ $rp->image ? (\Illuminate\Support\Str::startsWith($rp->image, ['http://', 'https://']) ? $rp->image : asset($rp->image)) : $rp->getImageLink() }}"
+                                            alt="{{ d_trans($rp->name) }}">
                                         <div>
                                             @if ($rp->brand)
                                                 <div class="ig-product-brand">{{ $rp->brand->name }}</div>
