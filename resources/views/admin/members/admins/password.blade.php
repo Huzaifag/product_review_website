@@ -34,4 +34,5 @@
             </div>
         </div>
     </div>
+    @include('admin.members.admins.includes.styles')
 @endsection

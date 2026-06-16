@@ -112,4 +112,5 @@
         <script src="{{ asset('vendor/libs/toggle-master/bootstrap-toggle.min.js') }}"></script>
         <script src="{{ asset('vendor/libs/jquery/jquery.priceformat.min.js') }}"></script>
     @endpush
+    @include('admin.plans.includes.styles')
 @endsection

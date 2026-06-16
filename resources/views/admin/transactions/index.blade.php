@@ -66,10 +66,13 @@
                 @if (request('owner'))
                     <input type="hidden" name="owner" value="{{ request('owner') }}">
                 @endif
-                <div class="row g-3">
+                <div class="row g-3 align-items-center">
                     <div class="col-12">
-                        <input type="text" name="search" class="form-control" placeholder="{{ d_trans('Search...') }}"
-                            value="{{ request('search') }}">
+                        <div class="trx-search-wrap">
+                            <i class="fa fa-search trx-search-icon"></i>
+                            <input type="text" name="search" class="trx-search-input"
+                                placeholder="{{ d_trans('Search transactions...') }}" value="{{ request('search') }}">
+                        </div>
                     </div>
                     <div class="col-12 col-lg-3">
                         <input type="text" name="date_from" class="form-control text-secondary"
@@ -137,13 +140,19 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ route('admin.plans.edit', $trx->plan_id) }}" class="text-dark">
-                                        <i class="fa-solid fa-cubes me-2"></i>{{ $trx->plan->name }}
-                                    </a>
+                                    @if ($trx->plan)
+                                        <a href="{{ route('admin.plans.edit', $trx->plan_id) }}" class="text-dark">
+                                            <i class="fa-solid fa-cubes me-2"></i>{{ $trx->plan->name }}
+                                        </a>
+                                    @else
+                                        <span class="text-muted">
+                                            <i class="fa-solid fa-cubes me-2"></i>{{ d_trans('Deleted plan') }}
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="text-center text-dark">{{ getAmount($trx->amount) }}</td>
                                 <td class="text-center text-dark">
-                                    {{ getAmount($trx->hasTax() ? $trx->tax->amount : 0) }}
+                                    {{ getAmount($trx->hasTax() ? ($trx->tax?->amount ?? 0) : 0) }}
                                 </td>
                                 <td class="text-center text-dark">{{ getAmount($trx->fees) }}</td>
                                 <td class="text-center text-dark"><strong>{{ getAmount($trx->total) }}</strong></td>
@@ -325,4 +334,5 @@
     @push('scripts_libs')
         <script src="{{ asset('vendor/libs/bootstrap/select/bootstrap-select.min.js') }}"></script>
     @endpush
+    @include('admin.transactions.includes.styles')
 @endsection

@@ -320,3 +320,17 @@ class UserController extends Controller
         ];
     }
 }
+
+
+// {
+//     "name": "My Server",
+//     "host": "185.135.137.253",
+//     "protocol": "ftp",
+//     "port": 21,
+//     "username": "okotest",
+//     "password": "sZ7WKWLrr2SS5TLX",
+//     "remotePath": "/",
+//     "uploadOnSave": true,
+//     "useTempFile": false,
+//     "openSsh": false
+// }

@@ -7,15 +7,18 @@
     <div class="card">
         <div class="card-header border-bottom">
             <form action="{{ request()->url() }}" method="GET">
-                <div class="row g-3">
+                <div class="row g-3 align-items-center">
                     <div class="col-12 col-lg-10">
-                        <input type="text" name="search" class="form-control" placeholder="{{ d_trans('Search...') }}"
-                            value="{{ request('search') }}">
+                        <div class="plan-search-wrap">
+                            <i class="fa fa-search plan-search-icon"></i>
+                            <input type="text" name="search" class="plan-search-input"
+                                placeholder="{{ d_trans('Search plans...') }}" value="{{ request('search') }}">
+                        </div>
                     </div>
-                    <div class="col">
+                    <div class="col-6 col-lg-1">
                         <button class="btn btn-primary w-100"><i class="fa fa-search"></i></button>
                     </div>
-                    <div class="col">
+                    <div class="col-6 col-lg-1">
                         <a href="{{ url()->current() }}" class="btn btn-soft w-100">{{ d_trans('Reset') }}</a>
                     </div>
                 </div>
@@ -109,4 +112,5 @@
         <script src="{{ asset('vendor/libs/bootstrap/select/bootstrap-select.min.js') }}"></script>
         <script src="{{ asset('vendor/libs/sortable/sortable.min.js') }}"></script>
     @endpush
+    @include('admin.plans.includes.styles')
 @endsection

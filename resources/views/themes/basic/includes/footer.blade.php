@@ -18,7 +18,7 @@
                     <ul class="list-unstyled">
                         <li class="mb-2"><a href="{{ route('products.index') }}"
                                 class="text-decoration-none">{{ d_trans('All Products') }}</a></li>
-                        <li class="mb-2"><a href="{{ route('businesses.index') }}"
+                        <li class="mb-2"><a href="{{ route('products.index') }}"
                                 class="text-decoration-none">{{ d_trans('Categories') }}</a></li>
                         <li class="mb-2"><a href="/plans" class="text-decoration-none">{{ d_trans('Plans') }}</a>
                         </li>

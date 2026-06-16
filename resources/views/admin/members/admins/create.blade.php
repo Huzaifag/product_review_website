@@ -49,4 +49,5 @@
     @push('scripts_libs')
         <script src="{{ asset('vendor/libs/clipboard/clipboard.min.js') }}"></script>
     @endpush
+    @include('admin.members.admins.includes.styles')
 @endsection

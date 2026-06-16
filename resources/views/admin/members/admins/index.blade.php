@@ -98,4 +98,5 @@
     @push('scripts_libs')
         <script src="{{ asset('vendor/libs/bootstrap/select/bootstrap-select.min.js') }}"></script>
     @endpush
+    @include('admin.members.admins.includes.styles')
 @endsection

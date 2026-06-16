@@ -66,10 +66,15 @@
                         <strong>{{ d_trans('Subscriber') }}</strong>
                     </div>
                     <div class="col-auto">
-                       X 
-                         <a href="{{ route('admin.transactions.cancel', $trx->id) }}" class="text-dark">
-                            <i class="fa fa-user me-2"></i>{{ $trx->user->username }} 
-                        </a>
+                        @if ($trx->user)
+                            <a href="{{ route('admin.members.users.edit', $trx->user->id) }}" class="text-dark">
+                                <i class="fa fa-user me-2"></i>{{ $trx->user->username }}
+                            </a>
+                        @else
+                            <span class="text-muted">
+                                <i class="fa fa-user me-2"></i>{{ $trx->payer_email ?? d_trans('Unknown') }}
+                            </span>
+                        @endif
                     </div>
                 </div>
             </li>
@@ -137,10 +142,14 @@
                         <strong>{{ d_trans('Payment Gateway') }}</strong>
                     </div>
                     <div class="col-auto">
-                        <a href="{{ route('admin.settings.payment-gateways.edit', $trx->paymentGateway->id) }}"
-                            class="text-dark">
-                            <span>{{ $trx->paymentGateway->trans->name }}</span>
-                        </a>
+                        @if ($trx->paymentGateway)
+                            <a href="{{ route('admin.settings.payment-gateways.edit', $trx->paymentGateway->id) }}"
+                                class="text-dark">
+                                <span>{{ $trx->paymentGateway->trans->name }}</span>
+                            </a>
+                        @else
+                            <span class="text-muted">{{ d_trans('Deleted payment gateway') }}</span>
+                        @endif
                     </div>
                 </div>
             </li>
@@ -151,10 +160,16 @@
             <li class="list-group-item p-4">
                 <div class="row g-2 align-items-center">
                     <div class="col">
-                        <strong>{{ d_trans(':plan_name (:plan_interval)', [
-                            'plan_name' => $trx->plan->trans->name,
-                            'plan_interval' => $trx->plan->getIntervalName(),
-                        ]) }}</strong>
+                        <strong>
+                            @if ($trx->plan)
+                                {{ d_trans(':plan_name (:plan_interval)', [
+                                    'plan_name' => $trx->plan->trans->name,
+                                    'plan_interval' => $trx->plan->getIntervalName(),
+                                ]) }}
+                            @else
+                                {{ d_trans('Deleted plan') }}
+                            @endif
+                        </strong>
                     </div>
                     <div class="col-auto">
                         <div>{{ getAmount($trx->amount) }}</div>
@@ -177,12 +192,12 @@
                         <div class="row g-2 align-items-center">
                             <div class="col">
                                 <strong>{{ d_trans(':tax_name (:tax_rate%)', [
-                                    'tax_name' => m_trans($trx->tax->name),
-                                    'tax_rate' => $trx->tax->rate,
+                                    'tax_name' => m_trans($trx->tax?->name ?? d_trans('Tax')),
+                                    'tax_rate' => $trx->tax?->rate ?? 0,
                                 ]) }}</strong>
                             </div>
                             <div class="col-auto">
-                                <div>{{ getAmount($trx->tax->amount) }}</div>
+                                <div>{{ getAmount($trx->tax?->amount ?? 0) }}</div>
                             </div>
                         </div>
                     </li>
@@ -192,8 +207,8 @@
                         <div class="row g-2 align-items-center">
                             <div class="col">
                                 <strong>{{ d_trans(':payment_gateway Fees (:percentage%)', [
-                                    'payment_gateway' => $trx->paymentGateway->trans->name,
-                                    'percentage' => $trx->paymentGateway->fees,
+                                    'payment_gateway' => $trx->paymentGateway?->trans?->name ?? d_trans('Payment gateway'),
+                                    'percentage' => $trx->paymentGateway?->fees ?? 0,
                                 ]) }}</strong>
                             </div>
                             <div class="col-auto">
@@ -225,4 +240,5 @@
             })
         </script>
     @endpush
+    @include('admin.transactions.includes.styles')
 @endsection
