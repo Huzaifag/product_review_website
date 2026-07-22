@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -63,6 +64,33 @@ class LoginController extends Controller
         ],
             $request->filled('remember')
         );
+    }
+
+    //Google Auth
+
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        $googleUser = Socialite::driver('google')->stateless()->user();
+
+        $user = User::updateOrCreate(
+            [
+                'email' => $googleUser->email,
+            ],
+            [
+                'name' => $googleUser->name,
+                'google_id' => $googleUser->id,
+                'password' => bcrypt(str()->random(16)),
+            ]
+        );
+
+        Auth::login($user);
+
+        return redirect('/');
     }
 
     public function logout(Request $request)

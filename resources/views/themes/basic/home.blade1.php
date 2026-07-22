@@ -531,7 +531,6 @@
 }
 
 .oeko-search-input {
-    border-radius: 999px !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     background: rgba(255, 255, 255, 0.12) !important;
     backdrop-filter: blur(16px);

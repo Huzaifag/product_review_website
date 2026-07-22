@@ -32,6 +32,14 @@ class SettingsController extends Controller
             'seo.title' => ['nullable', 'string', 'block_patterns', 'max:255'],
             'seo.description' => ['nullable', 'string', 'block_patterns', 'max:255'],
             'seo.keywords' => ['nullable', 'string', 'block_patterns', 'max:255'],
+            'seo.canonical_url' => ['nullable', 'url', 'max:255'],
+            'seo.meta_author' => ['nullable', 'string', 'max:255', 'block_patterns'],
+            'seo.twitter_username' => ['nullable', 'string', 'max:255', 'block_patterns'],
+            'seo.google_analytics_id' => ['nullable', 'string', 'max:255', 'block_patterns'],
+            'seo.google_site_verification' => ['nullable', 'string', 'max:255', 'block_patterns'],
+            'seo.robots_txt' => ['nullable', 'string', 'max:255', 'block_patterns'],
+            'seo.page_speed_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'seo.og_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'social_links.*' => ['nullable', 'string', 'block_patterns'],
             'links.*' => ['nullable', 'string', 'block_patterns'],
         ];
@@ -55,6 +63,20 @@ class SettingsController extends Controller
         if ($request->has('actions.contact_page') && empty($requestData['general']['contact_email'])) {
             toastr()->error(d_trans('Contact email is required to enable contact page'));
             return back()->withInput();
+        }
+
+        if ($request->hasFile('seo.og_image')) {
+            try {
+                $ogImage = FileHandler::upload($request->file('seo.og_image'), [
+                    'name' => 'og-image-' . time(),
+                    'path' => 'images/seo/',
+                    'old_file' => config('settings.seo.og_image'),
+                ]);
+                $requestData['seo']['og_image'] = $ogImage;
+            } catch (\Exception $e) {
+                toastr()->error($e->getMessage());
+                return back();
+            }
         }
 
         $requestData['actions'] = [];

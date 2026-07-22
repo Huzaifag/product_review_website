@@ -6,7 +6,7 @@
 @section('back', route('admin.settings.index'))
 @section('form', true)
 @section('content')
-    <form id="submittedForm" action="{{ route('admin.settings.general.update') }}" method="POST">
+    <form id="submittedForm" action="{{ route('admin.settings.general.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row g-4">
             <div class="col-12">
@@ -82,6 +82,50 @@
                                         class="form-control form-control-md tags-input"
                                         value="{{ config('settings.seo.keywords') }}">
                                 </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">{{ d_trans('Canonical URL') }}</label>
+                                <input type="url" name="seo[canonical_url]" class="form-control form-control-md"
+                                    value="{{ config('settings.seo.canonical_url') }}">
+                            </div>
+                            <div class="col-lg-6">
+                                <label class="form-label">{{ d_trans('Meta Author') }}</label>
+                                <input type="text" name="seo[meta_author]" class="form-control form-control-md"
+                                    value="{{ config('settings.seo.meta_author') }}">
+                            </div>
+                            <div class="col-lg-6">
+                                <label class="form-label">{{ d_trans('Twitter Username') }}</label>
+                                <input type="text" name="seo[twitter_username]" class="form-control form-control-md"
+                                    value="{{ config('settings.seo.twitter_username') }}">
+                            </div>
+                            <div class="col-lg-6">
+                                <label class="form-label">{{ d_trans('Google Analytics ID') }}</label>
+                                <input type="text" name="seo[google_analytics_id]" class="form-control form-control-md"
+                                    value="{{ config('settings.seo.google_analytics_id') }}" placeholder="G-XXXXXXXXXX">
+                            </div>
+                            <div class="col-lg-6">
+                                <label class="form-label">{{ d_trans('Google Site Verification') }}</label>
+                                <input type="text" name="seo[google_site_verification]" class="form-control form-control-md"
+                                    value="{{ config('settings.seo.google_site_verification') }}">
+                            </div>
+                            <div class="col-lg-6">
+                                <label class="form-label">{{ d_trans('Robots.txt Status / Rule') }}</label>
+                                <input type="text" name="seo[robots_txt]" class="form-control form-control-md"
+                                    value="{{ config('settings.seo.robots_txt') }}" placeholder="index, follow">
+                            </div>
+                            <div class="col-lg-6">
+                                <label class="form-label">{{ d_trans('Page Speed Score') }}</label>
+                                <input type="number" name="seo[page_speed_score]" class="form-control form-control-md"
+                                    value="{{ config('settings.seo.page_speed_score') }}" min="0" max="100">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">{{ d_trans('OG Image (Social Share Preview)') }}</label>
+                                <input type="file" name="seo[og_image]" class="form-control form-control-md" accept="image/png, image/jpeg, image/jpg, image/webp">
+                                @if(config('settings.seo.og_image'))
+                                    <div class="mt-2">
+                                        <img src="{{ asset(config('settings.seo.og_image')) }}" alt="OG Image" class="img-thumbnail" width="150">
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

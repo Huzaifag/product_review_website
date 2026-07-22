@@ -63,11 +63,15 @@
                     &mdash; {{ d_trans('All rights reserved.') }}
                 </p>
 
-                <a href="https://bitlogicx.com" target="_blank" rel="noopener noreferrer" class="dev-badge">
-                    <span class="dev-icon">
-                        <i class="fa-solid fa-code"></i>
+                {{-- Footer dev credit --}}
+                <a href="https://cleovici.com/" target="_blank" rel="noopener noreferrer" class="cl-footer-dev">
+                    <span class="cl-footer-dev__icon">
+                        <i class="fa-solid fa-code" aria-hidden="true"></i>
                     </span>
-                    <span>{{ d_trans('Developed by') }} <strong style="font-weight: 600;">Bitlogicx</strong></span>
+                    <span class="cl-footer-dev__text">
+                        <span class="cl-footer-dev__by">{{ d_trans('Developed by') }}</span>
+                        <img src="{{ asset('images/developer/cleovici.png') }}" height="30" width="100" alt="Cleovici">
+                    </span>
                 </a>
 
                 <p class="footer-copyright mb-0 footer-note">
@@ -199,14 +203,14 @@
         transition: all 0.3s ease;
     }
 
-    .dev-badge:hover {
+    /* .dev-badge:hover {
         color: #fff !important;
         text-decoration: none !important;
         transform: translateY(-2px);
         box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.2),
             0 12px 28px rgba(0, 0, 0, 0.28);
-    }
+    } */
 
     .dev-icon {
         width: 28px;
@@ -284,12 +288,120 @@
             transform: translateY(0);
         }
     }
+
+
+
+    .cl-footer-dev {
+        justify-self: end;
+        display: inline-flex;
+        align-items: center;
+        gap: 13px;
+        padding: 12px 20px;
+        color: rgba(255, 255, 255, 0.65);
+        text-decoration: none;
+        position: relative;
+        transition: color 0.3s ease;
+    }
+
+    .cl-footer-dev::before,
+    .cl-footer-dev::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        opacity: 0.5;
+        transition: width 0.38s cubic-bezier(0.23, 1, 0.32, 1),
+            height 0.38s cubic-bezier(0.23, 1, 0.32, 1),
+            border-color 0.3s ease,
+            opacity 0.3s ease;
+    }
+
+    .cl-footer-dev::before {
+        top: 0;
+        left: 0;
+        border-top: 2px solid rgba(255, 255, 255, 0.55);
+        border-left: 2px solid rgba(255, 255, 255, 0.55);
+    }
+
+    .cl-footer-dev::after {
+        bottom: 0;
+        right: 0;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.55);
+        border-right: 2px solid rgba(255, 255, 255, 0.55);
+    }
+
+    .cl-footer-dev__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        background: rgba(197, 160, 89, 0.12);
+        border: 1px solid rgba(197, 160, 89, 0.25);
+        color: var(--cl-accent);
+        font-size: 13px;
+        flex-shrink: 0;
+        transition: background 0.3s ease,
+            border-color 0.3s ease,
+            color 0.3s ease,
+            transform 0.3s ease;
+    }
+
+    .cl-footer-dev__text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        line-height: 1;
+    }
+
+    .cl-footer-dev__by {
+        font-size: 0.62rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #f1f1f1;
+        transition: color 0.3s ease;
+    }
+
+    .cl-footer-dev__text img {
+        display: block;
+        height: 22px;
+        width: auto;
+        opacity: 0.75;
+        transition: opacity 0.3s ease, filter 0.3s ease;
+        filter: brightness(0) invert(1);
+    }
+
+    .cl-footer-dev:hover::before,
+    .cl-footer-dev:hover::after {
+        width: 100%;
+        height: 100%;
+        border-color: var(--cl-accent);
+        opacity: 1;
+    }
+
+    .cl-footer-dev:hover .cl-footer-dev__icon {
+        background: rgba(197, 160, 89, 0.22);
+        border-color: rgba(197, 160, 89, 0.55);
+        color: var(--cl-accent);
+        transform: rotate(-8deg) scale(1.08);
+    }
+
+    .cl-footer-dev:hover .cl-footer-dev__by {
+        color: rgba(197, 160, 89, 0.8);
+    }
+
+    .cl-footer-dev:hover .cl-footer-dev__text img {
+        opacity: 1;
+        filter: brightness(0) invert(69%) sepia(50%) saturate(497%) hue-rotate(5deg) brightness(92%) contrast(89%);
+    }
 </style>
 
 {{-- Script to dynamically set the year without extra JS files --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('span[data-year]').forEach(function(el) {
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('span[data-year]').forEach(function (el) {
             el.setAttribute('data-year', new Date().getFullYear());
         });
     });

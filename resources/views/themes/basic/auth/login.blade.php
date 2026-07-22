@@ -706,6 +706,16 @@
                         </div>
                     </form>
 
+                    <div class="login-with mt-3">
+                        <div class="login-with-divider mb-3 text-center">
+                            <span class="text-muted small">{{ d_trans('Or') }}</span>
+                        </div>
+                        <a href="{{ route('login.google') }}" class="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center" style="border-radius: 13px; padding: 12px; font-weight: 600;">
+                            <img src="https://www.google.com/favicon.ico" alt="Google" style="width: 18px; margin-inline-end: 10px;">
+                            {{ d_trans('Continue with Google') }}
+                        </a>
+                    </div>
+
                     <x-oauth-buttons />
 
                     @if (config('settings.user.actions.registration'))

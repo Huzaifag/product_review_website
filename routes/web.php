@@ -39,6 +39,8 @@ Route::middleware('maintenance')->group(function () {
     Route::namespace('Auth')->group(function () {
         Route::get('login', 'LoginController@showLoginForm')->name('login');
         Route::post('login', 'LoginController@login');
+        Route::get('login/google', 'LoginController@redirectToGoogle')->name('login.google');
+        Route::get('login/google/callback', 'LoginController@handleGoogleCallback')->name('login.google.callback');
         Route::post('logout', 'LoginController@logout')->name('logout');
         Route::middleware(['registration.disable'])->group(function () {
             Route::get('register', 'RegisterController@showRegistrationForm')->name('register');

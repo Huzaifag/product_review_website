@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Setting extends Model
 {
     const CURRENCY_BEFORE_PRICE = 1;
+
     const CURRENCY_AFTER_PRICE = 2;
 
     public $timestamps = false;
@@ -24,6 +25,7 @@ class Setting extends Model
         if ($setting) {
             return $setting->value;
         }
+
         return false;
     }
 
@@ -33,15 +35,13 @@ class Setting extends Model
         if ($setting) {
             $settings = (array) $setting->value;
             foreach ($data as $dataKey => $dataValue) {
-                if (array_key_exists($dataKey, $settings)) {
-                    $settings[$dataKey] = $dataValue;
-                }
+                $settings[$dataKey] = $dataValue;
             }
-            if (count((array) $setting->value) == count($settings)) {
-                $setting->value = $settings;
-                return $setting->update();
-            }
+            $setting->value = $settings;
+
+            return $setting->save();
         }
+
         return false;
     }
 

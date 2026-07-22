@@ -69,52 +69,7 @@
             </div>
 
             {{-- Search bar --}}
-            <div class="oeko-hero-search" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-                <div class="header-search search home-search">
-                    <form action="{{ route('products.index') }}"
-                        data-ajax-action="{{ route('products.ajax-search') }}"
-                        data-ajax-empty="{{ d_trans('No results found') }}"
-                        method="GET">
-                        <div class="search-input oeko-search-input">
-                            <span class="oeko-search-leading" aria-hidden="true">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2">
-                                    <circle cx="11" cy="11" r="8"/>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                                </svg>
-                            </span>
-                            <input type="text" name="search" class="form-control"
-                                placeholder="{{ d_trans('Search product or brand... e.g. Weleda, Nivea') }}"
-                                autocomplete="off">
-                            <button type="button" id="imageSearchBtn" class="oeko-camera-btn"
-                                aria-label="{{ d_trans('Search by image') }}"
-                                title="{{ d_trans('Search by image') }}">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2">
-                                    <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
-                                    <circle cx="12" cy="13" r="4"/>
-                                </svg>
-                            </button>
-                            <button aria-label="{{ d_trans('Search') }}" class="oeko-search-btn" type="submit">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2">
-                                    <circle cx="11" cy="11" r="8"/>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                                </svg>
-                                <span>{{ d_trans('Search') }}</span>
-                            </button>
-                        </div>
-                    </form>
-                    <div class="search-results">
-                        <div class="search-results-inner" data-simplebar>
-                            <div></div>
-                        </div>
-                        <a href="{{ route('businesses.index') }}" class="search-action">
-                            {{ d_trans('View All Test Results') }}
-                        </a>
-                    </div>
-                </div>
-            </div>
+            @include('themes.basic.components.product-search')
 
             {{-- Stats row --}}
             <div class="oeko-hero-stats" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
@@ -317,7 +272,13 @@
 
 /* ── Hero Wrapper ── */
 .oeko-hero {
-    background: #FDF8F4;
+  background: #F6E8DC;
+    background: radial-gradient(
+    circle,
+    rgba(246, 232, 220, 0.95) 0%,
+    rgba(242, 218, 196, 1) 50%,
+    rgba(255, 238, 238, 1) 100%
+    );
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -353,8 +314,10 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #FFFFFF;
-    border: 1px solid #EDE0D4;
+    background: rgba(255, 255, 255, 0.31);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     border-radius: 999px;
     padding: 6px 16px 6px 12px;
     font-family: 'DM Sans', sans-serif;
@@ -383,7 +346,7 @@
 
 /* Hero title */
 .oeko-hero-title {
-    font-size: clamp(48px, 5vw, 68px);
+    font-size: clamp(48px, 5vw, 55px);
     font-weight: 700;
     color: #2C1A0E;
     line-height: 1.05;
@@ -424,9 +387,12 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    background: #FFFFFF;
-    border: 1px solid #EDE0D4;
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.31);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 8px 16px;
     font-family: 'DM Sans', sans-serif;
     font-size: 13px;
@@ -451,24 +417,46 @@
 .oeko-btn-primary {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     background: #2C1A0E;
     color: #FFFFFF !important;
     font-family: 'DM Sans', sans-serif;
     font-size: 15px;
     font-weight: 600;
-    padding: 14px 32px;
-    border-radius: 999px;
+    padding: 0 28px;
+    height: 48px;
+    border-radius: 12px;
     text-decoration: none !important;
-    transition: all 200ms ease;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border: none;
     white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(44, 26, 14, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.oeko-btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    transition: all 0.6s ease;
+}
+
+.oeko-btn-primary:hover::after {
+    left: 200%;
+    transition: all 0.8s ease;
 }
 
 .oeko-btn-primary:hover {
-    background: #C62828;
+    background: #1A0F08;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(198,40,40,0.25);
+    box-shadow: 0 8px 24px rgba(44, 26, 14, 0.35);
     color: #FFFFFF !important;
 }
 
@@ -477,41 +465,35 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-
-    padding: 8px 16px;
-    min-height: 38px;
-
+    padding: 0 24px;
+    height: 48px;
     color: #C62828 !important;
-    background: rgba(198, 40, 40, 0.06);
-
+    background: rgba(255, 255, 255, 0.31);
     font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
-    line-height: 1;
-
     text-decoration: none !important;
     white-space: nowrap;
-
-    border: 1px solid rgba(198, 40, 40, 0.18);
-    border-radius: 999px;
-
-    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.08);
-
+    border: 1px solid rgba(198, 40, 40, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     cursor: pointer;
-    transition: all 180ms ease;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .oeko-btn-ghost:hover {
     color: #ffffff !important;
-    background: #C62828;
-    border-color: #C62828;
-    box-shadow: 0 8px 20px rgba(198, 40, 40, 0.22);
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, #D32F2F 0%, #A91D1D 100%);
+    border-color: transparent;
+    box-shadow: 0 8px 24px rgba(198, 40, 40, 0.3);
+    transform: translateY(-2px);
 }
 
 .oeko-btn-ghost:active {
-    transform: translateY(0);
-    box-shadow: 0 4px 10px rgba(198, 40, 40, 0.18);
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(198, 40, 40, 0.2);
 }
 
 .oeko-btn-ghost:focus-visible {
@@ -522,16 +504,12 @@
 .oeko-btn-ghost i,
 .oeko-btn-ghost svg {
     font-size: 15px;
-    transition: transform 180ms ease;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .oeko-btn-ghost:hover i,
 .oeko-btn-ghost:hover svg {
-    transform: translateX(2px);
-}
-
-.oeko-btn-ghost:hover {
-    color: #8B0000 !important;
+    transform: translateX(4px);
 }
 
 /* Camera button */
@@ -563,56 +541,7 @@
     box-shadow: 0 0 0 4px rgba(198,40,40,0.20), 0 6px 14px rgba(198,40,40,0.18);
 }
 
-/* Search */
-.oeko-hero-search {
-    max-width: 520px;
-    overflow: visible;
-}
 
-.oeko-search-input {
-    border-radius: 999px !important;
-    border: 1px solid #EFE6DE !important;
-    background: #FFFFFF !important;
-    box-shadow: 0 8px 28px rgba(44,26,14,0.10), 0 2px 6px rgba(44,26,14,0.05) !important;
-    overflow: visible;
-    display: grid;
-    grid-template-columns: auto 1fr auto auto;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 10px 8px 14px;
-    transition: all 200ms ease;
-}
-
-.oeko-search-input:focus-within {
-    border-color: #C62828 !important;
-    box-shadow: 0 0 0 3px rgba(198,40,40,0.14),
-                0 10px 32px rgba(44,26,14,0.12) !important;
-}
-
-.oeko-search-input .form-control {
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 15.5px !important;
-    color: #4A3728 !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 6px 6px;
-    background: transparent !important;
-}
-
-.oeko-search-input .form-control::placeholder {
-    color: #9C8878 !important;
-}
-
-.oeko-search-leading {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    color: #B9A99B;
-    background: #FBF6F1;
-}
 
 .oeko-search-btn {
     display: inline-flex;
@@ -727,10 +656,13 @@
 /* Floating cards */
 .oeko-float-card {
     position: absolute;
-    background: #FFFFFF;
+    background: rgba(255, 255, 255, 0.31);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     border-radius: 16px;
     padding: 14px 16px;
-    box-shadow: 0 12px 40px rgba(44,26,14,0.14);
+    box-shadow: 0 12px 40px rgba(44, 26, 14, 0.14);
     z-index: 2;
     min-width: 200px;
     max-width: 240px;
@@ -1201,9 +1133,6 @@
         justify-content: center;
     }
 
-    .oeko-hero-search {
-        max-width: 100%;
-    }
 
     .oeko-hero-right {
         max-width: 480px;
@@ -1271,35 +1200,6 @@
         text-align: center;
     }
 
-    .oeko-hero-search {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .oeko-hero-search .header-search,
-    .oeko-hero-search form {
-        width: 100%;
-    }
-
-    .oeko-search-input {
-        min-height: 56px;
-        grid-template-columns: auto 1fr auto auto;
-        padding: 8px 8px 8px 12px;
-        gap: 4px;
-    }
-
-    .oeko-search-btn {
-        width: 38px;
-        height: 38px;
-        padding: 0;
-        justify-content: center;
-        border-radius: 50%;
-        flex-shrink: 0;
-    }
-
-    .oeko-search-btn span {
-        display: none;
-    }
 
 
     .oeko-hero-stats {
